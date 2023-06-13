@@ -16,7 +16,7 @@ import { DeleteComponent } from './dialogs/delete/delete.component';
 import { SelectionModel } from '@angular/cdk/collections';
 import { UnsubscribeOnDestroyAdapter } from '@shared';
 import { MyTasksService } from './my-tasks.service';
-import { MyTasks } from './my-tasks.model';
+import { Claim } from './my-tasks.model';
 import { Direction } from '@angular/cdk/bidi';
 import { TableExportUtil, TableElement } from '@shared';
 import { formatDate } from '@angular/common';
@@ -46,10 +46,10 @@ export class MyTasksComponent
 
   exampleDatabase?: MyTasksService | null;
   dataSource!: ExampleDataSource;
-  selection = new SelectionModel<MyTasks>(true, []);
+  selection = new SelectionModel<Claim>(true, []);
   index?: number;
   id?: number;
-  myTasks?: MyTasks | null;
+  myTasks?: Claim | null;
   constructor(
     public httpClient: HttpClient,
     public dialog: MatDialog,
@@ -98,7 +98,7 @@ export class MyTasksComponent
       }
     });
   }
-  editCall(row: MyTasks) {
+  editCall(row: Claim) {
     this.id = row.id;
     let tempDirection: Direction;
     if (localStorage.getItem('isRtl') === 'true') {
@@ -136,7 +136,7 @@ export class MyTasksComponent
     });
   }
 
-  deleteItem(i: number, row: MyTasks) {
+  deleteItem(i: number, row: Claim) {
     this.index = i;
     this.id = row.id;
     let tempDirection: Direction;
@@ -199,7 +199,7 @@ export class MyTasksComponent
       this.exampleDatabase?.dataChange.value.splice(index, 1);
 
       this.refreshTable();
-      this.selection = new SelectionModel<MyTasks>(true, []);
+      this.selection = new SelectionModel<Claim>(true, []);
     });
     this.showNotification(
       'snackbar-danger',
@@ -229,15 +229,11 @@ export class MyTasksComponent
     // key name with space add in brackets
     const exportData: Partial<TableElement>[] =
       this.dataSource.filteredData.map((x) => ({
-        'Task No': x.taskNo,
-        Project: x.project,
-        Client: x.client,
         Status: x.status,
         Priority: x.priority,
         Type: x.type,
-        Executor: x.executor,
         'Joining Date': formatDate(new Date(x.date), 'yyyy-MM-dd', 'en') || '',
-        Details: x.details,
+        Details: x.description,
       }));
 
     TableExportUtil.exportToExcel(exportData, 'excel');
@@ -257,7 +253,7 @@ export class MyTasksComponent
     });
   }
 }
-export class ExampleDataSource extends DataSource<MyTasks> {
+export class ExampleDataSource extends DataSource<Claim> {
   filterChange = new BehaviorSubject('');
   get filter(): string {
     return this.filterChange.value;
@@ -265,8 +261,8 @@ export class ExampleDataSource extends DataSource<MyTasks> {
   set filter(filter: string) {
     this.filterChange.next(filter);
   }
-  filteredData: MyTasks[] = [];
-  renderedData: MyTasks[] = [];
+  filteredData: Claim[] = [];
+  renderedData: Claim[] = [];
   constructor(
     public exampleDatabase: MyTasksService,
     public paginator: MatPaginator,
@@ -277,7 +273,7 @@ export class ExampleDataSource extends DataSource<MyTasks> {
     this.filterChange.subscribe(() => (this.paginator.pageIndex = 0));
   }
   /** Connect function called by the table to retrieve one stream containing the data to render. */
-  connect(): Observable<MyTasks[]> {
+  connect(): Observable<Claim[]> {
     // Listen for any changes in the base data, sorting, filtering, or pagination
     const displayDataChanges = [
       this.exampleDatabase.dataChange,
@@ -291,17 +287,13 @@ export class ExampleDataSource extends DataSource<MyTasks> {
         // Filter data
         this.filteredData = this.exampleDatabase.data
           .slice()
-          .filter((myTasks: MyTasks) => {
+          .filter((myTasks: Claim) => {
             const searchStr = (
-              myTasks.taskNo +
-              myTasks.project +
-              myTasks.client +
               myTasks.status +
               myTasks.priority +
               myTasks.type +
-              myTasks.executor +
               myTasks.date +
-              myTasks.details
+              myTasks.description
             ).toLowerCase();
             return searchStr.indexOf(this.filter.toLowerCase()) !== -1;
           });
@@ -321,7 +313,7 @@ export class ExampleDataSource extends DataSource<MyTasks> {
     //disconnect
   }
   /** Returns a sorted copy of the database data. */
-  sortData(data: MyTasks[]): MyTasks[] {
+  sortData(data: Claim[]): Claim[] {
     if (!this._sort.active || this._sort.direction === '') {
       return data;
     }
@@ -331,15 +323,6 @@ export class ExampleDataSource extends DataSource<MyTasks> {
       switch (this._sort.active) {
         case 'id':
           [propertyA, propertyB] = [a.id, b.id];
-          break;
-        case 'taskNo':
-          [propertyA, propertyB] = [a.taskNo, b.taskNo];
-          break;
-        case 'project':
-          [propertyA, propertyB] = [a.project, b.project];
-          break;
-        case 'client':
-          [propertyA, propertyB] = [a.client, b.client];
           break;
         case 'status':
           [propertyA, propertyB] = [a.status, b.status];

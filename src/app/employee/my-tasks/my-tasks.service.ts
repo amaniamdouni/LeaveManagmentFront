@@ -1,19 +1,19 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { MyTasks } from './my-tasks.model';
+import { Claim } from './my-tasks.model';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { UnsubscribeOnDestroyAdapter } from '@shared';
 @Injectable()
 export class MyTasksService extends UnsubscribeOnDestroyAdapter {
   private readonly API_URL = 'assets/data/my-tasks.json';
   isTblLoading = true;
-  dataChange: BehaviorSubject<MyTasks[]> = new BehaviorSubject<MyTasks[]>([]);
+  dataChange: BehaviorSubject<Claim[]> = new BehaviorSubject<Claim[]>([]);
   // Temporarily stores data from dialogs
-  dialogData!: MyTasks;
+  dialogData!: Claim;
   constructor(private httpClient: HttpClient) {
     super();
   }
-  get data(): MyTasks[] {
+  get data(): Claim[] {
     return this.dataChange.value;
   }
   getDialogData() {
@@ -21,7 +21,7 @@ export class MyTasksService extends UnsubscribeOnDestroyAdapter {
   }
   /** CRUD METHODS */
   getAllMyTaskss(): void {
-    this.subs.sink = this.httpClient.get<MyTasks[]>(this.API_URL).subscribe({
+    this.subs.sink = this.httpClient.get<Claim[]>(this.API_URL).subscribe({
       next: (data) => {
         this.isTblLoading = false;
         this.dataChange.next(data);
@@ -32,7 +32,7 @@ export class MyTasksService extends UnsubscribeOnDestroyAdapter {
       },
     });
   }
-  addMyTasks(myTasks: MyTasks): void {
+  addMyTasks(myTasks: Claim): void {
     this.dialogData = myTasks;
 
     // this.httpClient.post(this.API_URL, myTasks)
@@ -45,7 +45,7 @@ export class MyTasksService extends UnsubscribeOnDestroyAdapter {
     //     },
     //   });
   }
-  updateMyTasks(myTasks: MyTasks): void {
+  updateMyTasks(myTasks: Claim): void {
     this.dialogData = myTasks;
 
     // this.httpClient.put(this.API_URL + myTasks.id, myTasks)

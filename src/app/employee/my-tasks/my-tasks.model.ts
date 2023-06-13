@@ -1,27 +1,19 @@
 import { formatDate } from '@angular/common';
-export class MyTasks {
+export class Claim {
   id: number;
-  taskNo: string;
-  project: string;
-  client: string;
   status: string;
   priority: string;
   type: string;
-  executor: string;
   date: string;
-  details: string;
-  constructor(myTasks: MyTasks) {
+  description: string;
+  constructor(myTasks: Claim) {
     {
       this.id = myTasks.id || this.getRandomID();
-      this.taskNo = myTasks.taskNo || '';
-      this.project = myTasks.project || '';
-      this.client = myTasks.client || '';
       this.status = myTasks.status || '';
       this.priority = myTasks.priority || '';
       this.type = myTasks.type || '';
-      this.executor = myTasks.executor || '';
       this.date = formatDate(new Date(), 'yyyy-MM-dd', 'en') || '';
-      this.details = myTasks.details || '';
+      this.description = myTasks.description || '';
     }
   }
   public getRandomID(): number {

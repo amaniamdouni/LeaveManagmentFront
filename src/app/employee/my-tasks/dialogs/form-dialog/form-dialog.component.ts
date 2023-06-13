@@ -8,12 +8,12 @@ import {
 } from '@angular/forms';
 import { formatDate } from '@angular/common';
 import { MyTasksService } from '../../my-tasks.service';
-import { MyTasks } from '../../my-tasks.model';
+import { Claim } from '../../my-tasks.model';
 
 export interface DialogData {
   id: number;
   action: string;
-  myTasks: MyTasks;
+  myTasks: Claim;
 }
 
 @Component({
@@ -25,7 +25,7 @@ export class FormDialogComponent {
   action: string;
   dialogTitle: string;
   myTasksForm: UntypedFormGroup;
-  myTasks: MyTasks;
+  myTasks: Claim;
   constructor(
     public dialogRef: MatDialogRef<FormDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: DialogData,
@@ -35,12 +35,12 @@ export class FormDialogComponent {
     // Set the defaults
     this.action = data.action;
     if (this.action === 'edit') {
-      this.dialogTitle = data.myTasks.taskNo;
+      this.dialogTitle = data.myTasks.description;
       this.myTasks = data.myTasks;
     } else {
       this.dialogTitle = 'New MyTasks';
-      const blankObject = {} as MyTasks;
-      this.myTasks = new MyTasks(blankObject);
+      const blankObject = {} as Claim;
+      this.myTasks = new Claim(blankObject);
     }
     this.myTasksForm = this.createContactForm();
   }
@@ -58,18 +58,14 @@ export class FormDialogComponent {
   createContactForm(): UntypedFormGroup {
     return this.fb.group({
       id: [this.myTasks.id],
-      taskNo: [this.myTasks.taskNo],
-      project: [this.myTasks.project],
-      client: [this.myTasks.client],
       status: [this.myTasks.status],
       priority: [this.myTasks.priority],
       type: [this.myTasks.type],
-      executor: [this.myTasks.executor],
       date: [
         formatDate(this.myTasks.date, 'yyyy-MM-dd', 'en'),
         [Validators.required],
       ],
-      details: [this.myTasks.details],
+      details: [this.myTasks.description],
     });
   }
   submit() {
