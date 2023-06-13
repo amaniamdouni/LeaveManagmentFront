@@ -20,6 +20,7 @@ import { Claim } from './my-tasks.model';
 import { Direction } from '@angular/cdk/bidi';
 import { TableExportUtil, TableElement } from '@shared';
 import { formatDate } from '@angular/common';
+import { C } from '@angular/cdk/keycodes';
 
 @Component({
   selector: 'app-my-tasks',
@@ -32,13 +33,9 @@ export class MyTasksComponent
 {
   displayedColumns = [
     'select',
-    'taskNo',
-    'project',
-    'client',
     'status',
     'type',
     'priority',
-    'executor',
     'date',
     'details',
     'actions',
@@ -53,7 +50,7 @@ export class MyTasksComponent
   constructor(
     public httpClient: HttpClient,
     public dialog: MatDialog,
-    public myTasksService: MyTasksService,
+    public claimService: MyTasksService,
     private snackBar: MatSnackBar
   ) {
     super();
@@ -61,12 +58,18 @@ export class MyTasksComponent
   @ViewChild(MatPaginator, { static: true }) paginator!: MatPaginator;
   @ViewChild(MatSort, { static: true }) sort!: MatSort;
   @ViewChild('filter', { static: true }) filter!: ElementRef;
+  
+  //claims: Claim= new Claim();
   ngOnInit() {
     this.loadData();
   }
   refresh() {
     this.loadData();
   }
+ /* add(){
+    this.claimService.addCaimAndAssginToUser(this.claims).subscribe();
+    this.claims=new Claim();
+  }*/
   addNew() {
     let tempDirection: Direction;
     if (localStorage.getItem('isRtl') === 'true') {
@@ -86,7 +89,7 @@ export class MyTasksComponent
         // After dialog is closed we're doing frontend updates
         // For add we're just pushing a new row inside DataServicex
         this.exampleDatabase?.dataChange.value.unshift(
-          this.myTasksService.getDialogData()
+          this.claimService.getDialogData()
         );
         this.refreshTable();
         this.showNotification(
@@ -122,7 +125,7 @@ export class MyTasksComponent
         // Then you update that record using data from dialogData (values you enetered)
         if (foundIndex != null && this.exampleDatabase) {
           this.exampleDatabase.dataChange.value[foundIndex] =
-            this.myTasksService.getDialogData();
+            this.claimService.getDialogData();
           // And lastly refresh table
           this.refreshTable();
           this.showNotification(
@@ -281,7 +284,7 @@ export class ExampleDataSource extends DataSource<Claim> {
       this.filterChange,
       this.paginator.page,
     ];
-    this.exampleDatabase.getAllMyTaskss();
+    //this.exampleDatabase.getAllClaims();
     return merge(...displayDataChanges).pipe(
       map(() => {
         // Filter data

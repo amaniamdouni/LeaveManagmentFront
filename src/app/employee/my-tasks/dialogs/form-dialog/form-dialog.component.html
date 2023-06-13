@@ -14,39 +14,7 @@
   <div mat-dialog-content>
     <form class="register-form m-4" [formGroup]="myTasksForm" (ngSubmit)="submit">
       <div class="row">
-        <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
-          <mat-form-field class="example-full-width" appearance="outline">
-            <mat-label>Task No</mat-label>
-            <input matInput formControlName="taskNo" required>
-            <mat-icon class="material-icons-two-tone color-icon p-3" matSuffix>task_alt</mat-icon>
-            <mat-error *ngIf="myTasksForm.get('taskNo')?.hasError('required')">
-              Task No is required
-            </mat-error>
-          </mat-form-field>
-        </div>
-        <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
-          <mat-form-field class="example-full-width" appearance="outline">
-            <mat-label>Project</mat-label>
-            <input matInput formControlName="project" required>
-            <mat-icon class="material-icons-two-tone color-icon p-3" matSuffix>business_center</mat-icon>
-            <mat-error *ngIf="myTasksForm.get('project')?.hasError('required')">
-              Project is required
-            </mat-error>
-          </mat-form-field>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
-          <mat-form-field class="example-full-width" appearance="outline">
-            <mat-label>Client</mat-label>
-            <input matInput formControlName="client" required>
-            <mat-icon class="material-icons-two-tone color-icon p-3" matSuffix>person_outline</mat-icon>
-            <mat-error *ngIf="myTasksForm.get('client')?.hasError('required')">
-              client is required
-            </mat-error>
-          </mat-form-field>
-        </div>
-        <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+        <div class="col-xl-12 col-lg-6 col-md-12 col-sm-12 mb-2">
           <mat-form-field class="example-full-width mb-3" appearance="outline">
             <mat-label>Status</mat-label>
             <mat-select formControlName="status" required>
@@ -63,8 +31,8 @@
           </mat-form-field>
         </div>
       </div>
-      <div class="row">
-        <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+      <div>
+        <div class="col-xl-12 col-lg-6 col-md-12 col-sm-12 mb-2">
           <mat-form-field class="example-full-width mb-3" appearance="outline">
             <mat-label>Priority</mat-label>
             <mat-select formControlName="priority" required>
@@ -83,7 +51,7 @@
             </mat-error>
           </mat-form-field>
         </div>
-        <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+        <div class="col-xl-12 col-lg-6 col-md-12 col-sm-12 mb-2">
           <mat-form-field class="example-full-width mb-3" appearance="outline">
             <mat-label>type</mat-label>
             <mat-select formControlName="type" required>
@@ -104,17 +72,7 @@
         </div>
       </div>
       <div class="row">
-        <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
-          <mat-form-field class="example-full-width" appearance="outline">
-            <mat-label>Executor</mat-label>
-            <input matInput formControlName="executor" required>
-            <mat-icon class="material-icons-two-tone color-icon p-3" matSuffix>person_outline</mat-icon>
-            <mat-error *ngIf="myTasksForm.get('executor')?.hasError('required')">
-              Executor is required
-            </mat-error>
-          </mat-form-field>
-        </div>
-        <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+        <div class="col-xl-12 col-lg-6 col-md-12 col-sm-12 mb-2">
           <mat-form-field class="example-full-width" appearance="outline">
             <mat-label>Date</mat-label>
             <input matInput [matDatepicker]="picker" formControlName="date">
