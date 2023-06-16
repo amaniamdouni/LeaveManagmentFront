@@ -18,6 +18,11 @@ const routes: Routes = [
       import('./leaves/leaves.module').then((m) => m.LeavesModule),
   },
   {
+    path: 'projects',
+    loadChildren: () =>
+      import('./projects/projects.module').then((m) => m.ProjectsModule),
+  },
+  {
     path: 'accounts',
     loadChildren: () =>
       import('./accounts/accounts.module').then((m) => m.AccountsModule),
