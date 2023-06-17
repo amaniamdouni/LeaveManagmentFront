@@ -7,6 +7,8 @@ import { Project, ProjectStatus } from '../core/project.model';
 import { ProjectService } from '../core/project.service';
 import { ProjectDialogComponent } from '../project-dialog/project-dialog.component';
 import { Direction } from '@angular/cdk/bidi';
+import { TeamService } from 'app/services/team.service';
+import { Team } from 'app/models/TeamAdapter';
 
 @Component({
   selector: 'app-board',
@@ -15,53 +17,49 @@ import { Direction } from '@angular/cdk/bidi';
 })
 export class BoardComponent implements OnInit {
   public lists: object;
+  public listsTeam: object;
+  private pollingInterval: any;
 
   constructor(
     private projectService: ProjectService,
+    private teamservice: TeamService,
     private dialog: MatDialog,
     private snackBar: MatSnackBar
   ) {
     this.lists = {};
+    this.listsTeam = {};
   }
 
   public ngOnInit(): void {
     this.projectService.getObjects().subscribe((projects: Project[]) => {
       // split project to status categories
-      this.lists = {
-        NEWPROJECTS: projects.filter(
-          (project) => project.status === ProjectStatus.NEWPROJECTS
-        ),
-        RUNNING: projects.filter(
-          (project) => project.status === ProjectStatus.RUNNING
-        ),
-        ONHOLD: projects.filter(
-          (project) => project.status === ProjectStatus.ONHOLD
-        ),
-        FINISHED: projects.filter(
-          (project) => project.status === ProjectStatus.FINISHED
-        ),
-      };
+      this.lists = {projects};
+    });
+
+    this.pollingInterval = setInterval(() => {
+      this.refreshTeams();
+    }, 5000);
+  }
+  getUsersLength(team: Team): number {
+    return team.userList?.length??0;
+  }
+  refreshTeams() {
+    this.teamservice.getObjects().subscribe((teams: Team[]) => {
+      // split project to status categories
+      this.listsTeam = {teams};
     });
   }
-
   unsorted = (): number => {
     return 0;
   };
   public drop(event: CdkDragDrop<any>): void {
     if (event.previousContainer !== event.container) {
       const project = event.item.data;
-      // project.status = ProjectStatus[event.container.id];
-      project.status =
-        ProjectStatus[JSON.parse(JSON.stringify(event.container.id))];
       this.projectService.updateObject(project);
     }
   }
 
   public addProject(name: string, status: any): void {
-    if (!/\S/.test(name)) {
-      // do not add project if name is empty or contain white spaces only
-      return;
-    }
     this.projectService.createOject({
       name,
       status: ProjectStatus[status],
@@ -99,14 +97,14 @@ export class BoardComponent implements OnInit {
   }
 
   public newProjectDialog(): void {
-    this.dialogOpen('Create new project', null);
+    this.dialogOpen('Créer une nouvelle équipe', null);
   }
 
-  public editProjectDialog(project: Project): void {
-    this.dialogOpen('Edit project', project);
+  public editProjectDialog(team: Team): void {
+    this.dialogOpen('Modifier Equipe', team);
   }
 
-  private dialogOpen(title: string, project: Project | any): void {
+  private dialogOpen(title: string, project: Team | any): void {
     let tempDirection: Direction;
     if (localStorage.getItem('isRtl') === 'true') {
       tempDirection = 'rtl';

@@ -15,12 +15,16 @@ import {
   ProjectType,
 } from '../core/project.model';
 import { ProjectService } from '../core/project.service';
+import { Team } from 'app/models/TeamAdapter';
+import { TeamService } from 'app/services/team.service';
+import { User } from '@core';
+import { UserService } from 'app/services/user.service';
 
 export interface DialogData {
   id: number;
   action: string;
   title: string;
-  project: Project;
+  project: Team;
 }
 
 @Component({
@@ -28,58 +32,66 @@ export interface DialogData {
   templateUrl: './project-dialog.component.html',
 })
 export class ProjectDialogComponent {
-  public project: Project;
+  public project: Team;
   public dialogTitle: string;
   public projectForm: UntypedFormGroup;
   public statusChoices: typeof ProjectStatus;
   public priorityChoices: typeof ProjectPriority;
   public projectType: typeof ProjectType;
+  listUser : User[];
+  private pollingInterval: any;
 
   constructor(
     private formBuilder: UntypedFormBuilder,
     @Inject(MAT_DIALOG_DATA) public data: DialogData,
     public dialogRef: MatDialogRef<ProjectDialogComponent>,
     private snackBar: MatSnackBar,
-    private projectService: ProjectService
+    private projectService: ProjectService,    
+    private teamservice: TeamService,
+    private userservice:UserService,
+
   ) {
+    this.listUser=[];
     this.dialogTitle = data.title;
     this.project = data.project;
     this.statusChoices = ProjectStatus;
     this.priorityChoices = ProjectPriority;
     this.projectType = ProjectType;
-
     const nonWhiteSpaceRegExp = new RegExp('\\S');
 
     this.projectForm = this.formBuilder.group({
-      name: [
-        this.project?.name,
+      nameTeam: [
+        this.project?.nameTeam,
         [Validators.required, Validators.pattern(nonWhiteSpaceRegExp)],
       ],
-      status: [
-        this.project ? this.project.status : this.statusChoices.NEWPROJECTS,
+      description: [this.project?.description,
+        [Validators.required],
       ],
-      description: [this.project?.description],
-      deadline: [this.project?.deadline],
-      priority: [
-        this.project ? this.project.priority : this.priorityChoices.MEDIUM,
-      ],
-      open_task: [this.project?.open_task],
-      type: [this.project ? this.project.type : this.projectType.WEB],
-      created: [this.project?.created],
-      team_leader: [this.project?.team_leader],
-      progress: [this.project?.progress],
+      user: [this.project?.user?.id,
+        [Validators.required],
+      ]
+    });
+    this.pollingInterval = setInterval(() => {
+      this.refreshUser();
+    }, 1000);
+  }
+  refreshUser() {
+    this.userservice.getUsers().subscribe((res: User[]) => {
+      this.listUser = res;
     });
   }
-
   public save(): void {
     console.log('save');
     if (!this.projectForm.valid) {
       return;
     }
+    let user = this.listUser.find(u => u.id === this.projectForm.value.user);
+    console.log(user);
+    this.projectForm.value.user = user;
     if (this.project) {
       // update project object with form values
       Object.assign(this.project, this.projectForm.value);
-      this.projectService.updateObject(this.project);
+      this.teamservice.updateObject(this.project);
       this.snackBar.open('Project updated Successfully...!!!', '', {
         duration: 2000,
         verticalPosition: 'bottom',
@@ -89,7 +101,7 @@ export class ProjectDialogComponent {
 
       this.dialogRef.close();
     } else {
-      this.projectService.createOject(this.projectForm.value);
+      this.teamservice.createOject(this.projectForm.value);
       this.snackBar.open('Project created Successfully...!!!', '', {
         duration: 2000,
         verticalPosition: 'bottom',
@@ -104,3 +116,4 @@ export class ProjectDialogComponent {
     this.dialogRef.close();
   }
 }
+
