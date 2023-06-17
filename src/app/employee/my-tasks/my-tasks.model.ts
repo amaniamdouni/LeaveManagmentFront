@@ -1,18 +1,18 @@
 import { formatDate } from '@angular/common';
 export class Claim {
   id: number;
-  status: string;
-  priority: string;
-  type: string;
-  date: string;
+  claimStatus: string;
+  claimPriority: string;
+  // type: string;
+  dateClaim: string;
   description: string;
   constructor(myTasks: Claim) {
     {
       this.id = myTasks.id || this.getRandomID();
-      this.status = myTasks.status || '';
-      this.priority = myTasks.priority || '';
-      this.type = myTasks.type || '';
-      this.date = formatDate(new Date(), 'yyyy-MM-dd', 'en') || '';
+      this.claimStatus = myTasks.claimStatus || '';
+      this.claimPriority = myTasks.claimPriority || '';
+     // this.type = myTasks.type || '';
+      this.dateClaim = formatDate(new Date(), 'yyyy-MM-dd', 'en') || '';
       this.description = myTasks.description || '';
     }
   }

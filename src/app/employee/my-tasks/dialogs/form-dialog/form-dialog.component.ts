@@ -58,11 +58,11 @@ export class FormDialogComponent {
   createContactForm(): UntypedFormGroup {
     return this.fb.group({
       id: [this.myTasks.id],
-      status: [this.myTasks.status],
-      priority: [this.myTasks.priority],
-      type: [this.myTasks.type],
+      status: [this.myTasks.claimStatus],
+      priority: [this.myTasks.claimPriority],
+      //type: [this.myTasks.type],
       date: [
-        formatDate(this.myTasks.date, 'yyyy-MM-dd', 'en'),
+        formatDate(this.myTasks.dateClaim, 'yyyy-MM-dd', 'en'),
         [Validators.required],
       ],
       details: [this.myTasks.description],
@@ -75,6 +75,6 @@ export class FormDialogComponent {
     this.dialogRef.close();
   }
   public confirmAdd(): void {
-    this.myTasksService.addMyTasks(this.myTasksForm.getRawValue());
+    this.myTasksService.addClaim(this.myTasksForm.getRawValue());
   }
 }

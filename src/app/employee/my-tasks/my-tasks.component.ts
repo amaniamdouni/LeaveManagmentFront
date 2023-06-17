@@ -43,6 +43,7 @@ export class MyTasksComponent
 
   exampleDatabase?: MyTasksService | null;
   dataSource!: ExampleDataSource;
+  dataSourceClaim: any;
   selection = new SelectionModel<Claim>(true, []);
   index?: number;
   id?: number;
@@ -59,17 +60,20 @@ export class MyTasksComponent
   @ViewChild(MatSort, { static: true }) sort!: MatSort;
   @ViewChild('filter', { static: true }) filter!: ElementRef;
   
-  //claims: Claim= new Claim();
+  
   ngOnInit() {
     this.loadData();
+  
   }
   refresh() {
-    this.loadData();
+    
+   // this.loadData();
   }
- /* add(){
-    this.claimService.addCaimAndAssginToUser(this.claims).subscribe();
+  claims: Claim = new Claim();
+ add(){
+    this.claimService.addClaim(this.claimService).subscribe();
     this.claims=new Claim();
-  }*/
+  }
   addNew() {
     let tempDirection: Direction;
     if (localStorage.getItem('isRtl') === 'true') {
@@ -211,31 +215,22 @@ export class MyTasksComponent
       'center'
     );
   }
+  // dataSource => dataSourceClaim
   public loadData() {
-    this.exampleDatabase = new MyTasksService(this.httpClient);
-    this.dataSource = new ExampleDataSource(
-      this.exampleDatabase,
-      this.paginator,
-      this.sort
-    );
-    this.subs.sink = fromEvent(this.filter.nativeElement, 'keyup').subscribe(
-      () => {
-        if (!this.dataSource) {
-          return;
-        }
-        this.dataSource.filter = this.filter.nativeElement.value;
-      }
-    );
+    this.claimService.getclaims().subscribe(x => {
+      this.dataSourceClaim = x ;
+      console.log(this.dataSourceClaim);
+    });
   }
   // export table data in excel file
   exportExcel() {
     // key name with space add in brackets
     const exportData: Partial<TableElement>[] =
       this.dataSource.filteredData.map((x) => ({
-        Status: x.status,
-        Priority: x.priority,
-        Type: x.type,
-        'Joining Date': formatDate(new Date(x.date), 'yyyy-MM-dd', 'en') || '',
+        Status: x.claimStatus,
+        Priority: x.claimPriority,
+        //Type: x.type,
+        'Joining Date': formatDate(new Date(x.dateClaim), 'yyyy-MM-dd', 'en') || '',
         Details: x.description,
       }));
 
@@ -292,10 +287,10 @@ export class ExampleDataSource extends DataSource<Claim> {
           .slice()
           .filter((myTasks: Claim) => {
             const searchStr = (
-              myTasks.status +
-              myTasks.priority +
-              myTasks.type +
-              myTasks.date +
+              myTasks.claimStatus +
+              myTasks.claimPriority +
+              // myTasks.type +
+              myTasks.dateClaim +
               myTasks.description
             ).toLowerCase();
             return searchStr.indexOf(this.filter.toLowerCase()) !== -1;
@@ -328,13 +323,10 @@ export class ExampleDataSource extends DataSource<Claim> {
           [propertyA, propertyB] = [a.id, b.id];
           break;
         case 'status':
-          [propertyA, propertyB] = [a.status, b.status];
+          [propertyA, propertyB] = [a.claimStatus, b.claimStatus];
           break;
         case 'priority':
-          [propertyA, propertyB] = [a.priority, b.priority];
-          break;
-        case 'type':
-          [propertyA, propertyB] = [a.type, b.type];
+          [propertyA, propertyB] = [a.claimPriority, b.claimPriority];
           break;
       }
       const valueA = isNaN(+propertyA) ? propertyA : +propertyA;
