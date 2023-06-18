@@ -4,9 +4,9 @@ export class Claim {
   claimStatus: string;
   claimPriority: string;
   // type: string;
-  dateClaim: string;
+  dateClaim: Date;
   description: string;
-  constructor(myTasks: Claim) {
+ /* constructor(myTasks: Claim) {
     {
       this.id = myTasks.id || this.getRandomID();
       this.claimStatus = myTasks.claimStatus || '';
@@ -16,10 +16,10 @@ export class Claim {
       this.description = myTasks.description || '';
     }
   }
-  public getRandomID(): number {
+ /* public getRandomID(): number {
     const S4 = () => {
       return ((1 + Math.random()) * 0x10000) | 0;
     };
     return S4() + S4();
-  }
+  }*/
 }

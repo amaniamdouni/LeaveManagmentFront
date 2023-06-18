@@ -40,7 +40,7 @@ export class FormDialogComponent {
     } else {
       this.dialogTitle = 'New MyTasks';
       const blankObject = {} as Claim;
-      this.myTasks = new Claim(blankObject);
+      this.myTasks = new Claim();
     }
     this.myTasksForm = this.createContactForm();
   }
@@ -58,13 +58,10 @@ export class FormDialogComponent {
   createContactForm(): UntypedFormGroup {
     return this.fb.group({
       id: [this.myTasks.id],
-      status: [this.myTasks.claimStatus],
-      priority: [this.myTasks.claimPriority],
+      claimStatus: [this.myTasks.claimStatus],
+      claimPriority: [this.myTasks.claimPriority],
       //type: [this.myTasks.type],
-      date: [
-        formatDate(this.myTasks.dateClaim, 'yyyy-MM-dd', 'en'),
-        [Validators.required],
-      ],
+      date: [this.myTasks.dateClaim],
       details: [this.myTasks.description],
     });
   }

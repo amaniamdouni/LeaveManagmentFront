@@ -21,6 +21,7 @@ import { Direction } from '@angular/cdk/bidi';
 import { TableExportUtil, TableElement } from '@shared';
 import { formatDate } from '@angular/common';
 import { C } from '@angular/cdk/keycodes';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-my-tasks',
@@ -34,7 +35,6 @@ export class MyTasksComponent
   displayedColumns = [
     'select',
     'status',
-    'type',
     'priority',
     'date',
     'details',
@@ -52,7 +52,8 @@ export class MyTasksComponent
     public httpClient: HttpClient,
     public dialog: MatDialog,
     public claimService: MyTasksService,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private _router:Router
   ) {
     super();
   }
@@ -67,12 +68,7 @@ export class MyTasksComponent
   }
   refresh() {
     
-   // this.loadData();
-  }
-  claims: Claim = new Claim();
- add(){
-    this.claimService.addClaim(this.claimService).subscribe();
-    this.claims=new Claim();
+    this.loadData();
   }
   addNew() {
     let tempDirection: Direction;
@@ -90,21 +86,29 @@ export class MyTasksComponent
     });
     this.subs.sink = dialogRef.afterClosed().subscribe((result) => {
       if (result === 1) {
-        // After dialog is closed we're doing frontend updates
-        // For add we're just pushing a new row inside DataServicex
-        this.exampleDatabase?.dataChange.value.unshift(
-          this.claimService.getDialogData()
-        );
+        const newClaim: Claim = this.claimService.getDialogData();
+        // Utilisez la méthode addClaim pour ajouter la nouvelle revendication
+        this.claimService.addClaim(newClaim).subscribe((addedClaim) => {
+          // Le code ci-dessous sera exécuté une fois que la revendication sera ajoutée avec succès
+          this.exampleDatabase?.dataChange.value.unshift(addedClaim);
         this.refreshTable();
         this.showNotification(
           'snackbar-success',
           'Add Record Successfully...!!!',
           'bottom',
           'center'
-        );
+          );
+        },);
       }
     });
   }
+
+/*c:Claim = new Claim();
+  update(row: Claim){
+    this.id = row.id;
+    this.claimService.updateMyTasks(this.c).subscribe(res=>this._router.navigateByUrl("/products"));
+
+  }*/
   editCall(row: Claim) {
     this.id = row.id;
     let tempDirection: Direction;
@@ -128,8 +132,10 @@ export class MyTasksComponent
         );
         // Then you update that record using data from dialogData (values you enetered)
         if (foundIndex != null && this.exampleDatabase) {
-          this.exampleDatabase.dataChange.value[foundIndex] =
-            this.claimService.getDialogData();
+          const updatedClaim: Claim = this.claimService.getDialogData();
+        // Utilisez la méthode updateMyTasks pour mettre à jour la tâche
+        this.claimService.updateMyTasks(updatedClaim).subscribe((updatedClaim) => {
+          this.claimService.getDialogData();
           // And lastly refresh table
           this.refreshTable();
           this.showNotification(
@@ -137,7 +143,8 @@ export class MyTasksComponent
             'Edit Record Successfully...!!!',
             'bottom',
             'center'
-          );
+            );
+          },);
         }
       }
     });

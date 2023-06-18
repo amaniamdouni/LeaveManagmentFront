@@ -54,25 +54,6 @@
             </mat-error>
           </mat-form-field>
         </div>
-        <div class="col-xl-12 col-lg-6 col-md-12 col-sm-12 mb-2">
-          <mat-form-field class="example-full-width mb-3" appearance="outline">
-            <mat-label>type</mat-label>
-            <mat-select formControlName="type" required>
-              <mat-option [value]="'Bug'">
-                Bug
-              </mat-option>
-              <mat-option [value]="'Error'">
-                Error
-              </mat-option>
-              <mat-option [value]="'Development'">
-                Development
-              </mat-option>
-            </mat-select>
-            <mat-error *ngIf="myTasksForm.get('type')?.hasError('required')">
-              Select task type
-            </mat-error>
-          </mat-form-field>
-        </div>
       </div>
       <div class="row">
         <div class="col-xl-12 col-lg-6 col-md-12 col-sm-12 mb-2">
