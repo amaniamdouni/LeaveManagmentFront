@@ -16,7 +16,7 @@ import { DeleteComponent } from './dialogs/delete/delete.component';
 import { SelectionModel } from '@angular/cdk/collections';
 import { UnsubscribeOnDestroyAdapter } from '@shared';
 import { MyTasksService } from './my-tasks.service';
-import { Claim } from './my-tasks.model';
+import { Claim, ClaimPriority } from './my-tasks.model';
 import { Direction } from '@angular/cdk/bidi';
 import { TableExportUtil, TableElement } from '@shared';
 import { formatDate } from '@angular/common';
@@ -34,8 +34,8 @@ export class MyTasksComponent
 {
   displayedColumns = [
     'select',
-    'status',
-    'priority',
+    'claimStatus',
+    'claimPriority',
     'date',
     'details',
     'actions',
@@ -70,7 +70,7 @@ export class MyTasksComponent
     
     this.loadData();
   }
-  addNew() {
+ addNew() {
     let tempDirection: Direction;
     if (localStorage.getItem('isRtl') === 'true') {
       tempDirection = 'rtl';
@@ -89,6 +89,7 @@ export class MyTasksComponent
         const newClaim: Claim = this.claimService.getDialogData();
         // Utilisez la méthode addClaim pour ajouter la nouvelle revendication
         this.claimService.addClaim(newClaim).subscribe((addedClaim) => {
+          console.log(newClaim.description)
           // Le code ci-dessous sera exécuté une fois que la revendication sera ajoutée avec succès
           this.exampleDatabase?.dataChange.value.unshift(addedClaim);
         this.refreshTable();
@@ -103,12 +104,56 @@ export class MyTasksComponent
     });
   }
 
+
 /*c:Claim = new Claim();
   update(row: Claim){
     this.id = row.id;
     this.claimService.updateMyTasks(this.c).subscribe(res=>this._router.navigateByUrl("/products"));
 
   }*/
+ 
+  /*addNew() {
+    let tempDirection: Direction;
+    if (localStorage.getItem('isRtl') === 'true') {
+      tempDirection = 'rtl';
+    } else {
+      tempDirection = 'ltr';
+    }
+    const dialogRef = this.dialog.open(FormDialogComponent, {
+      data: {
+        myTasks: this.myTasks,
+        action: 'add',
+      },
+      direction: tempDirection,
+    });
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result === 1) {
+        const newClaim: Claim = this.claimService.getDialogData();
+  
+        // Check if the claim priority is valid before sending the request
+        if (
+          [ClaimPriority.HIGH, ClaimPriority.LOW, ClaimPriority.MEDIUM].includes(
+            newClaim.claimPriority
+          )
+        ) {
+          // Use the addClaim method to add the new claim
+          this.claimService.addClaim(newClaim).subscribe(
+            (addedClaim) => {
+              console.log(newClaim.description);
+            },
+            (error) => {
+              console.error('Error adding claim:', error);
+              // Handle the error or display an appropriate message to the user
+            }
+          );
+        } else {
+          console.error('Invalid claim priority:', newClaim.claimPriority);
+          // Handle the error or display an appropriate message to the user
+        }
+      }
+    });
+  }*/
+  
   editCall(row: Claim) {
     this.id = row.id;
     let tempDirection: Direction;
@@ -231,19 +276,18 @@ export class MyTasksComponent
   }
   // export table data in excel file
   exportExcel() {
-    // key name with space add in brackets
-    const exportData: Partial<TableElement>[] =
-      this.dataSource.filteredData.map((x) => ({
+    if (this.dataSourceClaim.filteredData) {
+      const exportData: Partial<TableElement>[] = this.dataSourceClaim.filteredData.map((x) => ({
         Status: x.claimStatus,
         Priority: x.claimPriority,
-        //Type: x.type,
-        'Joining Date': formatDate(new Date(x.dateClaim), 'yyyy-MM-dd', 'en') || '',
+        'Joining Date': x.dateClaim,
         Details: x.description,
       }));
-
-    TableExportUtil.exportToExcel(exportData, 'excel');
+  
+      TableExportUtil.exportToExcel(exportData, 'excel');
+    }
   }
-
+  
   showNotification(
     colorName: string,
     text: string,
@@ -294,9 +338,8 @@ export class ExampleDataSource extends DataSource<Claim> {
           .slice()
           .filter((myTasks: Claim) => {
             const searchStr = (
-              myTasks.claimStatus +
-              myTasks.claimPriority +
-              // myTasks.type +
+              myTasks.claimStatus,
+              myTasks.claimPriority,
               myTasks.dateClaim +
               myTasks.description
             ).toLowerCase();

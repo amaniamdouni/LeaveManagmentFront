@@ -17,7 +17,7 @@
         <div class="col-xl-12 col-lg-6 col-md-12 col-sm-12 mb-2">
           <mat-form-field class="example-full-width mb-3" appearance="outline">
             <mat-label>Status</mat-label>
-            <mat-select formControlName="status" required>
+            <mat-select formControlName="claimStatus" required>
               <mat-option [value]="'IN_PROGRESS'">
                 IN_PROGRESS
               </mat-option>
@@ -28,7 +28,7 @@
                 ACCEPTED
               </mat-option>
             </mat-select>
-            <mat-error *ngIf="myTasksForm.get('status')?.hasError('required')">
+            <mat-error *ngIf="myTasksForm.get('claimStatus')?.hasError('required')">
               Select task status
             </mat-error>
           </mat-form-field>
@@ -38,18 +38,18 @@
         <div class="col-xl-12 col-lg-6 col-md-12 col-sm-12 mb-2">
           <mat-form-field class="example-full-width mb-3" appearance="outline">
             <mat-label>Priority</mat-label>
-            <mat-select formControlName="priority" required>
-              <mat-option [value]="'High'">
+            <mat-select formControlName="claimPriority" required>
+              <mat-option [value]="'HIGH'">
                 High
               </mat-option>
-              <mat-option [value]="'Medium'">
+              <mat-option [value]="'MEDIUM'">
                 Medium
               </mat-option>
-              <mat-option [value]="'Low'">
+              <mat-option [value]="'LOW'">
                 Low
               </mat-option>
             </mat-select>
-            <mat-error *ngIf="myTasksForm.get('priority')?.hasError('required')">
+            <mat-error *ngIf="myTasksForm.get('claimPriority')?.hasError('required')">
               Select priority
             </mat-error>
           </mat-form-field>
