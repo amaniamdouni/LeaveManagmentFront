@@ -34,7 +34,7 @@ export class MyLeavesService extends UnsubscribeOnDestroyAdapter {
   // }
   getAllMyLeaves()
   {
-    return this.httpClient.get<Leaves[]>(this.API_URL+"/all");
+    return this.httpClient.get<Leaves[]>(this.API_URL);
   }
 
   updateLeave(leave:Leaves)
@@ -45,6 +45,10 @@ export class MyLeavesService extends UnsubscribeOnDestroyAdapter {
   deleteLeave(id:number)
   {
     return this.httpClient.delete(this.API_URL+"/delete/"+id);
+  }
+
+  addLeave(leave:Leaves) {
+    return this.httpClient.post<Leaves>(this.API_URL+"/add",leave);
   }
   // addMyLeaves(Leaves: Leaves): void {
   //   this.dialogData = Leaves;

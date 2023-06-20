@@ -68,9 +68,6 @@ export class MyLeavesComponent
   ngOnInit() {
     this.loadData();
   }
-  refresh() {
-    //this.loadData();
-  }
   addNew() {
     let tempDirection: Direction;
     if (localStorage.getItem('isRtl') === 'true') {
@@ -89,13 +86,14 @@ export class MyLeavesComponent
       if (result === 1) {
         // After dialog is closed we're doing frontend updates
         // For add we're just pushing a new row inside DataService
-        this.exampleDatabase?.dataChange.value.unshift(
-          this.myLeavesService.getDialogData()
-        );
-        this.refreshTable();
+        // this.exampleDatabase?.dataChange.value.unshift(
+        //   this.myLeavesService.getDialogData()
+        // );
+        //this.refreshTable();
+        this.loadData();
         this.showNotification(
           'snackbar-success',
-          'Add Record Successfully...!!!',
+          'Leave added Successfully',
           'bottom',
           'center'
         );
@@ -122,24 +120,13 @@ export class MyLeavesComponent
     this.subs.sink = dialogRef.afterClosed().subscribe((result) => {
       console.log(result);
       if (result === 1) {
-        this.refreshTable();
-        // When using an edit things are little different, firstly we find record inside DataService by id
-        // const foundIndex = this.exampleDatabase?.dataChange.value.findIndex(
-        //   (x) => x.id === this.id
-        // );
-        // Then you update that record using data from dialogData (values you enetered)
-        // if (foundIndex != null && this.exampleDatabase) {
-        //   this.exampleDatabase.dataChange.value[foundIndex] =
-        //     this.myLeavesService.getDialogData();
-        //   // And lastly refresh table
-        //   this.refreshTable();
-        //   this.showNotification(
-        //     'black',
-        //     'Edit Record Successfully...!!!',
-        //     'bottom',
-        //     'center'
-        //   );
-        // }
+        this.loadData();
+        this.showNotification(
+          'black',
+          'Leave updated Successfully',
+          'bottom',
+          'center'
+        );
       }
     });
   }
@@ -196,25 +183,9 @@ export class MyLeavesComponent
     });
     this.subs.sink = dialogRef.afterClosed().subscribe((result) => {
       if (result === 1) {
-        const foundIndex = this.exampleDatabase?.dataChange.value.findIndex(
-          (x) => x.id === this.id
-        );
-        // for delete we use splice in order to remove single object from DataService
-        if (foundIndex !== undefined && this.exampleDatabase !== undefined) {
-          this.exampleDatabase?.dataChange.value.splice(foundIndex, 1);
-          this.refreshTable();
-          this.showNotification(
-            'snackbar-danger',
-            'Delete Record Successfully...!!!',
-            'bottom',
-            'center'
-          );
-        }
+        this.loadData();
       }
     });
-  }
-  private refreshTable() {
-    this.paginator._changePageSize(this.paginator.pageSize);
   }
   /** Whether the number of selected elements matches the total number of rows. */
   // isAllSelected() {

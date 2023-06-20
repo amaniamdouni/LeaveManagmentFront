@@ -32,7 +32,7 @@
                 </li>
                 <li class="tbl-header-btn">
                   <div class="m-l-10" matTooltip="REFRESH">
-                    <button mat-mini-fab color="primary" (click)="refresh()">
+                    <button mat-mini-fab color="primary" (click)="loadData()">
                       <mat-icon class="col-white">refresh</mat-icon>
                     </button>
                   </div>
@@ -72,7 +72,7 @@
                 </ng-container> -->
                 <!-- ID Column -->
                 <ng-container matColumnDef="id">
-                  <mat-header-cell *matHeaderCellDef mat-sort-header>Id</mat-header-cell>
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>N</mat-header-cell>
                   <mat-cell *matCellDef="let row">{{row.id}}</mat-cell>
                 </ng-container>
                 <ng-container matColumnDef="createdAt">
@@ -111,15 +111,23 @@
                     <span class="mobile-label">Status:</span>
                     <div *ngIf="row.leaveStatus==='APPROVED'">
                       <span class="badge badge-pill badge-primary col-green">
-                        {{row.status}}</span>
+                        {{row.leaveStatus}}</span>
                     </div>
                     <div *ngIf="row.leaveStatus==='REFUSED'">
                       <span class="badge badge-pill badge-primary col-red">
-                        {{row.status}}</span>
+                        {{row.leaveStatus}}</span>
                     </div>
                     <div *ngIf="row.leaveStatus==='IN_PROGRESS'">
                       <span class="badge badge-pill badge-primary col-blue">
-                        {{row.status}}</span>
+                        {{row.leaveStatus}}</span>
+                    </div>
+                    <div *ngIf="row.leaveStatus==='CANCELLED'">
+                      <span class="badge badge-pill badge-primary col-black">
+                        {{row.leaveStatus}}</span>
+                    </div>
+                    <div *ngIf="row.leaveStatus==='ON_HOLD'">
+                      <span class="badge badge-pill badge-primary col-blue">
+                        {{row.leaveStatus}}</span>
                     </div>
                   </mat-cell>
                 </ng-container>
@@ -175,7 +183,7 @@
                     <mat-icon>delete</mat-icon>
                     <span>Delete Record</span>
                   </button>
-                  <button mat-menu-item (click)="refresh()">
+                  <button mat-menu-item (click)="loadData()">
                     <mat-icon>refresh</mat-icon>
                     <span>Refresh Record</span>
                   </button>
@@ -208,7 +216,7 @@
                 [style.display]="dataSource.length === 0 ? '' : 'none'">
                 No results
               </div>
-              <mat-paginator #paginator [length]="dataSource.length" [pageIndex]="0" [pageSize]="10"
+              <mat-paginator #paginator [length]="dataSource.length" [pageSize]="10"
                 [pageSizeOptions]="[5, 10, 25, 100]">
               </mat-paginator>
             </div>
