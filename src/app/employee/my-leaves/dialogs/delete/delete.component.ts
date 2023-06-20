@@ -25,6 +25,11 @@ export class DeleteDialogComponent {
   }
   confirmDelete(): void {
     console.log(this.data);
-    this.myLeavesService.deleteMyLeaves(this.data.id);
+    this.myLeavesService.deleteLeave(this.data.id).subscribe((res) => {
+      console.log(res);
+    },
+     (err) => {
+      console.log(err);
+    });
   }
 }
