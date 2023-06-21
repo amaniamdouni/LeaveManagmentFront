@@ -8,11 +8,13 @@ import {
   UntypedFormBuilder,
 } from '@angular/forms';
 import { Estimates } from '../../estimates.model';
+import { User } from 'app/models/user';
+import { UserService } from 'app/services/user.service';
 
 export interface DialogData {
   id: number;
   action: string;
-  estimates: Estimates;
+  estimates: User;
 }
 
 @Component({
@@ -24,22 +26,23 @@ export class FormDialogComponent {
   action: string;
   dialogTitle: string;
   estimatesForm: UntypedFormGroup;
-  estimates: Estimates;
+  estimates: User;
   constructor(
     public dialogRef: MatDialogRef<FormDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: DialogData,
     public estimatesService: EstimatesService,
+    public userservice : UserService,
     private fb: UntypedFormBuilder
   ) {
     // Set the defaults
     this.action = data.action;
     if (this.action === 'edit') {
-      this.dialogTitle = data.estimates.cName;
+      this.dialogTitle = data.estimates.firstName;
       this.estimates = data.estimates;
     } else {
       this.dialogTitle = 'New Estimates';
-      const blankObject = {} as Estimates;
-      this.estimates = new Estimates(blankObject);
+      const blankObject = {} as User;
+      this.estimates = new User(blankObject);
     }
     this.estimatesForm = this.createContactForm();
   }
@@ -57,14 +60,17 @@ export class FormDialogComponent {
   createContactForm(): UntypedFormGroup {
     return this.fb.group({
       id: [this.estimates.id],
-      eNo: [this.estimates.eNo],
-      cName: [this.estimates.cName],
-      estDate: [this.estimates.estDate],
-      expDate: [this.estimates.expDate],
-      country: [this.estimates.country],
-      amount: [this.estimates.amount],
-      status: [this.estimates.status],
-      details: [this.estimates.details],
+      firstName: [this.estimates.firstName],
+      lastName: [this.estimates.lastName],
+      address: [this.estimates.address],
+      position: [this.estimates.position],
+      email: [this.estimates.email],
+      birthDate: [this.estimates.birthDate],
+      startDate: [this.estimates.startDate],
+      leaveBalance: [this.estimates.leaveBalance],
+      phoneNumber: [this.estimates.phoneNumber],
+      phoneSecondary: [this.estimates.phoneSecondary],
+      password: [this.estimates.password],
     });
   }
   submit() {
@@ -74,6 +80,7 @@ export class FormDialogComponent {
     this.dialogRef.close();
   }
   public confirmAdd(): void {
-    this.estimatesService.addEstimates(this.estimatesForm.getRawValue());
+    console.log(this.estimatesForm);
+    this.userservice.addEstimates(this.estimatesForm.getRawValue());
   }
 }

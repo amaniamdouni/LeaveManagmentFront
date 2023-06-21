@@ -81,8 +81,6 @@ describe("ProjectDialogComponent", () => {
       "	", // tab
       " 	", // space and tab
     ].forEach((value) => {
-      component.form.controls["name"].setValue(value);
-      component.form.markAsDirty();
 
       fixture.detectChanges();
 
@@ -99,10 +97,6 @@ describe("ProjectDialogComponent", () => {
     const button: DebugElement = fixture.debugElement.query(
       By.css("button.mat-primary")
     );
-
-    // when
-    component.form.controls["name"].setValue("Nowe testowe zadanie");
-    component.form.markAsDirty();
 
     fixture.detectChanges();
 

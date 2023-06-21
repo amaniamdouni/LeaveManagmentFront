@@ -9,6 +9,7 @@ import { ProjectDialogComponent } from '../project-dialog/project-dialog.compone
 import { Direction } from '@angular/cdk/bidi';
 import { TeamService } from 'app/services/team.service';
 import { Team } from 'app/models/TeamAdapter';
+import { EstimatesComponent } from '../../estimates/estimates.component';
 
 @Component({
   selector: 'app-board',
@@ -66,7 +67,7 @@ export class BoardComponent implements OnInit {
     });
   }
 
-  public removeProject(project: Project): void {
+  public removeProject(project: Team): void {
     // show "deleted" info
     // const snack = this.snackBar.open("The Project has been deleted", "Undo");
     const snack = this.snackBar.open(
@@ -79,23 +80,26 @@ export class BoardComponent implements OnInit {
         panelClass: 'snackbar-danger',
       }
     );
-    // put project to the trash
-    this.projectService.detachObject(project);
-    // when snack has been removed (dismissed)
-    snack.afterDismissed().subscribe((info) => {
-      if (info.dismissedByAction !== true) {
-        // if dismissed not by undo click (so it dissappeared)
-        // then get project by id and delete it
-        this.projectService.deleteObject(project);
-      }
-    });
-    // snack action has been taken
-    snack.onAction().subscribe(() => {
-      // undo button clicked, so remove project from the trash
-      this.projectService.attachObject(project);
+    this.teamservice.deleteObject(project);
+  }
+  public Adduser(project: Team): void {
+    let tempDirection: Direction;
+    if (localStorage.getItem('isRtl') === 'true') {
+      tempDirection = 'rtl';
+    } else {
+      tempDirection = 'ltr';
+    }
+    // open angular material dialog
+    this.dialog.open(EstimatesComponent, {
+      height: '80%',
+      width: '55%',
+      autoFocus: true,
+      data: {
+        project,
+      },
+      direction: tempDirection,
     });
   }
-
   public newProjectDialog(): void {
     this.dialogOpen('Créer une nouvelle équipe', null);
   }
@@ -113,7 +117,7 @@ export class BoardComponent implements OnInit {
     }
     // open angular material dialog
     this.dialog.open(ProjectDialogComponent, {
-      height: '85%',
+      height: '40%',
       width: '55%',
       autoFocus: true,
       data: {

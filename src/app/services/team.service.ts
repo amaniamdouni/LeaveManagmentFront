@@ -1,10 +1,13 @@
 import { Injectable } from '@angular/core';
 import { Observable, BehaviorSubject } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { catchError, map, tap } from 'rxjs/operators';
 // import { PROJETS } from "./project.data";
 import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { UnsubscribeOnDestroyAdapter } from '@shared';
 import { Team, TeamAdapter } from 'app/models/TeamAdapter';
+import { DatePipe } from '@angular/common';
+import { Archive } from 'angular-feather/icons';
+import { Leave } from 'app/models/Leave';
 @Injectable({
   providedIn: 'root'
 })
@@ -21,11 +24,14 @@ export class TeamService extends UnsubscribeOnDestroyAdapter {
   public readonly projects: Observable<object[]> =
     this._projects.asObservable();
   private readonly API_URL = 'http://localhost:9090/team/';
-
+  isTblLoading = true;
+  dataChange: BehaviorSubject<Leave[]> = new BehaviorSubject<Leave[]>(
+    []
+  );
+  dialogData!: Team;
   constructor(private adapter: TeamAdapter, private httpClient: HttpClient) {
     super();
     // this._projects.next(PROJECTS); // mock up backend with fake data (not Project objects yet!)
-    this.getAllProjectss();
   }
 
   /** CRUD METHODS */
@@ -39,8 +45,23 @@ export class TeamService extends UnsubscribeOnDestroyAdapter {
       },
     });
   }
-
+  getAllProjectssByTeam(): Observable<Leave[]> {
+    return this.httpClient.get<Leave[]>(this.API_URL+"retrieveLeavesByTeam/3").pipe(
+      tap((data: Leave[]) => {
+        this.isTblLoading = false;
+        this.dataChange.next(data);
+      }),
+      catchError((error: HttpErrorResponse) => {
+        this.isTblLoading = false;
+        console.log(error.name + ' ' + error.message);
+        // Throw the error again to propagate it
+        throw error;
+      })
+    );
+  }
+  
   public getObjects(): Observable<Team[]> {
+    this.getAllProjectss();
     return this.projects.pipe(
       map((data: any[]) =>
         data
@@ -76,19 +97,41 @@ export class TeamService extends UnsubscribeOnDestroyAdapter {
   }
 
   public createOject(project: any): void {
-    project.id = this._projects.getValue().length + 1; // mock Project object with fake id (we have no backend)
-    this._projects.next(this._projects.getValue().concat(project));
+    this.httpClient.put(this.API_URL, project,this.httpOptions)
+        .subscribe({
+          next: (data) => {
+            this.dialogData = project;
+          },
+          error: (error: HttpErrorResponse) => {
+             // error code here
+          },
+        }); 
   }
 
-  public updateObject(project: Team): void {
-    console.log(project.id);
-    this.httpClient.put(this.API_URL,project,this.httpOptions)
+  public updateObject(project: Team): void {  
+    this.httpClient.put(this.API_URL, project,this.httpOptions)
+        .subscribe({
+          next: (data) => {
+            this.dialogData = project;
+          },
+          error: (error: HttpErrorResponse) => {
+             // error code here
+          },
+        });  
   }
+  
 
-  public deleteObject(project: Team): void {
-    this._projects.next(
-      this._projects.getValue().filter((t: any) => t.id !== project.id)
-    );
+  public deleteObject(project: Team): void  {
+    console.log(this.API_URL + project.id,this.httpOptions);
+    this.httpClient.delete(this.API_URL + project.id)
+        .subscribe({
+          next: (data) => {
+            console.log(project.id);
+          },
+          error: (error: HttpErrorResponse) => {
+             // error code here
+          },
+        });
   }
 
   public detachObject(project: Team): void {

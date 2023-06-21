@@ -85,12 +85,16 @@ export class ProjectDialogComponent {
     if (!this.projectForm.valid) {
       return;
     }
+    console.log(this.projectForm.value.createdOn);
     let user = this.listUser.find(u => u.id === this.projectForm.value.user);
-    console.log(user);
     this.projectForm.value.user = user;
+    this.projectForm.value.createdOn = "2023-06-16";
+    this.projectForm.value.archive = false;
+    this.projectForm.value.userList = [];
     if (this.project) {
       // update project object with form values
       Object.assign(this.project, this.projectForm.value);
+      console.log(this.project);
       this.teamservice.updateObject(this.project);
       this.snackBar.open('Project updated Successfully...!!!', '', {
         duration: 2000,

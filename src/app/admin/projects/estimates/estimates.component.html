@@ -12,12 +12,12 @@
             <div class="left">
               <ul class="header-buttons-left ms-0">
                 <li class="tbl-title">
-                  <h2>Estimatess</h2>
+                  <h2>Employee </h2>
                 </li>
                 <li class="tbl-search-box">
                   <label for="search-input"><i class="material-icons search-icon">search</i></label>
-                  <input placeholder="Search" type="text" #filter class="browser-default search-field"
-                    aria-label="Search box">
+                  <input placeholder="Search" type="text" class="browser-default search-field"
+                    aria-label="Search box" [(ngModel)]="searchTerm" (input)="filterData()">
                 </li>
               </ul>
             </div>
@@ -30,7 +30,7 @@
                     </button>
                   </div>
                 </li>
-                <li class="tbl-header-btn">
+                <!-- <li class="tbl-header-btn">
                   <div class="m-l-10" matTooltip="REFRESH">
                     <button mat-mini-fab color="primary" (click)="refresh()">
                       <mat-icon class="col-white">refresh</mat-icon>
@@ -45,29 +45,29 @@
                     </button>
                   </div>
                 </li>
-                <li>
+                 <li>
                   <div class="export-button m-l-10" matTooltip="XLSX">
                     <img src="assets/images/icons/xlsx.png" alt="" (click)="exportExcel()" />
                   </div>
-                </li>
+                </li>-->
               </ul>
-            </div>
+            </div> 
           </div>
           <div class="body overflow-auto">
             <div class="responsive_table">
-              <table mat-table #table [dataSource]="dataSource" matSort class="mat-cell">
+              <table mat-table #table [dataSource]="listUser" matSort class="mat-cell">
                 <!-- Checkbox Column -->
                 <ng-container matColumnDef="select">
                   <mat-header-cell *matHeaderCellDef [ngClass]="'tbl-col-width-per-6'">
-                    <mat-checkbox (change)="$event ? masterToggle() : null"
+                    <!-- <mat-checkbox (change)="$event ? masterToggle() : null"
                       [checked]="selection.hasValue() && isAllSelected()"
                       [indeterminate]="selection.hasValue() && !isAllSelected()" [ngClass]="'tbl-checkbox'">
-                    </mat-checkbox>
+                    </mat-checkbox> -->
                   </mat-header-cell>
                   <mat-cell *matCellDef="let row" [ngClass]="'tbl-col-width-per-6'">
-                    <mat-checkbox (click)="$event.stopPropagation()" (change)="$event ? selection.toggle(row) : null"
+                    <!-- <mat-checkbox (click)="$event.stopPropagation()"  (change)="$event ? selection.toggle(row) : null"
                       [checked]="selection.isSelected(row)" [ngClass]="'tbl-checkbox'">
-                    </mat-checkbox>
+                    </mat-checkbox> -->
                   </mat-cell>
                 </ng-container>
                 <!-- ID Column -->
@@ -76,33 +76,33 @@
                   <mat-cell *matCellDef="let row">{{row.id}}</mat-cell>
                 </ng-container>
                 <ng-container matColumnDef="eNo">
-                  <mat-header-cell *matHeaderCellDef mat-sort-header>Estimate ID</mat-header-cell>
-                  <mat-cell *matCellDef="let row"> <span class="mobile-label">Estimate ID:</span>{{row.eNo}}</mat-cell>
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>Matricule</mat-header-cell>
+                  <mat-cell *matCellDef="let row"> <span class="mobile-label">Estimate ID:</span>{{row.matricule}}</mat-cell>
                 </ng-container>
-                <ng-container matColumnDef="cName">
-                  <mat-header-cell *matHeaderCellDef mat-sort-header>Client Name</mat-header-cell>
-                  <mat-cell *matCellDef="let row"> <span class="mobile-label">Client Name:</span>{{row.cName}}
+                <ng-container matColumnDef="firstName">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>Nom & Prénom</mat-header-cell>
+                  <mat-cell *matCellDef="let row"> <span class="mobile-label">Nom & Prénom</span>{{row.firstName}} {{row.lastName}}
                   </mat-cell>
                 </ng-container>
                 <ng-container matColumnDef="estDate">
-                  <mat-header-cell *matHeaderCellDef mat-sort-header>Estimate Date</mat-header-cell>
-                  <mat-cell *matCellDef="let row"> <span class="mobile-label">Estimate
-                      Date:</span>{{row.estDate | date: 'MM/dd/yyyy'}}</mat-cell>
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>Date de naissance</mat-header-cell>
+                  <mat-cell *matCellDef="let row"> <span class="mobile-label">Date de naissance
+                      Date:</span>{{row.birthDate | date: 'MM/dd/yyyy'}}</mat-cell>
                 </ng-container>
                 <ng-container matColumnDef="expDate">
-                  <mat-header-cell *matHeaderCellDef mat-sort-header>Expired Date</mat-header-cell>
-                  <mat-cell *matCellDef="let row"> <span class="mobile-label">Expired
-                      Date:</span>{{row.expDate | date: 'MM/dd/yyyy'}}</mat-cell>
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>Initiation</mat-header-cell>
+                  <mat-cell *matCellDef="let row"> <span class="mobile-label">Initiation
+                      Date:</span>{{row.startDate | date: 'MM/dd/yyyy'}}</mat-cell>
                 </ng-container>
                 <ng-container matColumnDef="country">
-                  <mat-header-cell *matHeaderCellDef mat-sort-header>Country</mat-header-cell>
-                  <mat-cell *matCellDef="let row"> <span class="mobile-label">Country:</span>{{row.country}}</mat-cell>
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>Courrier éléctronique</mat-header-cell>
+                  <mat-cell *matCellDef="let row"> <span class="mobile-label">Courrier éléctronique</span>{{row.email}}</mat-cell>
                 </ng-container>
                 <ng-container matColumnDef="amount">
-                  <mat-header-cell *matHeaderCellDef mat-sort-header>Amount</mat-header-cell>
-                  <mat-cell *matCellDef="let row"><span class="mobile-label">Amount:</span> {{row.amount}}</mat-cell>
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>Adresse</mat-header-cell>
+                  <mat-cell *matCellDef="let row"><span class="mobile-label">Adresse</span> {{row.address}}</mat-cell>
                 </ng-container>
-                <ng-container matColumnDef="status">
+                <!-- <ng-container matColumnDef="status">
                   <mat-header-cell *matHeaderCellDef mat-sort-header> Status
                   </mat-header-cell>
                   <mat-cell mat-cell *matCellDef="let row">
@@ -124,11 +124,11 @@
                         {{row.status}}</span>
                     </div>
                   </mat-cell>
-                </ng-container>
+                </ng-container> -->
                 <ng-container matColumnDef="details">
-                  <mat-header-cell *matHeaderCellDef mat-sort-header>Details</mat-header-cell>
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>Num téléphone</mat-header-cell>
                   <mat-cell *matCellDef="let row" class="column-nowrap"> <span class="truncate-text"><span
-                        class="mobile-label">Details:</span>{{row.details}}</span>
+                        class="mobile-label">Num téléphone</span>{{row.phoneNumber}}</span>
                   </mat-cell>
                 </ng-container>
                 <!-- actions -->
@@ -140,11 +140,11 @@
                       <app-feather-icons [icon]="'edit'" [class]="'tbl-fav-edit'">
                       </app-feather-icons>
                     </button>
-                    <button mat-icon-button color="accent" (click)="$event.stopPropagation()"
+                    <!-- <button mat-icon-button color="accent" (click)="$event.stopPropagation()"
                       (click)="deleteItem(i, row)" class="tbl-action-btn" matTooltip="Delete">
                       <app-feather-icons [icon]="'trash-2'" [class]="'tbl-fav-delete'">
                       </app-feather-icons>
-                    </button>
+                    </button> -->
                   </mat-cell>
                 </ng-container>
                 <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
@@ -154,17 +154,17 @@
                 </mat-row>
               </table>
               <!-- Loading spinner -->
-              <div *ngIf="exampleDatabase?.isTblLoading" class="tbl-spinner">
+              <!-- <div *ngIf="exampleDatabase?.isTblLoading" class="tbl-spinner">
                 <mat-progress-spinner color="primary" [diameter]="40" mode="indeterminate">
                 </mat-progress-spinner>
-              </div>
+              </div> -->
               <div *ngIf="!exampleDatabase?.isTblLoading" class="no-results"
                 [style.display]="dataSource.renderedData.length === 0 ? '' : 'none'">
                 No results
               </div>
-              <mat-paginator #paginator [length]="dataSource.filteredData.length" [pageIndex]="0" [pageSize]="10"
+              <!-- <mat-paginator #paginator [length]="dataSource.filteredData.length" [pageIndex]="0" [pageSize]="10"
                 [pageSizeOptions]="[5, 10, 25, 100]">
-              </mat-paginator>
+              </mat-paginator> -->
             </div>
           </div>
         </div>

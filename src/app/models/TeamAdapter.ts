@@ -3,6 +3,7 @@ import { Adapter } from './Adapter';
 import { User } from '@core';
 
 export class Team {
+  
   constructor(
     public id: number,
     public nameTeam: string,
@@ -12,6 +13,7 @@ export class Team {
     public user?:User,
     public userList?:User[]
   ) {}
+
 }
 
 @Injectable({

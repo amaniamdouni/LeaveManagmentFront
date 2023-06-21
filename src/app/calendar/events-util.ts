@@ -67,7 +67,7 @@ export const INITIAL_EVENTS: EventInput[] = [
     end: new Date(year, month, day + 2, 14, 30),
     allDay: false,
     className: "fc-event-success",
-    groupId: "work",
+    groupId: "important",
     details:
       "Her extensive perceived may any sincerity extremity. Indeed add rather may pretty see.",
   },
@@ -94,7 +94,7 @@ export const INITIAL_EVENTS: EventInput[] = [
       "Her extensive perceived may any sincerity extremity. Indeed add rather may pretty see.",
   },
   {
-    id: "event9",
+    id: "9",
     title: "Get To Gather",
     start: new Date(year, month, day + 6, 10, 0),
     end: new Date(year, month, day + 7, 10, 30),
@@ -105,10 +105,21 @@ export const INITIAL_EVENTS: EventInput[] = [
       "Her extensive perceived may any sincerity extremity. Indeed add rather may pretty see.",
   },
   {
-    id: "event10",
+    id: "10",
     title: "Collage Party",
     start: new Date(year, month, day + 20, 10, 0),
     end: new Date(year, month, day + 20, 10, 30),
+    allDay: false,
+    className: "fc-event-info",
+    groupId: "friends",
+    details:
+      "Her extensive perceived may any sincerity extremity. Indeed add rather may pretty see.",
+  },
+  {
+    id: "11",
+    title: "Collage Party",
+    start: new Date(year, month, day + 1, 10, 0),
+    end: new Date(year, month, day + 1, 10, 30),
     allDay: false,
     className: "fc-event-info",
     groupId: "friends",

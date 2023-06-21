@@ -28,14 +28,18 @@
           <mat-form-field class="example-full-width mb-3" appearance="outline">
             <mat-label>User</mat-label>
             <mat-select formControlName="user" required>
-            <mat-option [value]="project.user?.id" selected>
-                {{ project.user?.firstName +" "+ project.user?.lastName}}
+              <ng-container *ngIf="project?.user !== null">
+                <mat-option [value]="project?.user?.id" selected>
+                {{ project?.user?.firstName +" "+ project?.user?.lastName}}
             </mat-option>
+            </ng-container>
+            <ng-container *ngIf="listUser !== null">
             <ng-container *ngFor="let user of listUser">
-              <mat-option [value]="user.id" *ngIf="user.id !== project.user?.id">
-                {{ user.firstName }} {{ user.lastName }}
+              <mat-option [value]="user?.id" *ngIf="user?.id !== project?.user?.id">
+                {{ user?.firstName }} {{ user?.lastName }}
               </mat-option>
             </ng-container>
+          </ng-container>
             </mat-select>
             <mat-error *ngIf="projectForm.get('user')?.hasError('required')">
               User is required

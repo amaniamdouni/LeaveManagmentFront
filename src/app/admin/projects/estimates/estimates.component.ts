@@ -20,6 +20,8 @@ import { UnsubscribeOnDestroyAdapter } from '@shared';
 import { Direction } from '@angular/cdk/bidi';
 import { TableExportUtil, TableElement } from '@shared';
 import { formatDate } from '@angular/common';
+import { User } from '@core';
+import { UserService } from 'app/services/user.service';
 
 @Component({
   selector: 'app-estimates',
@@ -33,34 +35,87 @@ export class EstimatesComponent
   displayedColumns = [
     'select',
     'eNo',
-    'cName',
+    'firstName',
     'estDate',
     'expDate',
     'country',
     'amount',
-    'status',
     'details',
     'actions',
   ];
-  exampleDatabase?: EstimatesService;
+  listUser : User[];
+  exampleDatabase?: UserService;
   dataSource!: ExampleDataSource;
-  selection = new SelectionModel<Estimates>(true, []);
+  selection = new SelectionModel<User>(true, []);
   index?: number;
   id?: number;
-  estimates?: Estimates;
+  estimates?: User;
+  searchTerm: string;
+
+  private pollingInterval: any;
+
   constructor(
     public httpClient: HttpClient,
     public dialog: MatDialog,
     public estimatesService: EstimatesService,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private userservice:UserService,
+
   ) {
     super();
-  }
+    this.listUser=[];
+    this.searchTerm = "";
+
+    this.pollingInterval = setInterval(() => {
+      if (!this.searchTerm) {
+      this.refreshTeams();
+      }else{
+        this.filterData();
+      }
+    }, 5000);
+    }
   @ViewChild(MatPaginator, { static: true }) paginator!: MatPaginator;
   @ViewChild(MatSort, { static: true }) sort!: MatSort;
   @ViewChild('filter', { static: true }) filter!: ElementRef;
   ngOnInit() {
     this.loadData();
+    console.log(this.selection);
+  }
+  refreshTeams() {
+    this.userservice.getAllEstimatess().subscribe({
+      next: (users: User[]) => {
+        this.listUser = users;
+      },
+      error: (error: any) => {
+        // Handle the error here
+        console.error('Error occurred while fetching users:', error);
+      }
+    });
+  }
+  test(user : User){
+    console.log(user.id);
+  }
+  filterData() {
+    if (!this.searchTerm) {
+      // Si le terme de recherche est vide, affichez tous les éléments
+      this.dataSource.renderedData = this.listUser;
+      return;
+    }
+    
+    // Convertissez le terme de recherche en minuscules pour une recherche insensible à la casse
+    const searchTermLowerCase = this.searchTerm.toLowerCase();
+    
+    // Filtrez la liste en fonction du terme de recherche
+    const filteredData = this.listUser.filter((user) => {
+      let fullname = user.firstName+" "+user.lastName;
+      // Effectuez ici la logique de recherche en fonction des propriétés de l'objet utilisateur
+      // Par exemple, vous pouvez rechercher par nom, ID, etc.
+      return user.firstName.toLowerCase().includes(searchTermLowerCase) ||
+      user.lastName.toLowerCase().includes(searchTermLowerCase);
+    });
+  
+    // Mettez à jour la source de données avec les éléments filtrés
+    this.listUser= filteredData;
   }
   refresh() {
     this.loadData();
@@ -84,7 +139,7 @@ export class EstimatesComponent
         // After dialog is closed we're doing frontend updates
         // For add we're just pushing a new row inside DataService
         this.exampleDatabase?.dataChange.value.unshift(
-          this.estimatesService.getDialogData()
+          this.userservice.getDialogData()
         );
         this.refreshTable();
         this.showNotification(
@@ -96,7 +151,7 @@ export class EstimatesComponent
       }
     });
   }
-  editCall(row: Estimates) {
+  editCall(row: User) {
     this.id = row.id;
     let tempDirection: Direction;
     if (localStorage.getItem('isRtl') === 'true') {
@@ -121,7 +176,7 @@ export class EstimatesComponent
         if (foundIndex !== undefined) {
           if (this.exampleDatabase) {
             this.exampleDatabase.dataChange.value[foundIndex] =
-              this.estimatesService.getDialogData();
+              this.userservice.getDialogData();
           }
           // And lastly refresh table
           this.refreshTable();
@@ -135,7 +190,7 @@ export class EstimatesComponent
       }
     });
   }
-  deleteItem(i: number, row: Estimates) {
+  deleteItem(i: number, row: User) {
     this.index = i;
     this.id = row.id;
     let tempDirection: Direction;
@@ -195,10 +250,10 @@ export class EstimatesComponent
       const index: number = this.dataSource.renderedData.findIndex(
         (d) => d === item
       );
-      // console.log(this.dataSource.renderedData.findIndex((d) => d === item));
+      console.log(this.dataSource.renderedData.findIndex((d) => d === item));
       this.exampleDatabase?.dataChange.value.splice(index, 1);
       this.refreshTable();
-      this.selection = new SelectionModel<Estimates>(true, []);
+      this.selection = new SelectionModel<User>(true, []);
     });
     this.showNotification(
       'snackbar-danger',
@@ -208,7 +263,7 @@ export class EstimatesComponent
     );
   }
   public loadData() {
-    this.exampleDatabase = new EstimatesService(this.httpClient);
+    this.exampleDatabase = new UserService(this.httpClient);
     this.dataSource = new ExampleDataSource(
       this.exampleDatabase,
       this.paginator,
@@ -223,25 +278,25 @@ export class EstimatesComponent
       }
     );
   }
-  // export table data in excel file
-  exportExcel() {
-    // key name with space add in brackets
-    const exportData: Partial<TableElement>[] =
-      this.dataSource.filteredData.map((x) => ({
-        'Estimate ID': x.eNo,
-        'Client Name': x.cName,
-        'Estimate Date':
-          formatDate(new Date(x.estDate), 'yyyy-MM-dd', 'en') || '',
-        'Expired Date':
-          formatDate(new Date(x.expDate), 'yyyy-MM-dd', 'en') || '',
-        Country: x.country,
-        Amount: x.amount,
-        Status: x.status,
-        Details: x.details,
-      }));
+  // // export table data in excel file
+  // exportExcel() {
+  //   // key name with space add in brackets
+  //   const exportData: Partial<TableElement>[] =
+  //     this.dataSource.filteredData.map((x) => ({
+  //       'Estimate ID': x.eNo,
+  //       'Client Name': x.cName,
+  //       'Estimate Date':
+  //         formatDate(new Date(x.estDate), 'yyyy-MM-dd', 'en') || '',
+  //       'Expired Date':
+  //         formatDate(new Date(x.expDate), 'yyyy-MM-dd', 'en') || '',
+  //       Country: x.country,
+  //       Amount: x.amount,
+  //       Status: x.status,
+  //       Details: x.details,
+  //     }));
 
-    TableExportUtil.exportToExcel(exportData, 'excel');
-  }
+  //   TableExportUtil.exportToExcel(exportData, 'excel');
+  // }
 
   showNotification(
     colorName: string,
@@ -257,7 +312,7 @@ export class EstimatesComponent
     });
   }
 }
-export class ExampleDataSource extends DataSource<Estimates> {
+export class ExampleDataSource extends DataSource<User> {
   filterChange = new BehaviorSubject('');
   get filter(): string {
     return this.filterChange.value;
@@ -265,19 +320,20 @@ export class ExampleDataSource extends DataSource<Estimates> {
   set filter(filter: string) {
     this.filterChange.next(filter);
   }
-  filteredData: Estimates[] = [];
-  renderedData: Estimates[] = [];
+  filteredData: User[] = [];
+  renderedData: User[] = [];
+
   constructor(
-    public exampleDatabase: EstimatesService,
+    public exampleDatabase: UserService,
     public paginator: MatPaginator,
     public _sort: MatSort
   ) {
     super();
     // Reset to the first page when the user changes the filter.
-    this.filterChange.subscribe(() => (this.paginator.pageIndex = 0));
+    //this.filterChange.subscribe(() => (this.paginator.pageIndex = 0));
   }
   /** Connect function called by the table to retrieve one stream containing the data to render. */
-  connect(): Observable<Estimates[]> {
+  connect(): Observable<User[]> {
     // Listen for any changes in the base data, sorting, filtering, or pagination
     const displayDataChanges = [
       this.exampleDatabase.dataChange,
@@ -291,13 +347,11 @@ export class ExampleDataSource extends DataSource<Estimates> {
         // Filter data
         this.filteredData = this.exampleDatabase.data
           .slice()
-          .filter((estimates: Estimates) => {
+          .filter((users: User) => {
             const searchStr = (
-              estimates.cName +
-              estimates.estDate +
-              estimates.country +
-              estimates.expDate +
-              estimates.amount
+              users.id +
+              users.firstName +
+              users.lastName 
             ).toLowerCase();
             return searchStr.indexOf(this.filter.toLowerCase()) !== -1;
           });
@@ -316,8 +370,10 @@ export class ExampleDataSource extends DataSource<Estimates> {
   disconnect() {
     //disconnect
   }
+  
+  
   /** Returns a sorted copy of the database data. */
-  sortData(data: Estimates[]): Estimates[] {
+  sortData(data: User[]): User[] {
     if (!this._sort.active || this._sort.direction === '') {
       return data;
     }
@@ -328,20 +384,11 @@ export class ExampleDataSource extends DataSource<Estimates> {
         case 'id':
           [propertyA, propertyB] = [a.id, b.id];
           break;
-        case 'cName':
-          [propertyA, propertyB] = [a.cName, b.cName];
+        case 'firstName':
+          [propertyA, propertyB] = [a.firstName, b.firstName];
           break;
         case 'estDate':
-          [propertyA, propertyB] = [a.estDate, b.estDate];
-          break;
-        case 'country':
-          [propertyA, propertyB] = [a.country, b.country];
-          break;
-        case 'expDate':
-          [propertyA, propertyB] = [a.expDate, b.expDate];
-          break;
-        case 'status':
-          [propertyA, propertyB] = [a.status, b.status];
+          [propertyA, propertyB] = [a.lastName, b.lastName];
           break;
       }
       const valueA = isNaN(+propertyA) ? propertyA : +propertyA;

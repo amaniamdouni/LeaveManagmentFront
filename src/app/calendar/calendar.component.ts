@@ -29,6 +29,9 @@ import { INITIAL_EVENTS } from './events-util';
 import { MatCheckboxChange } from '@angular/material/checkbox';
 import { UnsubscribeOnDestroyAdapter } from '../shared/UnsubscribeOnDestroyAdapter';
 import { Direction } from '@angular/cdk/bidi';
+import { TeamService } from 'app/services/team.service';
+import { Team } from 'app/models/TeamAdapter';
+import { Leave } from 'app/models/Leave';
 
 @Component({
   selector: 'app-calendar',
@@ -45,6 +48,11 @@ export class CalendarComponent
   dialogTitle: string;
   filterOptions = 'All';
   calendarData!: Calendar;
+  private pollingInterval: any;
+  public d = new Date();
+  public day = this.d.getDate();
+  public month = this.d.getMonth();
+  public year = this.d.getFullYear();
   filterItems: string[] = [
     'work',
     'personal',
@@ -55,7 +63,7 @@ export class CalendarComponent
 
   calendarEvents?: EventInput[];
   tempEvents?: EventInput[];
-
+  CG_payee : EventInput[];
   public filters: Array<{ name: string; value: string; checked: boolean }> = [
     { name: 'work', value: 'Work', checked: true },
     { name: 'personal', value: 'Personal', checked: true },
@@ -68,21 +76,55 @@ export class CalendarComponent
     private fb: UntypedFormBuilder,
     private dialog: MatDialog,
     public calendarService: CalendarService,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private teamservice:TeamService
   ) {
     super();
     this.dialogTitle = 'Add New Event';
     const blankObject = {} as Calendar;
     this.calendar = new Calendar(blankObject);
     this.addCusForm = this.createCalendarForm(this.calendar);
+    this.CG_payee = [];
   }
 
   public ngOnInit(): void {
-    this.calendarEvents = INITIAL_EVENTS;
-    this.tempEvents = this.calendarEvents;
-    this.calendarOptions.initialEvents = this.calendarEvents;
+
+    this.pollingInterval = setInterval(() => {
+      this.calendarEvents = this.refreshTeams();
+      this.tempEvents = this.calendarEvents;
+      this.calendarOptions.initialEvents = this.calendarEvents;
+    }, 5000);
   }
 
+  refreshTeams() : EventInput[]{
+    this.CG_payee = [];
+    this.teamservice.getAllProjectssByTeam().subscribe({
+      next: (leaves: Leave[]) => {
+        console.log(leaves);
+        leaves.forEach((leave) => {
+          let event: EventInput = {
+            id: leave.id.toString(),
+            title : leave.user.firstName,
+            start: new Date(this.year, this.month, this.day+1, 12, 0),
+            allDay: false,
+            end:new Date(this.year, this.month, this.day+1, 14, 0),
+            className :"fc-event-success",
+            groupId : "important",
+            details : leave.comment
+          };
+        
+          this.CG_payee.push(event);
+        });
+        INITIAL_EVENTS.concat(this.CG_payee);
+        console.log(this.CG_payee.concat(INITIAL_EVENTS));
+      },
+      error: (error: any) => {
+        // Handle the error here
+        console.error('Error occurred while fetching users:', error);
+      }
+    });
+    return INITIAL_EVENTS.concat(this.CG_payee);
+  }
   calendarOptions: CalendarOptions = {
     plugins: [dayGridPlugin, timeGridPlugin, listPlugin, interactionPlugin],
     headerToolbar: {
