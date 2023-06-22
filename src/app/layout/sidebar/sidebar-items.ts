@@ -1396,18 +1396,6 @@ export const ROUTES: RouteInfo[] = [
         submenu: [],
       },
       {
-        path: '/authentication/signup',
-        title: 'Sign Up',
-        iconType: '',
-        icon: '',
-        class: 'ml-menu',
-        groupTitle: false,
-        badge: '',
-        badgeClass: '',
-        role: [''],
-        submenu: [],
-      },
-      {
         path: '/authentication/forgot-password',
         title: 'Forgot Password',
         iconType: '',
