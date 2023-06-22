@@ -19,6 +19,7 @@ import { Team } from 'app/models/TeamAdapter';
 import { TeamService } from 'app/services/team.service';
 import { User } from '@core';
 import { UserService } from 'app/services/user.service';
+import { BoardComponent } from '../board/board.component';
 
 export interface DialogData {
   id: number;
@@ -30,6 +31,7 @@ export interface DialogData {
 @Component({
   selector: 'app-project-dialog',
   templateUrl: './project-dialog.component.html',
+  providers: [BoardComponent],
 })
 export class ProjectDialogComponent {
   public project: Team;
@@ -49,7 +51,7 @@ export class ProjectDialogComponent {
     private projectService: ProjectService,    
     private teamservice: TeamService,
     private userservice:UserService,
-
+    private compOne: BoardComponent
   ) {
     this.listUser=[];
     this.dialogTitle = data.title;
@@ -80,7 +82,10 @@ export class ProjectDialogComponent {
       this.listUser = res;
     });
   }
-  public save(): void {
+  delay(ms: number): Promise<void> {
+    return new Promise(resolve => setTimeout(resolve, ms));
+  }
+  async save() {
     console.log('save');
     if (!this.projectForm.valid) {
       return;
@@ -115,6 +120,11 @@ export class ProjectDialogComponent {
 
       this.dialogRef.close();
     }
+    await this.delay(2000); // Wait for 2 seconds
+
+    await this.compOne.ngOnInit().then(() => console.log('Finished'))
+    .catch(() => console.error('Failed!'));;
+    
   }
   onNoClick(): void {
     this.dialogRef.close();

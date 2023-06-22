@@ -25,31 +25,44 @@ export class BoardComponent implements OnInit {
     private projectService: ProjectService,
     private teamservice: TeamService,
     private dialog: MatDialog,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
   ) {
     this.lists = {};
     this.listsTeam = {};
   }
 
-  public ngOnInit(): void {
+  async ngOnInit() {
     this.projectService.getObjects().subscribe((projects: Project[]) => {
       // split project to status categories
       this.lists = {projects};
     });
-
-    this.pollingInterval = setInterval(() => {
       this.refreshTeams();
-    }, 5000);
+
+    // this.pollingInterval = setInterval(() => {
+    //   this.refreshTeams();
+    // }, 5000);
   }
   getUsersLength(team: Team): number {
     return team.userList?.length??0;
   }
-  refreshTeams() {
+  async refreshTeams() {
     this.teamservice.getObjects().subscribe((teams: Team[]) => {
       // split project to status categories
       this.listsTeam = {teams};
     });
+    console.log(this.listsTeam)
+    console.log("teset");
+    console.log(this.listsTeam)
   }
+  // async refreshTeams() {
+  //   try {
+  //     const teams: Team[] = await this.teamservice.getObjects().toPromise();
+  //     // split project to status categories
+  //     this.listsTeam = { teams };
+  //   } catch (error) {
+  //     // Handle error
+  //   }
+  // }
   unsorted = (): number => {
     return 0;
   };
@@ -66,8 +79,10 @@ export class BoardComponent implements OnInit {
       status: ProjectStatus[status],
     });
   }
-
-  public removeProject(project: Team): void {
+  delay(ms: number): Promise<void> {
+    return new Promise(resolve => setTimeout(resolve, ms));
+  }
+  async removeProject(project: Team) {
     // show "deleted" info
     // const snack = this.snackBar.open("The Project has been deleted", "Undo");
     const snack = this.snackBar.open(
@@ -80,7 +95,9 @@ export class BoardComponent implements OnInit {
         panelClass: 'snackbar-danger',
       }
     );
-    this.teamservice.deleteObject(project);
+    await this.teamservice.deleteObject(project);
+    await this.delay(2000); // Wait for 2 seconds
+    this.refreshTeams();
   }
   public Adduser(project: Team): void {
     let tempDirection: Direction;
@@ -102,6 +119,7 @@ export class BoardComponent implements OnInit {
   }
   public newProjectDialog(): void {
     this.dialogOpen('Créer une nouvelle équipe', null);
+    
   }
 
   public editProjectDialog(team: Team): void {

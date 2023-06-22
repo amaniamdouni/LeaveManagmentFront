@@ -10,7 +10,7 @@ import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import listPlugin from '@fullcalendar/list';
-
+import { Observable, BehaviorSubject } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
 import {
   UntypedFormBuilder,
@@ -60,7 +60,7 @@ export class CalendarComponent
     'travel',
     'friends',
   ];
-
+  leaves : Observable<Leave[]>;
   calendarEvents?: EventInput[];
   tempEvents?: EventInput[];
   CG_payee : EventInput[];
@@ -85,45 +85,31 @@ export class CalendarComponent
     this.calendar = new Calendar(blankObject);
     this.addCusForm = this.createCalendarForm(this.calendar);
     this.CG_payee = [];
+    this.leaves = new Observable;
+    
   }
 
-  public ngOnInit(): void {
+   ngOnInit() :void{
 
-    this.pollingInterval = setInterval(() => {
-      this.calendarEvents = this.refreshTeams();
-      this.tempEvents = this.calendarEvents;
-      this.calendarOptions.initialEvents = this.calendarEvents;
-    }, 5000);
+    console.log("test");
+    console.log(INITIAL_EVENTS);
+    this.refreshTeams();
+
+    this.calendarEvents = this.CG_payee
+    this.tempEvents = this.calendarEvents;
+    this.calendarOptions.initialEvents = this.calendarEvents;
+
   }
-
-  refreshTeams() : EventInput[]{
+  delay(ms: number): Promise<void> {
+    return new Promise(resolve => setTimeout(resolve, ms));
+  }
+  async refreshTeams() {
     this.CG_payee = [];
-    this.teamservice.getAllProjectssByTeam().subscribe({
-      next: (leaves: Leave[]) => {
-        console.log(leaves);
-        leaves.forEach((leave) => {
-          let event: EventInput = {
-            id: leave.id.toString(),
-            title : leave.user.firstName,
-            start: new Date(this.year, this.month, this.day+1, 12, 0),
-            allDay: false,
-            end:new Date(this.year, this.month, this.day+1, 14, 0),
-            className :"fc-event-success",
-            groupId : "important",
-            details : leave.comment
-          };
-        
-          this.CG_payee.push(event);
-        });
-        INITIAL_EVENTS.concat(this.CG_payee);
-        console.log(this.CG_payee.concat(INITIAL_EVENTS));
-      },
-      error: (error: any) => {
-        // Handle the error here
-        console.error('Error occurred while fetching users:', error);
-      }
-    });
-    return INITIAL_EVENTS.concat(this.CG_payee);
+    this.leaves = await this.teamservice.getAllProjectssByTeam();
+    this.delay(2000);
+    this.leaves = await this.teamservice.getAllProjectssByTeam();
+    console.log(this.leaves);
+    
   }
   calendarOptions: CalendarOptions = {
     plugins: [dayGridPlugin, timeGridPlugin, listPlugin, interactionPlugin],

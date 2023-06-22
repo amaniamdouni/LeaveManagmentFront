@@ -35,7 +35,7 @@ export class TeamService extends UnsubscribeOnDestroyAdapter {
   }
 
   /** CRUD METHODS */
-  getAllProjectss(): void {
+  async getAllProjectss() {
     this.subs.sink = this.httpClient.get<Team[]>(this.API_URL).subscribe({
       next: (data) => {
         this._projects.next(data); // mock up backend with fake data (not Project objects yet!)
@@ -45,7 +45,7 @@ export class TeamService extends UnsubscribeOnDestroyAdapter {
       },
     });
   }
-  getAllProjectssByTeam(): Observable<Leave[]> {
+  async getAllProjectssByTeam() {
     return this.httpClient.get<Leave[]>(this.API_URL+"retrieveLeavesByTeam/3").pipe(
       tap((data: Leave[]) => {
         this.isTblLoading = false;
@@ -62,6 +62,7 @@ export class TeamService extends UnsubscribeOnDestroyAdapter {
   
   public getObjects(): Observable<Team[]> {
     this.getAllProjectss();
+    console.log(this.projects);
     return this.projects.pipe(
       map((data: any[]) =>
         data
@@ -121,7 +122,7 @@ export class TeamService extends UnsubscribeOnDestroyAdapter {
   }
   
 
-  public deleteObject(project: Team): void  {
+  async deleteObject(project: Team)  {
     console.log(this.API_URL + project.id,this.httpOptions);
     this.httpClient.delete(this.API_URL + project.id)
         .subscribe({

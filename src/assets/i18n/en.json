@@ -10,6 +10,15 @@
         "DASHBOARD2": "Dashboard 2"
       }
     },
+    "Teams": {
+      "TEXT": "Projects",
+      "LIST": {
+        "ALL-PROJECTS": "All Projects",
+        "ADD-PROJECT": "Add Project",
+        "ESTIMATES": "Estimates",
+        "PROJECT-DETAILS": "Project Details"
+      }
+    },
     "PROJECTS": {
       "TEXT": "Projects",
       "LIST": {
