@@ -7,6 +7,7 @@ import {
 } from '@angular/forms';
 import { Role, AuthService } from '@core';
 import { UnsubscribeOnDestroyAdapter } from '@shared';
+import { HttpErrorResponse } from '@angular/common/http';
 @Component({
   selector: 'app-signin',
   templateUrl: './signin.component.html',
@@ -23,7 +24,6 @@ export class SigninComponent
   hide = true;
   constructor(
     private formBuilder: UntypedFormBuilder,
-    private route: ActivatedRoute,
     private router: Router,
     private authService: AuthService
   ) {
@@ -32,25 +32,27 @@ export class SigninComponent
 
   ngOnInit() {
     this.authForm = this.formBuilder.group({
-      username: ['admin@software.com', Validators.required],
-      password: ['admin@123', Validators.required],
+      username: ['admin@software.com',Validators.required],
+      password: [ 'admin@123',Validators.required],
     });
   }
   get f() {
     return this.authForm.controls;
   }
-  adminSet() {
-    this.authForm.get('username')?.setValue('admin@software.com');
-    this.authForm.get('password')?.setValue('admin@123');
-  }
-  employeeSet() {
-    this.authForm.get('username')?.setValue('employee@software.com');
-    this.authForm.get('password')?.setValue('employee@123');
-  }
+  // adminSet() {
+  //   this.authForm.get('username')?.setValue('admin@software.com');
+  //   this.authForm.get('password')?.setValue('admin@123');
+  // }
+  // employeeSet() {
+  //   this.authForm.get('username')?.setValue('employee@software.com');
+  //   this.authForm.get('password')?.setValue('employee@123');
+  // }
   onSubmit() {
     this.submitted = true;
     this.loading = true;
     this.error = '';
+    console.log(this.f['username'].value)
+    console.log(this.f['password'].value)
     if (this.authForm.invalid) {
       this.error = 'Username and Password not valid !';
       return;
