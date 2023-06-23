@@ -28,7 +28,7 @@ export class FormDialogComponent {
   myLeavesForm: UntypedFormGroup;
   myLeaves: Leaves;
   leaveStatutList = LeaveStatus;
-  leaveTypeList = LeaveType
+  leaveTypeList = LeaveType;
   constructor(
     public dialogRef: MatDialogRef<FormDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: DialogData,
@@ -68,7 +68,7 @@ export class FormDialogComponent {
       startDate: [this.myLeaves.startDate, [Validators.required]],
       endDate: [this.myLeaves.endDate, [Validators.required]],
       leaveType: [this.myLeaves.leaveType, [Validators.required]],
-      leaveStatus: [this.myLeaves.leaveStatus, [Validators.required]],
+      leaveStatus: [this.myLeaves.leaveStatus],
       comment: [this.myLeaves.comment, [Validators.required]],
     });
   }

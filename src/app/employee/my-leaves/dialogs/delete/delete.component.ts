@@ -1,12 +1,11 @@
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { Component, Inject } from '@angular/core';
 import { MyLeavesService } from '../../my-leaves.service';
+import { Leaves } from '../../models/leaves.model';
 
 export interface DialogData {
-  id: number;
-  type: string;
-  status: string;
-  reason: string;
+  Leaves: Leaves,
+  action: string
 }
 
 @Component({
@@ -24,8 +23,8 @@ export class DeleteDialogComponent {
     this.dialogRef.close();
   }
   confirmDelete(): void {
-    console.log(this.data);
-    this.myLeavesService.deleteLeave(this.data.id).subscribe((res) => {
+    console.log(this.data.Leaves.id);
+    this.myLeavesService.deleteLeave(this.data.Leaves.id).subscribe((res) => {
       console.log(res);
     },
      (err) => {

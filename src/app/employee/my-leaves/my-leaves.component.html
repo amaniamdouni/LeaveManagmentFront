@@ -144,12 +144,12 @@
                   <mat-cell *matCellDef="let row; let i=index;" class="pr-0">
                     <button mat-icon-button color="accent" (click)="$event.stopPropagation()" (click)="editCall(row)"
                       class="tbl-action-btn" matTooltip="Edit">
-                      <app-feather-icons [icon]="'edit'" [class]="'tbl-fav-edit'">
+                      <app-feather-icons [icon]="'edit2'" [class]="'tbl-fav-edit'">
                       </app-feather-icons>
                     </button>
                     <button mat-icon-button color="accent" (click)="$event.stopPropagation()"
                       (click)="deleteItem(i, row)" class="tbl-action-btn" matTooltip="Delete">
-                      <app-feather-icons [icon]="'trash-2'" [class]="'tbl-fav-delete'">
+                      <app-feather-icons [icon]="'x'" [class]="'tbl-fav-delete'">
                       </app-feather-icons>
                     </button>
                   </mat-cell>

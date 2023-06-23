@@ -21,6 +21,7 @@ import { MyLeavesService } from './my-leaves.service';
 import { Direction } from '@angular/cdk/bidi';
 import { TableExportUtil, TableElement } from '@shared';
 import { formatDate } from '@angular/common';
+import { LeaveStatus } from './models/leaveStatus';
 
 @Component({
   selector: 'app-my-leaves',
@@ -50,6 +51,7 @@ export class MyLeavesComponent
   id?: number;
   index?: number;
   Leaves?: Leaves | null;
+  isCancel = false;
   constructor(
     public httpClient: HttpClient,
     public dialog: MatDialog,
@@ -75,6 +77,7 @@ export class MyLeavesComponent
     } else {
       tempDirection = 'ltr';
     }
+    console.log(this.Leaves);
     const dialogRef = this.dialog.open(FormDialogComponent, {
       data: {
         Leaves: this.Leaves,
@@ -84,12 +87,6 @@ export class MyLeavesComponent
     });
     this.subs.sink = dialogRef.afterClosed().subscribe((result) => {
       if (result === 1) {
-        // After dialog is closed we're doing frontend updates
-        // For add we're just pushing a new row inside DataService
-        // this.exampleDatabase?.dataChange.value.unshift(
-        //   this.myLeavesService.getDialogData()
-        // );
-        //this.refreshTable();
         this.loadData();
         this.showNotification(
           'snackbar-success',
@@ -130,40 +127,6 @@ export class MyLeavesComponent
       }
     });
   }
-  // deleteItem(i: number, row: any) {
-  //   this.index = i;
-  //   this.id = row.id;
-  //   let tempDirection: Direction;
-  //   if (localStorage.getItem('isRtl') === 'true') {
-  //     tempDirection = 'rtl';
-  //   } else {
-  //     tempDirection = 'ltr';
-  //   }
-  //   const dialogRef = this.dialog.open(DeleteDialogComponent, {
-  //     height: '270px',
-  //     width: '400px',
-  //     data: row,
-  //     direction: tempDirection,
-  //   });
-  //   this.subs.sink = dialogRef.afterClosed().subscribe((result) => {
-  //     if (result === 1) {
-  //       const foundIndex = this.exampleDatabase?.dataChange.value.findIndex(
-  //         (x) => x.id === this.id
-  //       );
-  //       // for delete we use splice in order to remove single object from DataService
-  //       if (foundIndex != null && this.exampleDatabase) {
-  //         this.exampleDatabase.dataChange.value.splice(foundIndex, 1);
-  //         this.refreshTable();
-  //         this.showNotification(
-  //           'snackbar-danger',
-  //           'Delete Record Successfully...!!!',
-  //           'bottom',
-  //           'center'
-  //         );
-  //       }
-  //     }
-  //   });
-  // }
 
   deleteItem(i: number, row: Leaves) {
     this.index = i;
@@ -174,18 +137,22 @@ export class MyLeavesComponent
     } else {
       tempDirection = 'ltr';
     }
+      this.isCancel = true;
+      const dialogRef = this.dialog.open(DeleteDialogComponent, {
+        height: '270px',
+        width: '300px',
+        data: {
+          Leaves: row,
+          action: 'cancel',
+        },
+        direction: tempDirection,
+      });
+      this.subs.sink = dialogRef.afterClosed().subscribe((result) => {
+        if (result === 1) {
+          this.loadData();
+        }
+      });
 
-    const dialogRef = this.dialog.open(DeleteDialogComponent, {
-      height: '270px',
-      width: '300px',
-      data: row,
-      direction: tempDirection,
-    });
-    this.subs.sink = dialogRef.afterClosed().subscribe((result) => {
-      if (result === 1) {
-        this.loadData();
-      }
-    });
   }
   /** Whether the number of selected elements matches the total number of rows. */
   // isAllSelected() {

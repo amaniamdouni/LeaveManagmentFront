@@ -1,6 +1,7 @@
-import { LeaveStatus } from "./leaveStatus";
-import { LeaveType } from "./leaveType";
-
+import { formatDate } from '@angular/common';
+import { LeaveStatus } from './leaveStatus';
+import { LeaveType } from './leaveType';
+import { User } from './user.model';
 export class Leaves {
   id: number;
   //halfDay: string;
@@ -12,7 +13,7 @@ export class Leaves {
   createdAt: Date;
   leaveType: LeaveType;
   archived: boolean;
-  user: string;
+  user: User;
 
   constructor(myLeaves: Leaves) {
     {
