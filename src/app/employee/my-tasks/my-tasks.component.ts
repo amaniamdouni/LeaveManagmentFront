@@ -53,7 +53,6 @@ export class MyTasksComponent
     public dialog: MatDialog,
     public claimService: MyTasksService,
     private snackBar: MatSnackBar,
-    private _router:Router
   ) {
     super();
   }
@@ -93,68 +92,12 @@ export class MyTasksComponent
           // Le code ci-dessous sera exécuté une fois que la revendication sera ajoutée avec succès
           this.exampleDatabase?.dataChange.value.unshift(addedClaim);
         this.refreshTable();
-        this.showNotification(
-          'snackbar-success',
-          'Add Record Successfully...!!!',
-          'bottom',
-          'center'
-          );
         },);
       }
     });
   }
 
-
-/*c:Claim = new Claim();
-  update(row: Claim){
-    this.id = row.id;
-    this.claimService.updateMyTasks(this.c).subscribe(res=>this._router.navigateByUrl("/products"));
-
-  }*/
- 
-  /*addNew() {
-    let tempDirection: Direction;
-    if (localStorage.getItem('isRtl') === 'true') {
-      tempDirection = 'rtl';
-    } else {
-      tempDirection = 'ltr';
-    }
-    const dialogRef = this.dialog.open(FormDialogComponent, {
-      data: {
-        myTasks: this.myTasks,
-        action: 'add',
-      },
-      direction: tempDirection,
-    });
-    dialogRef.afterClosed().subscribe((result) => {
-      if (result === 1) {
-        const newClaim: Claim = this.claimService.getDialogData();
-  
-        // Check if the claim priority is valid before sending the request
-        if (
-          [ClaimPriority.HIGH, ClaimPriority.LOW, ClaimPriority.MEDIUM].includes(
-            newClaim.claimPriority
-          )
-        ) {
-          // Use the addClaim method to add the new claim
-          this.claimService.addClaim(newClaim).subscribe(
-            (addedClaim) => {
-              console.log(newClaim.description);
-            },
-            (error) => {
-              console.error('Error adding claim:', error);
-              // Handle the error or display an appropriate message to the user
-            }
-          );
-        } else {
-          console.error('Invalid claim priority:', newClaim.claimPriority);
-          // Handle the error or display an appropriate message to the user
-        }
-      }
-    });
-  }*/
-  
-  editCall(row: Claim) {
+ /* editCall(row: Claim) {
     this.id = row.id;
     let tempDirection: Direction;
     if (localStorage.getItem('isRtl') === 'true') {
@@ -193,9 +136,45 @@ export class MyTasksComponent
         }
       }
     });
-  }
+  }*/
 
-  deleteItem(i: number, row: Claim) {
+  editCall(row: Claim) {
+    this.id = row.id;
+    let tempDirection: Direction;
+    if (localStorage.getItem('isRtl') === 'true') {
+      tempDirection = 'rtl';
+    } else {
+      tempDirection = 'ltr';
+    }
+    const dialogRef = this.dialog.open(FormDialogComponent, {
+      data: {
+        myTasks: row,
+        action: 'edit',
+      },
+      direction: tempDirection,
+    });
+    this.subs.sink = dialogRef.afterClosed().subscribe((result) => {
+      if (result === 1) {
+        const foundIndex = this.exampleDatabase?.dataChange.value.findIndex(
+          (x) => x.id === this.id
+        );
+        console.log('foundIndex:', foundIndex);
+        if (foundIndex != null && this.exampleDatabase) {
+          const updatedClaim: Claim = this.claimService.getDialogData();
+          console.log('updatedClaim:', updatedClaim);
+          this.claimService.updateMyTasks(updatedClaim).subscribe(() => {
+            this.claimService.getDialogData();
+            this.refreshTable();
+          });
+        } else {
+          console.log('Error: No matching index found.');
+        }
+      }
+    });
+  }
+  
+
+ /* deleteItem(i: number, row: Claim) {
     this.index = i;
     this.id = row.id;
     let tempDirection: Direction;
@@ -227,6 +206,52 @@ export class MyTasksComponent
             'center'
           );
         }
+      }
+    });
+  }*/
+  
+  deleteMyTasks(id: number): void {
+    this.httpClient.delete<Claim>("/deleteClaim/" + id).subscribe(() => {
+      // Handle the success response or perform any additional actions
+      console.log("Record deleted successfully");
+    }, (error) => {
+      // Handle the error response or display an error message
+      console.error("Error deleting record:", error);
+    });
+  }
+  deleteItem(i: number, row: Claim) {
+    this.index = i;
+    this.id = row.id;
+    let tempDirection: Direction;
+    if (localStorage.getItem('isRtl') === 'true') {
+      tempDirection = 'rtl';
+    } else {
+      tempDirection = 'ltr';
+    }
+  
+    const dialogRef = this.dialog.open(DeleteComponent, {
+      height: '270px',
+      width: '300px',
+      data: row,
+      direction: tempDirection,
+    });
+  
+    this.subs.sink = dialogRef.afterClosed().subscribe((result) => {
+      if (result === 1) {
+        if (this.id !== undefined && this.exampleDatabase !== undefined) {
+          this.claimService.deleteMyTasks(this.id, row.claimStatus).subscribe(
+            () => {
+              this.exampleDatabase.dataChange.value.splice(this.index, 1);
+              this.refreshTable();
+              console.log("Record deleted successfully");
+            },
+            (error) => {
+              console.error("Error deleting record:", error);
+            }
+          );
+        }
+      } else {
+        console.log("err");
       }
     });
   }

@@ -22,7 +22,7 @@
                 IN_PROGRESS
               </mat-option>
               <mat-option [value]="'ON_HOLD'">
-                ON HOLD
+                ON_HOLD
               </mat-option>
               <mat-option [value]="'ACCEPTED'">
                 ACCEPTED
@@ -59,10 +59,10 @@
         <div class="col-xl-12 col-lg-6 col-md-12 col-sm-12 mb-2">
           <mat-form-field class="example-full-width" appearance="outline">
             <mat-label>Date</mat-label>
-            <input matInput [matDatepicker]="picker" formControlName="date">
+            <input matInput [matDatepicker]="picker" formControlName="dateClaim">
             <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
             <mat-datepicker #picker></mat-datepicker>
-            <mat-error *ngIf="myTasksForm.get('date')?.hasError('required')">
+            <mat-error *ngIf="myTasksForm.get('dateClaim')?.hasError('required')">
               Please select date
             </mat-error>
           </mat-form-field>
@@ -72,7 +72,7 @@
         <div class=" col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
           <mat-form-field class="example-full-width mb-3" appearance="outline">
             <mat-label>Description</mat-label>
-            <textarea matInput formControlName="details"></textarea>
+            <textarea matInput formControlName="description"></textarea>
           </mat-form-field>
         </div>
       </div>

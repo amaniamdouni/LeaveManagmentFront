@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { Claim } from './my-tasks.model';
+import { Claim, ClaimStatus } from './my-tasks.model';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { UnsubscribeOnDestroyAdapter } from '@shared';
 @Injectable()
@@ -39,21 +39,13 @@ export class MyTasksService extends UnsubscribeOnDestroyAdapter {
     this.dialogData = claim;
     return  this.httpClient.post<Claim>(this.API_URL+"/addClaim",claim);
   }
-  updateMyTasks(myTasks: Claim): Observable<Claim> {
-    this.dialogData = myTasks;
-    return  this.httpClient.put<Claim>(this.API_URL+"/updateClaim/"+myTasks.id,myTasks);
+  updateMyTasks(claim: Claim): Observable<Claim> {
+    this.dialogData = claim;
+    return  this.httpClient.put<Claim>(this.API_URL+"/updateClaim/"+claim.id,claim);
   }
-  deleteMyTasks(id: number): void {
-    console.log(id);
-
-    // this.httpClient.delete(this.API_URL + id)
-    //     .subscribe({
-    //       next: (data) => {
-    //         console.log(id);
-    //       },
-    //       error: (error: HttpErrorResponse) => {
-    //          // error code here
-    //       },
-    //     });
+  deleteMyTasks(id: number, claimStatus: ClaimStatus) {
+    return this.httpClient.delete<Claim>(this.API_URL + "/deleteClaim/" + id, {
+      params: { ClaimStatus : claimStatus } 
+    });
   }
 }

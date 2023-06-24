@@ -61,8 +61,8 @@ export class FormDialogComponent {
       claimStatus: [this.myTasks.claimStatus],
       claimPriority: [this.myTasks.claimPriority],
       //type: [this.myTasks.type],
-      date: [this.myTasks.dateClaim],
-      details: [this.myTasks.description],
+      dateClaim: [this.myTasks.dateClaim],
+      description: [this.myTasks.description],
     });
   }
   submit() {
