@@ -1,5 +1,4 @@
 export class User {
-    id: number;
     matricule: string;
     firstName: string;
     lastName: string;
@@ -13,9 +12,9 @@ export class User {
     phoneSecondary: string;
     email: string;
     password: string;
+    token: string;
     constructor(user: User) {
       {
-        this.id = user.id || 0;
         this.matricule = user.matricule || '';
         this.firstName = user.firstName || '';
         this.lastName = user.lastName || '';
@@ -29,6 +28,7 @@ export class User {
         this.phoneSecondary = user.phoneSecondary || '';
         this.email = user.email || '';
         this.password = user.password || '';
+        this.token = user.token || '';
       }
     }
   }

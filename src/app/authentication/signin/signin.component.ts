@@ -32,27 +32,17 @@ export class SigninComponent
 
   ngOnInit() {
     this.authForm = this.formBuilder.group({
-      username: ['admin@software.com',Validators.required],
-      password: [ 'admin@123',Validators.required],
+      username: [null,Validators.required],
+      password: [null,Validators.required],
     });
   }
   get f() {
     return this.authForm.controls;
   }
-  // adminSet() {
-  //   this.authForm.get('username')?.setValue('admin@software.com');
-  //   this.authForm.get('password')?.setValue('admin@123');
-  // }
-  // employeeSet() {
-  //   this.authForm.get('username')?.setValue('employee@software.com');
-  //   this.authForm.get('password')?.setValue('employee@123');
-  // }
   onSubmit() {
     this.submitted = true;
     this.loading = true;
     this.error = '';
-    console.log(this.f['username'].value)
-    console.log(this.f['password'].value)
     if (this.authForm.invalid) {
       this.error = 'Username and Password not valid !';
       return;
@@ -64,8 +54,10 @@ export class SigninComponent
             if (res) {
               setTimeout(() => {
                 const role = this.authService.currentUserValue.role;
-                if (role === Role.All || role === Role.Admin) {
-                  this.router.navigate(['/admin/dashboard/main']);
+                console.log(this.authService.currentUserValue.role)
+                console.log(role === Role.Admin)
+                if ( role === Role.Admin) {
+                  this.router.navigate(['/admin/dashboard/main' ]);
                 } else if (role === Role.Employee) {
                   this.router.navigate(['/employee/dashboard']);
                 } else {

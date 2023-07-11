@@ -18,7 +18,7 @@ export class UserService extends UnsubscribeOnDestroyAdapter {
         'Access-Control-Allow-Origin': 'http://localhost:4200'
       })
     };
-    private readonly API_URL = 'http://localhost:9090/users/';
+    private readonly API_URL = 'http://localhost:9090/user';
     isTblLoading = true;
     dataChange: BehaviorSubject<User[]> = new BehaviorSubject<User[]>(
       []
@@ -52,46 +52,41 @@ export class UserService extends UnsubscribeOnDestroyAdapter {
     }
     
     getUsers(): Observable<User[]> {
-      return this.httpClient.get<User[]>(this.API_URL);;
+      return this.httpClient.get<User[]>(this.API_URL);
     }
-    addEstimates(estimates: User): void {
-      this.dialogData = estimates;
-      console.log(estimates);
-      this.httpClient.post(this.API_URL, estimates)
+    addUser(user: User): void {
+      this.dialogData = user;
+      console.log(user);
+      this.httpClient.post(this.API_URL, user)
       .subscribe({
         next: (data) => {
-          this.dialogData = estimates;
+          this.dialogData = user;
         },
         error: (error: HttpErrorResponse) => {
            // error code here
         },
       });
     }
-    updateEstimates(estimates: User): void {
-      this.dialogData = estimates;
-      console.log(estimates);
-      this.httpClient.put(this.API_URL, estimates)
+  updateUser(user: User): void {
+      this.dialogData = user;
+      console.log(user);
+      this.httpClient.put(this.API_URL, user)
           .subscribe({
             next: (data) => {
-              this.dialogData = estimates;
+              this.dialogData = user;
             },
             error: (error: HttpErrorResponse) => {
                // error code here
             },
           });
-    }
-    deleteEstimates(id: number): void {
-      console.log(id);
-  
-      // this.httpClient.delete(this.API_URL + id)
-      //     .subscribe({
-      //       next: (data) => {
-      //         console.log(id);
-      //       },
-      //       error: (error: HttpErrorResponse) => {
-      //          // error code here
-      //       },
-      //     });
+  }
+  deleteUser( id: number ): void {
+       this.httpClient.put(this.API_URL, id)
+          .subscribe({
+            error: (error: HttpErrorResponse) => {
+               // error code here
+            },
+          });
     }
   }
   
