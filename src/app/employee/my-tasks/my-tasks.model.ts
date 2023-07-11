@@ -6,9 +6,9 @@ export enum ClaimPriority {
   MEDIUM = 'MEDIUM'
 }
 export enum ClaimStatus{
-  IN_PROGRESS,
-  ON_HOLD,
-  ACCEPTED
+  IN_PROGRESS ='IN_PROGRESS',
+  ON_HOLD='ON_HOLD',
+  ACCEPTED='ACCEPTED'
 }
 export class Claim {
   id: number;
@@ -16,22 +16,4 @@ export class Claim {
   claimPriority: ClaimPriority;
   dateClaim: Date;
   description: string;
-
-
- /* constructor(myTasks: Claim) {
-    {
-      this.id = myTasks.id || this.getRandomID();
-      this.claimStatus = myTasks.claimStatus || '';
-      this.claimPriority = myTasks.claimPriority || '';
-     // this.type = myTasks.type || '';
-      this.dateClaim = formatDate(new Date(), 'yyyy-MM-dd', 'en') || '';
-      this.description = myTasks.description || '';
-    }
-  }
- /* public getRandomID(): number {
-    const S4 = () => {
-      return ((1 + Math.random()) * 0x10000) | 0;
-    };
-    return S4() + S4();
-  }*/
 }

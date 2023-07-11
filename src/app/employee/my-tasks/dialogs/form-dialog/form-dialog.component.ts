@@ -72,6 +72,27 @@ export class FormDialogComponent {
     this.dialogRef.close();
   }
   public confirmAdd(): void {
-    this.myTasksService.addClaim(this.myTasksForm.getRawValue());
+   // this.myTasksService.addClaim(this.myTasksForm.getRawValue());
+    if(this.action==='edit')
+    {
+      console.log(this.myTasksForm.value);
+      this.myTasksService.updateMyTasks(this.myTasksForm.value).subscribe((result)=>{
+        console.log(result);
+      },
+      (err)=>
+      {
+        console.log(err);
+      });
+   }else
+      {
+        this.myTasksService.addClaim(this.myTasksForm.value).subscribe((result)=>
+        {
+          console.log(result);
+        },
+        (err)=>
+        {
+          console.log(err);
+        });
+      }
   }
 }

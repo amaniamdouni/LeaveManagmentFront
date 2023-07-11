@@ -86,59 +86,16 @@ export class MyTasksComponent
     this.subs.sink = dialogRef.afterClosed().subscribe((result) => {
       if (result === 1) {
         const newClaim: Claim = this.claimService.getDialogData();
-        // Utilisez la méthode addClaim pour ajouter la nouvelle revendication
         this.claimService.addClaim(newClaim).subscribe((addedClaim) => {
           console.log(newClaim.description)
-          // Le code ci-dessous sera exécuté une fois que la revendication sera ajoutée avec succès
           this.exampleDatabase?.dataChange.value.unshift(addedClaim);
-        this.refreshTable();
+        this.loadData();
         },);
       }
     });
   }
-
- /* editCall(row: Claim) {
-    this.id = row.id;
-    let tempDirection: Direction;
-    if (localStorage.getItem('isRtl') === 'true') {
-      tempDirection = 'rtl';
-    } else {
-      tempDirection = 'ltr';
-    }
-    const dialogRef = this.dialog.open(FormDialogComponent, {
-      data: {
-        myTasks: row,
-        action: 'edit',
-      },
-      direction: tempDirection,
-    });
-    this.subs.sink = dialogRef.afterClosed().subscribe((result) => {
-      if (result === 1) {
-        // When using an edit things are little different, firstly we find record inside DataService by id
-        const foundIndex = this.exampleDatabase?.dataChange.value.findIndex(
-          (x) => x.id === this.id
-        );
-        // Then you update that record using data from dialogData (values you enetered)
-        if (foundIndex != null && this.exampleDatabase) {
-          const updatedClaim: Claim = this.claimService.getDialogData();
-        // Utilisez la méthode updateMyTasks pour mettre à jour la tâche
-        this.claimService.updateMyTasks(updatedClaim).subscribe((updatedClaim) => {
-          this.claimService.getDialogData();
-          // And lastly refresh table
-          this.refreshTable();
-          this.showNotification(
-            'black',
-            'Edit Record Successfully...!!!',
-            'bottom',
-            'center'
-            );
-          },);
-        }
-      }
-    });
-  }*/
-
   editCall(row: Claim) {
+    console.log(row);
     this.id = row.id;
     let tempDirection: Direction;
     if (localStorage.getItem('isRtl') === 'true') {
@@ -158,65 +115,14 @@ export class MyTasksComponent
         const foundIndex = this.exampleDatabase?.dataChange.value.findIndex(
           (x) => x.id === this.id
         );
-        console.log('foundIndex:', foundIndex);
         if (foundIndex != null && this.exampleDatabase) {
           const updatedClaim: Claim = this.claimService.getDialogData();
           console.log('updatedClaim:', updatedClaim);
           this.claimService.updateMyTasks(updatedClaim).subscribe(() => {
-            this.claimService.getDialogData();
-            this.refreshTable();
+          this.loadData();
           });
-        } else {
-          console.log('Error: No matching index found.');
-        }
+        } 
       }
-    });
-  }
-  
-
- /* deleteItem(i: number, row: Claim) {
-    this.index = i;
-    this.id = row.id;
-    let tempDirection: Direction;
-    if (localStorage.getItem('isRtl') === 'true') {
-      tempDirection = 'rtl';
-    } else {
-      tempDirection = 'ltr';
-    }
-
-    const dialogRef = this.dialog.open(DeleteComponent, {
-      height: '270px',
-      width: '300px',
-      data: row,
-      direction: tempDirection,
-    });
-    this.subs.sink = dialogRef.afterClosed().subscribe((result) => {
-      if (result === 1) {
-        const foundIndex = this.exampleDatabase?.dataChange.value.findIndex(
-          (x) => x.id === this.id
-        );
-        // for delete we use splice in order to remove single object from DataService
-        if (foundIndex !== undefined && this.exampleDatabase !== undefined) {
-          this.exampleDatabase?.dataChange.value.splice(foundIndex, 1);
-          this.refreshTable();
-          this.showNotification(
-            'snackbar-danger',
-            'Delete Record Successfully...!!!',
-            'bottom',
-            'center'
-          );
-        }
-      }
-    });
-  }*/
-  
-  deleteMyTasks(id: number): void {
-    this.httpClient.delete<Claim>("/deleteClaim/" + id).subscribe(() => {
-      // Handle the success response or perform any additional actions
-      console.log("Record deleted successfully");
-    }, (error) => {
-      // Handle the error response or display an error message
-      console.error("Error deleting record:", error);
     });
   }
   deleteItem(i: number, row: Claim) {
@@ -238,18 +144,8 @@ export class MyTasksComponent
   
     this.subs.sink = dialogRef.afterClosed().subscribe((result) => {
       if (result === 1) {
-        if (this.id !== undefined && this.exampleDatabase !== undefined) {
-          this.claimService.deleteMyTasks(this.id, row.claimStatus).subscribe(
-            () => {
-              this.exampleDatabase.dataChange.value.splice(this.index, 1);
-              this.refreshTable();
+              this.loadData();
               console.log("Record deleted successfully");
-            },
-            (error) => {
-              console.error("Error deleting record:", error);
-            }
-          );
-        }
       } else {
         console.log("err");
       }

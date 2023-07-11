@@ -52,6 +52,18 @@ export const ROUTES: RouteInfo[] = [
     ],
   },
   {
+    path: '/admin/all-claims',
+    title: 'MENUITEMS.EMPLOYEES.LIST.ALL-EMPLOYEE',
+    iconType: '',
+    icon: '',
+    class: 'menu-toggle',
+    groupTitle: false,
+    badge: '',
+    badgeClass: '',
+    role: ['Admin'],
+    submenu: [],
+  },
+  {
     path: '',
     title: 'MENUITEMS.PROJECTS.TEXT',
     iconType: 'feather',
@@ -124,8 +136,8 @@ export const ROUTES: RouteInfo[] = [
     role: ['Admin'],
     submenu: [
       {
-        path: '/admin/employees/allEmployees',
-        title: 'MENUITEMS.EMPLOYEES.LIST.ALL-EMPLOYEE',
+        path: '/admin/employees/all-Claims',
+        title: 'All Claims',
         iconType: '',
         icon: '',
         class: 'ml-menu',
@@ -173,6 +185,7 @@ export const ROUTES: RouteInfo[] = [
       },
     ],
   },
+
   {
     path: '',
     title: 'MENUITEMS.LEAVES.TEXT',
@@ -630,7 +643,7 @@ export const ROUTES: RouteInfo[] = [
   },
   {
     path: '/employee/mytasks',
-    title: 'MENUITEMS.EMPLOYEE.MYTASKS',
+    title: 'My Claims',
     iconType: 'feather',
     icon: 'command',
     class: '',

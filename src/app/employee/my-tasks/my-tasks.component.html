@@ -81,11 +81,11 @@
                   <mat-cell mat-cell *matCellDef="let row">
                     <span class="mobile-label">Status: </span>
                     <div *ngIf="row.claimStatus==='IN_PROGRESS'">
-                      <span class="badge badge-solid-red">
+                      <span class="badge badge-solid-orange">
                         {{row.claimStatus}}</span>
                     </div>
                     <div *ngIf="row.claimStatus==='ON_HOLD'">
-                      <span class="badge badge-solid-green">
+                      <span class="badge badge-solid-red">
                         {{row.claimStatus}}</span>
                     </div>
                     <div *ngIf="row.claimStatus==='ACCEPTED'">
@@ -133,7 +133,7 @@
                       <app-feather-icons [icon]="'edit'" [class]="'tbl-fav-edit'">
                       </app-feather-icons>
                     </button>
-                    <button mat-icon-button color="accent" (click)="$event.stopPropagation()"
+                    <button  *ngIf="row.claimStatus==='ON_HOLD'" mat-icon-button color="accent" (click)="$event.stopPropagation()"
                       (click)="deleteItem(i, row)" class="tbl-action-btn" matTooltip="Delete">
                       <app-feather-icons [icon]="'trash-2'" [class]="'tbl-fav-delete'">
                       </app-feather-icons>
@@ -151,14 +151,6 @@
                 <mat-progress-spinner color="primary" [diameter]="40" mode="indeterminate">
                 </mat-progress-spinner>
               </div>
-              <!-- <div *ngIf="!exampleDatabase?.isTblLoading" class="no-results"
-                [style.display]="dataSource.renderedData.length === 0 ? '' : 'none'">
-                No results
-              </div>
-               <mat-paginator #paginator [length]="dataSource.filteredData.length" [pageIndex]="0" [pageSize]="10"
-                [pageSizeOptions]="[5, 10, 25, 100]">
-              </mat-paginator>
-              -->
             </div>
           </div>
         </div>

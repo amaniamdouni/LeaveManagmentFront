@@ -13,27 +13,6 @@
   </div>
   <div mat-dialog-content>
     <form class="register-form m-4" [formGroup]="myTasksForm" (ngSubmit)="submit">
-      <div class="row">
-        <div class="col-xl-12 col-lg-6 col-md-12 col-sm-12 mb-2">
-          <mat-form-field class="example-full-width mb-3" appearance="outline">
-            <mat-label>Status</mat-label>
-            <mat-select formControlName="claimStatus" required>
-              <mat-option [value]="'IN_PROGRESS'">
-                IN_PROGRESS
-              </mat-option>
-              <mat-option [value]="'ON_HOLD'">
-                ON_HOLD
-              </mat-option>
-              <mat-option [value]="'ACCEPTED'">
-                ACCEPTED
-              </mat-option>
-            </mat-select>
-            <mat-error *ngIf="myTasksForm.get('claimStatus')?.hasError('required')">
-              Select task status
-            </mat-error>
-          </mat-form-field>
-        </div>
-      </div>
       <div>
         <div class="col-xl-12 col-lg-6 col-md-12 col-sm-12 mb-2">
           <mat-form-field class="example-full-width mb-3" appearance="outline">

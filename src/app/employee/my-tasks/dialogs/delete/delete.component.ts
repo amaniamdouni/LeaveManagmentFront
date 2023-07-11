@@ -24,8 +24,8 @@ export class DeleteComponent {
     this.dialogRef.close();
   }
   confirmDelete(): void {
-    const claimStatusString = ClaimStatus[this.data.claimStatus];
-    this.myTasksService.deleteMyTasks(this.data.id, claimStatusString).subscribe(
+    const claimStatus = ClaimStatus[this.data.claimStatus];
+    this.myTasksService.deleteMyTasks(this.data.id).subscribe(
       (res) => {
         console.log(res);
       },
