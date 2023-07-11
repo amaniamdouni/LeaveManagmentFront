@@ -10,32 +10,11 @@
         "DASHBOARD2": "Dashboard 2"
       }
     },
-    "Teams": {
-      "TEXT": "Projects",
-      "LIST": {
-        "ALL-PROJECTS": "All Projects",
-        "ADD-PROJECT": "Add Project",
-        "ESTIMATES": "Estimates",
-        "PROJECT-DETAILS": "Project Details"
-      }
-    },
-    "PROJECTS": {
-      "TEXT": "Projects",
-      "LIST": {
-        "ALL-PROJECTS": "All Projects",
-        "ADD-PROJECT": "Add Project",
-        "ESTIMATES": "Estimates",
-        "PROJECT-DETAILS": "Project Details"
-      }
+    "Equipes": {
+      "TEXT": "Equipes"
     },
     "EMPLOYEES": {
-      "TEXT": "Employees",
-      "LIST": {
-        "ALL-EMPLOYEE": "All Employees",
-        "ADD-EMPLOYEE": "Add Employee",
-        "EDIT-EMPLOYEE": "Edit Employee",
-        "PROFILE": "Employee Profile"
-      }
+      "TEXT": "Employees"
     },
     "CLIENTS": {
       "TEXT": "Clients",
