@@ -47,6 +47,10 @@ export class SigninComponent
     this.authForm.get('username')?.setValue('employee@software.com');
     this.authForm.get('password')?.setValue('employee@123');
   }
+  clientSet() {
+    this.authForm.get('username')?.setValue('client@software.com');
+    this.authForm.get('password')?.setValue('client@123');
+  }
   onSubmit() {
     this.submitted = true;
     this.loading = true;
@@ -66,6 +70,8 @@ export class SigninComponent
                   this.router.navigate(['/admin/dashboard/main']);
                 } else if (role === Role.Employee) {
                   this.router.navigate(['/employee/dashboard']);
+                } else if (role === Role.Client) {
+                  this.router.navigate(['/client/dashboard']);
                 } else {
                   this.router.navigate(['/authentication/signin']);
                 }
