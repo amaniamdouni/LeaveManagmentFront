@@ -96,10 +96,10 @@ export class EmployeesComponent
       this.dataSource.renderedData = this.listUser;
       return;
     }
-    
+
     // Convertissez le terme de recherche en minuscules pour une recherche insensible à la casse
     const searchTermLowerCase = this.searchTerm.toLowerCase();
-    
+
     // Filtrez la liste en fonction du terme de recherche
     const filteredData = this.listUser.filter((user) => {
       const fullname = user.firstName+" "+user.lastName;
@@ -108,7 +108,7 @@ export class EmployeesComponent
       return user.matricule.toLowerCase().includes(searchTermLowerCase) || user.firstName.toLowerCase().includes(searchTermLowerCase) ||
       user.lastName.toLowerCase().includes(searchTermLowerCase);
     });
-  
+
     // Mettez à jour la source de données avec les éléments filtrés
     this.listUser= filteredData;
   }
@@ -217,12 +217,13 @@ export class EmployeesComponent
             'bottom',
             'center'
           );
-        }
       }
-    });
+    );
+
   }
   private refreshTable() {
-    this.paginator._changePageSize(this.paginator.pageSize);
+    //this.paginator._changePageSize(this.paginator.pageSize);
+    this.loadData();
   }
   /** Whether the number of selected elements matches the details number of rows. */
   isAllSelected() {
@@ -327,7 +328,7 @@ export class ExampleDataSource extends DataSource<User> {
             const searchStr = (
               users.matricule +
               users.firstName +
-              users.lastName 
+              users.lastName
             ).toLowerCase();
             return searchStr.indexOf(this.filter.toLowerCase()) !== -1;
           });
@@ -346,8 +347,8 @@ export class ExampleDataSource extends DataSource<User> {
   disconnect() {
     //disconnect
   }
-  
-  
+
+
   /** Returns a sorted copy of the database data. */
   sortData(data: User[]): User[] {
     if (!this._sort.active || this._sort.direction === '') {

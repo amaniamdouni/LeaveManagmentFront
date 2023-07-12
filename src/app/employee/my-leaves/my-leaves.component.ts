@@ -16,11 +16,12 @@ import { DeleteDialogComponent } from './dialogs/delete/delete.component';
 import { MatMenuTrigger } from '@angular/material/menu';
 import { SelectionModel } from '@angular/cdk/collections';
 import { UnsubscribeOnDestroyAdapter } from '@shared';
-import { MyLeaves } from './my-leaves.model';
+import { Leaves } from './models/leaves.model';
 import { MyLeavesService } from './my-leaves.service';
 import { Direction } from '@angular/cdk/bidi';
 import { TableExportUtil, TableElement } from '@shared';
 import { formatDate } from '@angular/common';
+import { LeaveStatus } from './models/leaveStatus';
 
 @Component({
   selector: 'app-my-leaves',
@@ -32,23 +33,25 @@ export class MyLeavesComponent
   implements OnInit
 {
   displayedColumns = [
-    'select',
-    'applyDate',
-    'fromDate',
-    'toDate',
-    'halfDay',
-    'type',
-    'status',
-    'reason',
-    'actions',
+    'id',
+    'startDate',
+    'endDate',
+    'createdAt',
+    'nbr_days',
+    'leaveType',
+    'leaveStatus',
+    'comment',
+    'actions'
   ];
 
   exampleDatabase?: MyLeavesService | null;
-  dataSource!: ExampleDataSource;
-  selection = new SelectionModel<MyLeaves>(true, []);
+  // dataSource!: ExampleDataSource;
+  dataSource = new Array<Leaves>;
+  selection = new SelectionModel<Leaves>(true, []);
   id?: number;
   index?: number;
-  myLeaves?: MyLeaves | null;
+  Leaves?: Leaves | null;
+  isCancel = false;
   constructor(
     public httpClient: HttpClient,
     public dialog: MatDialog,
@@ -67,9 +70,6 @@ export class MyLeavesComponent
   ngOnInit() {
     this.loadData();
   }
-  refresh() {
-    this.loadData();
-  }
   addNew() {
     let tempDirection: Direction;
     if (localStorage.getItem('isRtl') === 'true') {
@@ -77,32 +77,30 @@ export class MyLeavesComponent
     } else {
       tempDirection = 'ltr';
     }
+    console.log(this.Leaves);
     const dialogRef = this.dialog.open(FormDialogComponent, {
       data: {
-        myLeaves: this.myLeaves,
+        Leaves: this.Leaves,
         action: 'add',
       },
       direction: tempDirection,
     });
     this.subs.sink = dialogRef.afterClosed().subscribe((result) => {
       if (result === 1) {
-        // After dialog is closed we're doing frontend updates
-        // For add we're just pushing a new row inside DataService
-        this.exampleDatabase?.dataChange.value.unshift(
-          this.myLeavesService.getDialogData()
-        );
-        this.refreshTable();
+        this.loadData();
         this.showNotification(
           'snackbar-success',
-          'Add Record Successfully...!!!',
+          'Leave added Successfully',
           'bottom',
           'center'
         );
       }
     });
   }
-  editCall(row: MyLeaves) {
+  editCall(row: Leaves) {
+    console.log("test");
     this.id = row.id;
+    console.log(this.id);
     let tempDirection: Direction;
     if (localStorage.getItem('isRtl') === 'true') {
       tempDirection = 'rtl';
@@ -111,69 +109,26 @@ export class MyLeavesComponent
     }
     const dialogRef = this.dialog.open(FormDialogComponent, {
       data: {
-        myLeaves: row,
+        Leaves: row,
         action: 'edit',
       },
       direction: tempDirection,
     });
     this.subs.sink = dialogRef.afterClosed().subscribe((result) => {
+      console.log(result);
       if (result === 1) {
-        // When using an edit things are little different, firstly we find record inside DataService by id
-        const foundIndex = this.exampleDatabase?.dataChange.value.findIndex(
-          (x) => x.id === this.id
+        this.loadData();
+        this.showNotification(
+          'black',
+          'Leave updated Successfully',
+          'bottom',
+          'center'
         );
-        // Then you update that record using data from dialogData (values you enetered)
-        if (foundIndex != null && this.exampleDatabase) {
-          this.exampleDatabase.dataChange.value[foundIndex] =
-            this.myLeavesService.getDialogData();
-          // And lastly refresh table
-          this.refreshTable();
-          this.showNotification(
-            'black',
-            'Edit Record Successfully...!!!',
-            'bottom',
-            'center'
-          );
-        }
       }
     });
   }
-  // deleteItem(i: number, row: any) {
-  //   this.index = i;
-  //   this.id = row.id;
-  //   let tempDirection: Direction;
-  //   if (localStorage.getItem('isRtl') === 'true') {
-  //     tempDirection = 'rtl';
-  //   } else {
-  //     tempDirection = 'ltr';
-  //   }
-  //   const dialogRef = this.dialog.open(DeleteDialogComponent, {
-  //     height: '270px',
-  //     width: '400px',
-  //     data: row,
-  //     direction: tempDirection,
-  //   });
-  //   this.subs.sink = dialogRef.afterClosed().subscribe((result) => {
-  //     if (result === 1) {
-  //       const foundIndex = this.exampleDatabase?.dataChange.value.findIndex(
-  //         (x) => x.id === this.id
-  //       );
-  //       // for delete we use splice in order to remove single object from DataService
-  //       if (foundIndex != null && this.exampleDatabase) {
-  //         this.exampleDatabase.dataChange.value.splice(foundIndex, 1);
-  //         this.refreshTable();
-  //         this.showNotification(
-  //           'snackbar-danger',
-  //           'Delete Record Successfully...!!!',
-  //           'bottom',
-  //           'center'
-  //         );
-  //       }
-  //     }
-  //   });
-  // }
 
-  deleteItem(i: number, row: MyLeaves) {
+  deleteItem(i: number, row: Leaves) {
     this.index = i;
     this.id = row.id;
     let tempDirection: Direction;
@@ -182,101 +137,97 @@ export class MyLeavesComponent
     } else {
       tempDirection = 'ltr';
     }
-
-    const dialogRef = this.dialog.open(DeleteDialogComponent, {
-      height: '270px',
-      width: '300px',
-      data: row,
-      direction: tempDirection,
-    });
-    this.subs.sink = dialogRef.afterClosed().subscribe((result) => {
-      if (result === 1) {
-        const foundIndex = this.exampleDatabase?.dataChange.value.findIndex(
-          (x) => x.id === this.id
-        );
-        // for delete we use splice in order to remove single object from DataService
-        if (foundIndex !== undefined && this.exampleDatabase !== undefined) {
-          this.exampleDatabase?.dataChange.value.splice(foundIndex, 1);
-          this.refreshTable();
-          this.showNotification(
-            'snackbar-danger',
-            'Delete Record Successfully...!!!',
-            'bottom',
-            'center'
-          );
+      this.isCancel = true;
+      const dialogRef = this.dialog.open(DeleteDialogComponent, {
+        height: '270px',
+        width: '300px',
+        data: {
+          Leaves: row,
+          action: 'cancel',
+        },
+        direction: tempDirection,
+      });
+      this.subs.sink = dialogRef.afterClosed().subscribe((result) => {
+        if (result === 1) {
+          this.loadData();
         }
-      }
-    });
-  }
-  private refreshTable() {
-    this.paginator._changePageSize(this.paginator.pageSize);
+      });
+
   }
   /** Whether the number of selected elements matches the total number of rows. */
-  isAllSelected() {
-    const numSelected = this.selection.selected.length;
-    const numRows = this.dataSource.renderedData.length;
-    return numSelected === numRows;
-  }
+  // isAllSelected() {
+  //   const numSelected = this.selection.selected.length;
+  //  // const numRows = this.dataSource.renderedData.length;
+  //   return numSelected === numRows;
+  // }
 
   /** Selects all rows if they are not all selected; otherwise clear selection. */
-  masterToggle() {
-    this.isAllSelected()
-      ? this.selection.clear()
-      : this.dataSource.renderedData.forEach((row) =>
-          this.selection.select(row)
-        );
-  }
-  removeSelectedRows() {
-    const totalSelect = this.selection.selected.length;
-    this.selection.selected.forEach((item) => {
-      const index: number = this.dataSource.renderedData.findIndex(
-        (d) => d === item
-      );
-      // console.log(this.dataSource.renderedData.findIndex((d) => d === item));
-      this.exampleDatabase?.dataChange.value.splice(index, 1);
-      this.refreshTable();
-      this.selection = new SelectionModel<MyLeaves>(true, []);
-    });
-    this.showNotification(
-      'snackbar-danger',
-      totalSelect + ' Record Delete Successfully...!!!',
-      'bottom',
-      'center'
-    );
-  }
-  public loadData() {
-    this.exampleDatabase = new MyLeavesService(this.httpClient);
-    this.dataSource = new ExampleDataSource(
-      this.exampleDatabase,
-      this.paginator,
-      this.sort
-    );
-    this.subs.sink = fromEvent(this.filter.nativeElement, 'keyup').subscribe(
-      () => {
-        if (!this.dataSource) {
-          return;
-        }
-        this.dataSource.filter = this.filter.nativeElement.value;
-      }
-    );
-  }
-  // export table data in excel file
-  exportExcel() {
-    // key name with space add in brackets
-    const exportData: Partial<TableElement>[] =
-      this.dataSource.filteredData.map((x) => ({
-        'Apply Date':
-          formatDate(new Date(x.applyDate), 'yyyy-MM-dd', 'en') || '',
-        'From Date': formatDate(new Date(x.fromDate), 'yyyy-MM-dd', 'en') || '',
-        'To Date': formatDate(new Date(x.toDate), 'yyyy-MM-dd', 'en') || '',
-        'Half Day': x.halfDay,
-        Type: x.type,
-        Status: x.status,
-        Reason: x.reason,
-      }));
+  // masterToggle() {
+  //   this.isAllSelected()
+  //     ? this.selection.clear()
+  //     : this.dataSource.renderedData.forEach((row) =>
+  //         this.selection.select(row)
+  //       );
+  // }
+  // removeSelectedRows() {
+  //   const totalSelect = this.selection.selected.length;
+  //   this.selection.selected.forEach((item) => {
+  //     const index: number = this.dataSource.renderedData.findIndex(
+  //       (d) => d === item
+  //     );
+  //     // console.log(this.dataSource.renderedData.findIndex((d) => d === item));
+  //     this.exampleDatabase?.dataChange.value.splice(index, 1);
+  //     this.refreshTable();
+  //     this.selection = new SelectionModel<Leaves>(true, []);
+  //   });
+  //   this.showNotification(
+  //     'snackbar-danger',
+  //     totalSelect + ' Record Delete Successfully...!!!',
+  //     'bottom',
+  //     'center'
+  //   );
+  // }
+  //  public loadData() {
+  //    this.exampleDatabase = new MyLeavesService(this.httpClient);
+  //    this.dataSource = new ExampleDataSource(
+  //      this.exampleDatabase,
+  //      this.paginator,
+  //      this.sort
+  //    );
+  //    this.subs.sink = fromEvent(this.filter.nativeElement, 'keyup').subscribe(
+  //      () => {
+  //        if (!this.dataSource) {
+  //          return;
+  //        }
+  //        this.dataSource.filter = this.filter.nativeElement.value;
+  //      }
+  //    );
+  //  }
 
-    TableExportUtil.exportToExcel(exportData, 'excel');
+  public loadData() {
+    this.myLeavesService.getAllMyLeaves().subscribe((leaves) => {
+      this.dataSource = leaves;
+    });
   }
+
+
+  // export table data in excel file
+  // exportExcel() {
+  //   // key name with space add in brackets
+  //   const exportData: Partial<TableElement>[] =
+  //     this.dataSource.filteredData.map((x) => ({
+  //       'Apply Date':
+  //         formatDate(new Date(x.applyDate), 'yyyy-MM-dd', 'en') || '',
+  //       'From Date': formatDate(new Date(x.fromDate), 'yyyy-MM-dd', 'en') || '',
+  //       'To Date': formatDate(new Date(x.toDate), 'yyyy-MM-dd', 'en') || '',
+  //       'Half Day': x.halfDay,
+  //       Type: x.type,
+  //       Status: x.status,
+  //       Reason: x.reason,
+  //     }));
+
+  //   TableExportUtil.exportToExcel(exportData, 'excel');
+  // }
 
   showNotification(
     colorName: string,
@@ -292,7 +243,7 @@ export class MyLeavesComponent
     });
   }
   // context menu
-  onContextMenu(event: MouseEvent, item: MyLeaves) {
+  onContextMenu(event: MouseEvent, item: Leaves) {
     event.preventDefault();
     this.contextMenuPosition.x = event.clientX + 'px';
     this.contextMenuPosition.y = event.clientY + 'px';
@@ -303,94 +254,95 @@ export class MyLeavesComponent
     }
   }
 }
-export class ExampleDataSource extends DataSource<MyLeaves> {
-  filterChange = new BehaviorSubject('');
-  get filter(): string {
-    return this.filterChange.value;
-  }
-  set filter(filter: string) {
-    this.filterChange.next(filter);
-  }
-  filteredData: MyLeaves[] = [];
-  renderedData: MyLeaves[] = [];
-  constructor(
-    public exampleDatabase: MyLeavesService,
-    public paginator: MatPaginator,
-    public _sort: MatSort
-  ) {
-    super();
-    // Reset to the first page when the user changes the filter.
-    this.filterChange.subscribe(() => (this.paginator.pageIndex = 0));
-  }
-  /** Connect function called by the table to retrieve one stream containing the data to render. */
-  connect(): Observable<MyLeaves[]> {
-    // Listen for any changes in the base data, sorting, filtering, or pagination
-    const displayDataChanges = [
-      this.exampleDatabase.dataChange,
-      this._sort.sortChange,
-      this.filterChange,
-      this.paginator.page,
-    ];
-    this.exampleDatabase.getAllMyLeaves();
-    return merge(...displayDataChanges).pipe(
-      map(() => {
-        // Filter data
-        this.filteredData = this.exampleDatabase.data
-          .slice()
-          .filter((myLeaves: MyLeaves) => {
-            const searchStr = (
-              myLeaves.type +
-              myLeaves.halfDay +
-              myLeaves.applyDate +
-              myLeaves.reason
-            ).toLowerCase();
-            return searchStr.indexOf(this.filter.toLowerCase()) !== -1;
-          });
-        // Sort filtered data
-        const sortedData = this.sortData(this.filteredData.slice());
-        // Grab the page's slice of the filtered sorted data.
-        const startIndex = this.paginator.pageIndex * this.paginator.pageSize;
-        this.renderedData = sortedData.splice(
-          startIndex,
-          this.paginator.pageSize
-        );
-        return this.renderedData;
-      })
-    );
-  }
-  disconnect() {
-    //disconnect
-  }
-  /** Returns a sorted copy of the database data. */
-  sortData(data: MyLeaves[]): MyLeaves[] {
-    if (!this._sort.active || this._sort.direction === '') {
-      return data;
-    }
-    return data.sort((a, b) => {
-      let propertyA: number | string = '';
-      let propertyB: number | string = '';
-      switch (this._sort.active) {
-        case 'id':
-          [propertyA, propertyB] = [a.id, b.id];
-          break;
-        case 'type':
-          [propertyA, propertyB] = [a.type, b.type];
-          break;
-        case 'status':
-          [propertyA, propertyB] = [a.status, b.status];
-          break;
-        case 'applyDate':
-          [propertyA, propertyB] = [a.applyDate, b.applyDate];
-          break;
-        case 'fromDate':
-          [propertyA, propertyB] = [a.fromDate, b.fromDate];
-          break;
-      }
-      const valueA = isNaN(+propertyA) ? propertyA : +propertyA;
-      const valueB = isNaN(+propertyB) ? propertyB : +propertyB;
-      return (
-        (valueA < valueB ? -1 : 1) * (this._sort.direction === 'asc' ? 1 : -1)
-      );
-    });
-  }
-}
+
+// export class ExampleDataSource extends DataSource<Leaves> {
+//   filterChange = new BehaviorSubject('');
+//   get filter(): string {
+//     return this.filterChange.value;
+//   }
+//   set filter(filter: string) {
+//     this.filterChange.next(filter);
+//   }
+//   filteredData: Leaves[] = [];
+//   renderedData: Leaves[] = [];
+//   constructor(
+//     public exampleDatabase: MyLeavesService,
+//     public paginator: MatPaginator,
+//     public _sort: MatSort
+//   ) {
+//     super();
+//     // Reset to the first page when the user changes the filter.
+//     this.filterChange.subscribe(() => (this.paginator.pageIndex = 0));
+//   }
+//   /** Connect function called by the table to retrieve one stream containing the data to render. */
+//   connect(): Observable<Leaves[]> {
+//     // Listen for any changes in the base data, sorting, filtering, or pagination
+//     const displayDataChanges = [
+//       this.exampleDatabase.dataChange,
+//       this._sort.sortChange,
+//       this.filterChange,
+//       this.paginator.page,
+//     ];
+//     this.exampleDatabase.getAllMyLeaves();
+//     return merge(...displayDataChanges).pipe(
+//       map(() => {
+//         // Filter data
+//         this.filteredData = this.exampleDatabase.data
+//           .slice()
+//           .filter((Leaves: Leaves) => {
+//             const searchStr = (
+//               Leaves.type +
+//               Leaves.halfDay +
+//               Leaves.applyDate +
+//               Leaves.reason
+//             ).toLowerCase();
+//             return searchStr.indexOf(this.filter.toLowerCase()) !== -1;
+//           });
+//         // Sort filtered data
+//         const sortedData = this.sortData(this.filteredData.slice());
+//         // Grab the page's slice of the filtered sorted data.
+//         const startIndex = this.paginator.pageIndex * this.paginator.pageSize;
+//         this.renderedData = sortedData.splice(
+//           startIndex,
+//           this.paginator.pageSize
+//         );
+//         return this.renderedData;
+//       })
+//     );
+//   }
+//   disconnect() {
+//     //disconnect
+//   }
+//   /** Returns a sorted copy of the database data. */
+//   sortData(data: Leaves[]): Leaves[] {
+//     if (!this._sort.active || this._sort.direction === '') {
+//       return data;
+//     }
+//     return data.sort((a, b) => {
+//       let propertyA: number | string = '';
+//       let propertyB: number | string = '';
+//       switch (this._sort.active) {
+//         case 'id':
+//           [propertyA, propertyB] = [a.id, b.id];
+//           break;
+//         case 'type':
+//           [propertyA, propertyB] = [a.type, b.type];
+//           break;
+//         case 'status':
+//           [propertyA, propertyB] = [a.status, b.status];
+//           break;
+//         case 'applyDate':
+//           [propertyA, propertyB] = [a.applyDate, b.applyDate];
+//           break;
+//         case 'fromDate':
+//           [propertyA, propertyB] = [a.fromDate, b.fromDate];
+//           break;
+//       }
+//       const valueA = isNaN(+propertyA) ? propertyA : +propertyA;
+//       const valueB = isNaN(+propertyB) ? propertyB : +propertyB;
+//       return (
+//         (valueA < valueB ? -1 : 1) * (this._sort.direction === 'asc' ? 1 : -1)
+//       );
+//     });
+//   }
+// }

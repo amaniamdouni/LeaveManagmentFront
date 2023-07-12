@@ -17,10 +17,10 @@
         <div class=" col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
           <mat-form-field class="example-full-width" appearance="outline">
             <mat-label>Apply date</mat-label>
-            <input matInput [matDatepicker]="picker1" formControlName="applyDate" required>
+            <input matInput [matDatepicker]="picker1" formControlName="createdAt" required>
             <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
             <mat-datepicker #picker1></mat-datepicker>
-            <mat-error *ngIf="myLeavesForm.get('applyDate')?.hasError('required')">
+            <mat-error *ngIf="myLeavesForm.get('createdAt')?.hasError('required')">
               Please select date
             </mat-error>
           </mat-form-field>
@@ -28,10 +28,10 @@
         <div class=" col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
           <mat-form-field class="example-full-width" appearance="outline">
             <mat-label>From date</mat-label>
-            <input matInput [matDatepicker]="picker2" formControlName="fromDate" required>
+            <input matInput [matDatepicker]="picker2" formControlName="startDate" required>
             <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
             <mat-datepicker #picker2></mat-datepicker>
-            <mat-error *ngIf="myLeavesForm.get('fromDate')?.hasError('required')">
+            <mat-error *ngIf="myLeavesForm.get('startDate')?.hasError('required')">
               Please select date
             </mat-error>
           </mat-form-field>
@@ -41,20 +41,20 @@
         <div class=" col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
           <mat-form-field class="example-full-width" appearance="outline">
             <mat-label>To date</mat-label>
-            <input matInput [matDatepicker]="picker3" formControlName="toDate" required>
+            <input matInput [matDatepicker]="picker3" formControlName="endDate" required>
             <mat-datepicker-toggle matSuffix [for]="picker3"></mat-datepicker-toggle>
             <mat-datepicker #picker3></mat-datepicker>
-            <mat-error *ngIf="myLeavesForm.get('toDate')?.hasError('required')">
+            <mat-error *ngIf="myLeavesForm.get('endDate')?.hasError('required')">
               Please select date
             </mat-error>
           </mat-form-field>
         </div>
         <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
           <mat-form-field class="example-full-width mb-3" appearance="outline">
-            <mat-label>Half Day</mat-label>
-            <input matInput formControlName="halfDay" required>
-            <mat-error *ngIf="myLeavesForm.get('halfDay')?.hasError('required')">
-              Half Day required
+            <mat-label>N° Days</mat-label>
+            <input matInput number formControlName="nbr_days" required>
+            <mat-error *ngIf="myLeavesForm.get('nbr_days')?.hasError('required')">
+              N° Days required
             </mat-error>
           </mat-form-field>
         </div>
@@ -64,21 +64,9 @@
         <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
           <mat-form-field class="example-full-width mb-3" appearance="outline">
             <mat-label>Type</mat-label>
-            <mat-select formControlName="type" required>
-              <mat-option [value]="'Casual Leave'">
-                Casual Leave
-              </mat-option>
-              <mat-option [value]="'Sick Leave'">
-                Sick Leave
-              </mat-option>
-              <mat-option [value]="'Privilege Leave'">
-                Privilege Leave
-              </mat-option>
-              <mat-option [value]="'Marriage Leave'">
-                Marriage Leave
-              </mat-option>
-              <mat-option [value]="'Maternity Leave'">
-                Maternity Leave
+            <mat-select formControlName="leaveType" >
+              <mat-option *ngFor="let item of leaveTypeList | keyvalue" value={{item.value}}>
+                {{item.value}}
               </mat-option>
             </mat-select>
             <mat-error *ngIf="myLeavesForm.get('type')?.hasError('required')">
@@ -86,31 +74,12 @@
             </mat-error>
           </mat-form-field>
         </div>
-        <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
-          <mat-form-field class="example-full-width mb-3" appearance="outline">
-            <mat-label>Status</mat-label>
-            <mat-select formControlName="status" required>
-              <mat-option [value]="'Approved'">
-                Approved
-              </mat-option>
-              <mat-option [value]="'Rejected'">
-                Rejected
-              </mat-option>
-              <mat-option [value]="'Pending'">
-                Pending
-              </mat-option>
-            </mat-select>
-            <mat-error *ngIf="myLeavesForm.get('type')?.hasError('required')">
-              Select Status
-            </mat-error>
-          </mat-form-field>
-        </div>
       </div>
       <div class="row">
         <div class=" col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
           <mat-form-field class="example-full-width mb-3" appearance="outline">
-            <mat-label>Reason</mat-label>
-            <textarea matInput formControlName="reason"></textarea>
+            <mat-label>Comment</mat-label>
+            <textarea matInput formControlName="comment"></textarea>
           </mat-form-field>
         </div>
       </div>
