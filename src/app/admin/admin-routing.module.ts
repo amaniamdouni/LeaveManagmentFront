@@ -9,7 +9,7 @@ const routes: Routes = [
       import('./dashboard/dashboard.module').then((m) => m.DashboardModule),
   },
   {
-    path: 'details',
+    path: 'teams',
     loadChildren: () =>
       import('./teams/teams.module').then((m) => m.TeamsModule),
   },
