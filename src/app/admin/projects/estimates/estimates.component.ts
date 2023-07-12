@@ -17,12 +17,6 @@ import { map } from 'rxjs/operators';
 import { SelectionModel } from '@angular/cdk/collections';
 import { UnsubscribeOnDestroyAdapter } from '@shared';
 import { Direction } from '@angular/cdk/bidi';
-<<<<<<< HEAD
-import { TableExportUtil, TableElement } from '@shared';
-import { formatDate } from '@angular/common';
-=======
-import { User } from 'app/models/user';
->>>>>>> farah-user-front
 import { UserService } from 'app/services/user.service';
 import { User } from 'app/models/user';
 

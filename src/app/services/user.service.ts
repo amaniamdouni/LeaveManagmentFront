@@ -20,7 +20,7 @@ export class UserService extends UnsubscribeOnDestroyAdapter {
       })
     };
 
-    private readonly API_URL = 'http://localhost:9091/user';
+    private readonly API_URL = 'http://localhost:9090/user';
     isTblLoading = true;
     dataChange: BehaviorSubject<User[]> = new BehaviorSubject<User[]>(
       []

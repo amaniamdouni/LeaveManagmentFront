@@ -9,10 +9,6 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Team } from 'app/models/TeamAdapter';
 import { TeamService } from 'app/services/team.service';
-<<<<<<< HEAD:src/app/admin/projects/all-projects/project-dialog/project-dialog.component.ts
-=======
-import { User } from 'app/models/user';
->>>>>>> farah-user-front:src/app/admin/projects/all-teams/team-dialog/team-dialog.component.ts
 import { UserService } from 'app/services/user.service';
 import { BoardComponent } from '../board/board.component';
 import { User } from 'app/models/user';
