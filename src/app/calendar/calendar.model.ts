@@ -1,19 +1,19 @@
 import { formatDate } from '@angular/common';
 export class Calendar {
-  id: string;
-  title: string;
-  category: string;
-  startDate: string;
-  endDate: string;
+  id: any;
+  eventTitle: string;
+  eventType: string;
+  startDate: Date;
+  endDate: Date;
   details: string;
 
   constructor(calendar: Calendar) {
     {
-      this.id = calendar.id || '';
-      this.title = calendar.title || '';
-      this.category = calendar.category || '';
-      this.startDate = formatDate(new Date(), 'yyyy-MM-dd', 'en') || '';
-      this.endDate = formatDate(new Date(), 'yyyy-MM-dd', 'en') || '';
+      this.id = calendar.id;
+      this.eventTitle = calendar.eventTitle || '';
+      this.eventType = calendar.eventType || '';
+      this.startDate = calendar.startDate || formatDate(new Date(), 'yyyy-MM-dd', 'en');
+      this.endDate = calendar.endDate || formatDate(new Date(), 'yyyy-MM-dd', 'en');
       this.details = calendar.details || '';
     }
   }
