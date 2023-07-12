@@ -9,11 +9,11 @@ export const ROUTES: RouteInfo[] = [
     groupTitle: false,
     badge: '',
     badgeClass: '',
-    role: ['ADMIN'],
+    role:  ['ADMIN', 'SUPERADMIN'],
     submenu: [],
   },
   {
-    path:'/admin/projects/allProjects',
+    path:'/admin/projects/allprojects',
     title: 'MENUITEMS.TEAM.TEXT',
     iconType: 'feather',
     icon: 'users',
@@ -21,7 +21,7 @@ export const ROUTES: RouteInfo[] = [
     groupTitle: false,
     badge: '',
     badgeClass: '',
-    role: ['ADMIN'],
+    role: ['ADMIN', 'SUPERADMIN'],
     submenu: [],
   },
   {
@@ -33,7 +33,7 @@ export const ROUTES: RouteInfo[] = [
     groupTitle: false,
     badge: '',
     badgeClass: '',
-    role: ['ADMIN'],
+    role:  ['ADMIN', 'SUPERADMIN'],
     submenu: [],
   },
 

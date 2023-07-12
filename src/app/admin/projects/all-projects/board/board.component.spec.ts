@@ -137,13 +137,13 @@ describe("BoardComponent", () => {
 
   it("should open modal dialog after double click on project", () => {
     // given
-    spyOn(component, "editProjectDialog");
+    spyOn(component, "editTeamDialog");
     const input: DebugElement = fixture.debugElement.query(By.css(".project"));
 
     // when
     input.nativeElement.dispatchEvent(new MouseEvent("dblclick"));
 
     // then
-    expect(component.editProjectDialog).toHaveBeenCalled();
+    expect(component.editTeamDialog).toHaveBeenCalled();
   });
 });

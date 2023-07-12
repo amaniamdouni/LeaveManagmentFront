@@ -2,12 +2,12 @@ import { Component, ViewChild } from '@angular/core';
 import { BoardComponent } from './board/board.component';
 
 @Component({
-  selector: 'app-all-projects',
-  templateUrl: './all-projects.component.html',
-  styleUrls: ['./all-projects.component.scss'],
+  selector: 'app-all-teams',
+  templateUrl: './all-teams.component.html',
+  styleUrls: ['./all-teams.component.scss'],
   providers: [],
 })
-export class AllprojectsComponent {
+export class AllteamsComponent {
   public title = 'Oh My Kanban!';
 
   @ViewChild(BoardComponent)
