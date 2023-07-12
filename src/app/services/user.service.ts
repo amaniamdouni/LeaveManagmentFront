@@ -81,7 +81,7 @@ export class UserService extends UnsubscribeOnDestroyAdapter {
           });
   }
   deleteUser( matricule: string ): void {
-       this.httpClient.put(this.API_URL, matricule)
+       this.httpClient.delete(this.API_URL+ '/'+matricule)
           .subscribe({
             error: (error: HttpErrorResponse) => {
                // error code here

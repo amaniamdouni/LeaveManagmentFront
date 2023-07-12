@@ -1,12 +1,6 @@
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { Component, Inject } from '@angular/core';
-import {
-  UntypedFormControl,
-  Validators,
-  UntypedFormGroup,
-  UntypedFormBuilder,
-} from '@angular/forms';
-
+import { UntypedFormControl,Validators,UntypedFormGroup,UntypedFormBuilder,} from '@angular/forms';
 import { User } from 'app/models/user';
 import { UserService } from 'app/services/user.service';
 
@@ -35,7 +29,7 @@ export class FormDialogComponent {
     // Set the defaults
     this.action = data.action;
     if (this.action === 'edit') {
-      this.dialogTitle = data.user.firstName;
+      this.dialogTitle =  'Edit User';
       this.user = data.user;
     } else {
       this.dialogTitle = 'New User';
@@ -56,6 +50,7 @@ export class FormDialogComponent {
       : '';
   }
   createContactForm(): UntypedFormGroup {
+    console.log(this.user)
     return this.fb.group({
       firstName: [this.user.firstName],
       lastName: [this.user.lastName],

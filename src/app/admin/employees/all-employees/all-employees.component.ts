@@ -45,7 +45,7 @@ export class EmployeesComponent
   selection = new SelectionModel<User>(true, []);
   index?: number;
   matricule?: string;
-  estimates?: User;
+  user?: User;
   searchTerm: string;
 
   private pollingInterval: any;
@@ -124,7 +124,7 @@ export class EmployeesComponent
     }
     const dialogRef = this.dialog.open(FormDialogComponent, {
       data: {
-        estimates: this.estimates,
+        user: this.user,
         action: 'add',
       },
       direction: tempDirection,
