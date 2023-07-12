@@ -17,30 +17,32 @@
         <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 ">
           <mat-form-field class="example-full-width mb-3" appearance="outline">
             <mat-label>Title</mat-label>
-            <input matInput formControlName="title" required>
+            <input matInput formControlName="eventTitle" required>
             <mat-icon class="material-icons-two-tone color-icon p-3" matSuffix>turned_in_not</mat-icon>
           </mat-form-field>
         </div>
+        <!--ngif=isemploye
+        <input readonly matInput formControlName="title" required> -->
       </div>
       <div class="row">
         <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 ">
           <mat-form-field class="example-full-width mb-3" appearance="outline">
             <mat-label>Category</mat-label>
-            <mat-select formControlName="category" required>
-              <mat-option [value]="'work'">
-                Work
+            <mat-select formControlName="eventType" required>
+              <mat-option [value]="'Team Building'">
+                Team Building
               </mat-option>
-              <mat-option [value]="'personal'">
-                Personal
+              <mat-option [value]="'Conference'">
+                Conference
               </mat-option>
-              <mat-option [value]="'important'">
-                Important
+              <mat-option [value]="'Training Session'">
+                Training Session
               </mat-option>
-              <mat-option [value]="'travel'">
-                Travel
+              <mat-option [value]="'Employee Events'">
+                Employee Events
               </mat-option>
-              <mat-option [value]="'friends'">
-                Friends
+              <mat-option [value]="'Product Launches'">
+                Product Launches
               </mat-option>
             </mat-select>
           </mat-form-field>
