@@ -5,7 +5,8 @@ import {
   UntypedFormGroup,
   Validators,
 } from '@angular/forms';
-import { Role, AuthService } from '@core';
+import { Role} from 'app/models/role';
+import { AuthService } from 'app/services/auth.service';
 @Component({
   selector: 'app-locked',
   templateUrl: './locked.component.html',
@@ -42,7 +43,7 @@ export class LockedComponent implements OnInit {
       return;
     } else {
       const role = this.authService.currentUserValue.role;
-      if (role === Role.All || role === Role.Admin.toUpperCase()) {
+      if (role === Role.All || role === Role.Admin.toUpperCase() || role === Role.SuperAdmin.toUpperCase()) {
         this.router.navigate(['/admin/dashboard/main']);
       } else if (role === Role.Employee.toUpperCase()) {
         this.router.navigate(['/employee/dashboard']);

@@ -9,7 +9,9 @@ import {
 import { Router } from '@angular/router';
 import { ConfigService } from '@config';
 import { UnsubscribeOnDestroyAdapter } from '@shared';
-import { LanguageService, InConfiguration, AuthService } from '@core';
+import { InConfiguration} from '@core';
+import { LanguageService} from 'app/services/language.service';
+import { AuthService } from 'app/services/auth.service';
 
 
 @Component({

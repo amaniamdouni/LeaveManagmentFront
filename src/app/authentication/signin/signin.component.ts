@@ -1,13 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
-import {
-  UntypedFormBuilder,
-  UntypedFormGroup,
-  Validators,
-} from '@angular/forms';
-import { Role, AuthService } from '@core';
+import { Router } from '@angular/router';
+import {UntypedFormBuilder,UntypedFormGroup,Validators,} from '@angular/forms';
+import { Role } from 'app/models/role';
+import { AuthService } from 'app/services/auth.service';
 import { UnsubscribeOnDestroyAdapter } from '@shared';
-import { HttpErrorResponse } from '@angular/common/http';
+
 @Component({
   selector: 'app-signin',
   templateUrl: './signin.component.html',
@@ -56,12 +53,10 @@ export class SigninComponent
                 const role = this.authService.currentUserValue.role;
                 console.log(this.authService.currentUserValue.role)
                 console.log(role === Role.Admin)
-                if ( role === Role.Admin) {
+                if ( role === Role.Admin  || role === Role.SuperAdmin) {
                   this.router.navigate(['/admin/dashboard/main' ]);
-                } else if (role === Role.Employee) {
-                  this.router.navigate(['/employee/dashboard']);
-                } else if (role === Role.Client) {
-                  this.router.navigate(['/client/dashboard']);
+                } else if ( role === Role.Employee ) {
+                  this.router.navigate( [ '/employee/dashboard' ] );
                 } else {
                   this.router.navigate(['/authentication/signin']);
                 }

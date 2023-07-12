@@ -1,74 +1,73 @@
 <div class="addContainer">
-  <div class="modalHeader">
-    <div class="editRowModal">
-      <div class="modalHeader clearfix">
-        <div class="modal-about">
-          {{dialogTitle}}
+    <div class="modalHeader">
+        <div class="editRowModal">
+            <div class="modalHeader clearfix">
+                <div class="modal-about">
+                    {{dialogTitle}}
+                </div>
+            </div>
         </div>
-      </div>
-    </div>
-    <button mat-icon-button (click)="dialogRef.close()" class="modal-close-button" aria-label="Close dialog">
+        <button mat-icon-button (click)="dialogRef.close()" class="modal-close-button" aria-label="Close dialog">
       <mat-icon>close</mat-icon>
     </button>
-  </div>
-  <div mat-dialog-content>
-    <form class="register-form" [formGroup]="projectForm">
-      <div class="row">
-        <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
-          <mat-form-field class="example-full-width" appearance="outline">
-            <mat-label>Team name</mat-label>
-            <input matInput formControlName="nameTeam" placeholder="Team name" required>
-            <mat-icon class="material-icons-two-tone color-icon p-3" matSuffix>Name</mat-icon>
-            <mat-error *ngIf="projectForm.get('nameTeam')?.hasError('required')" >
-              Team name is required
-            </mat-error>
-          </mat-form-field>
-        </div>
-        <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
-          <mat-form-field class="example-full-width mb-3" appearance="outline">
-            <mat-label>User</mat-label>
-            <mat-select formControlName="user" required>
-              <ng-container *ngIf="project?.user !== null">
-                <mat-option [value]="project?.user?.id" selected>
-                {{ project?.user?.firstName +" "+ project?.user?.lastName}}
-            </mat-option>
-            </ng-container>
-            <ng-container *ngIf="listUser !== null">
-            <ng-container *ngFor="let user of listUser">
-              <mat-option [value]="user?.id" *ngIf="user?.id !== project?.user?.id">
-                {{ user?.firstName }} {{ user?.lastName }}
-              </mat-option>
-            </ng-container>
-          </ng-container>
-            </mat-select>
-            <mat-error *ngIf="projectForm.get('user')?.hasError('required')">
-              User is required
-            </mat-error>
-          </mat-form-field>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
-          <mat-form-field class="example-full-width mb-3" appearance="outline">
-            <mat-label>Descriptions Of The Team</mat-label>
-            <textarea matInput formControlName="description" class="description-area" required>
+    </div>
+    <div mat-dialog-content>
+        <form class="register-form" [formGroup]="projectForm">
+            <div class="row">
+                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width" appearance="outline">
+                        <mat-label>Team name</mat-label>
+                        <input matInput formControlName="nameTeam" placeholder="Team name" required>
+                        <mat-icon class="material-icons-two-tone color-icon p-3" matSuffix>Name</mat-icon>
+                        <mat-error *ngIf="projectForm.get('nameTeam')?.hasError('required')">
+                            Team name is required
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width mb-3" appearance="outline">
+                        <mat-label>User</mat-label>
+                        <mat-select formControlName="user" required>
+                            <ng-container *ngIf="project?.user !== null">
+                                <mat-option [value]="project?.user?.matricule" selected>
+                                    {{ project?.user?.firstName +" "+ project?.user?.lastName}}
+                                </mat-option>
+                            </ng-container>
+                            <ng-container *ngIf="listUser !== null">
+                                <ng-container *ngFor="let user of listUser">
+                                    <mat-option [value]="user?.matricule" *ngIf="user?.matricule !== project?.user?.matricule">
+                                        {{ user?.firstName }} {{ user?.lastName }}
+                                    </mat-option>
+                                </ng-container>
+                            </ng-container>
+                        </mat-select>
+                        <mat-error *ngIf="projectForm.get('user')?.hasError('required')">
+                            User is required
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width mb-3" appearance="outline">
+                        <mat-label>Descriptions Of The Team</mat-label>
+                        <textarea matInput formControlName="description" class="description-area" required>
             </textarea>
-            <mat-error *ngIf="projectForm.get('description')?.hasError('required')">
-              Descriptions is required
-            </mat-error>
-          </mat-form-field>
-        </div>
-      </div>
+                        <mat-error *ngIf="projectForm.get('description')?.hasError('required')">
+                            Descriptions is required
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+            </div>
 
-      <div class="row">
-        <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
-          <div class="example-button-row" align="end">
-            <button mat-raised-button color="primary" [disabled]="!projectForm.valid" [mat-dialog-close]="1"
-              (click)="save()">Save</button>
-            <button mat-raised-button color="warn" (click)="onNoClick()" tabindex="-1">Cancel</button>
-          </div>
-        </div>
-      </div>
-    </form>
-  </div>
+            <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+                    <div class="example-button-row" align="end">
+                        <button mat-raised-button color="primary" [disabled]="!projectForm.valid" [mat-dialog-close]="1" (click)="save()">Save</button>
+                        <button mat-raised-button color="warn" (click)="onNoClick()" tabindex="-1">Cancel</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
 </div>

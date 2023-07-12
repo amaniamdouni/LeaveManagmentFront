@@ -2,8 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { BehaviorSubject, Observable, of } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { User } from '../../models/user';
-import { environment } from 'environments/environment';
+import { User } from 'app/models/user';
 
 @Injectable({
   providedIn: 'root',
@@ -32,7 +31,7 @@ export class AuthService {
   login(matricule: string, password: string) {
     return this.http
     //.post<User>(`${environment.apiUrl}/authenticate`, {
-      .post<any>('http://localhost:9090/api/auth/login', {
+      .post<any>('http://localhost:9091/api/auth/login', {
         matricule,
         password,
       },this.httpOptions)

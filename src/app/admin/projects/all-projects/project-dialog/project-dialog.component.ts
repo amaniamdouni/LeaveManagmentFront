@@ -17,7 +17,7 @@ import {
 import { ProjectService } from '../core/project.service';
 import { Team } from 'app/models/TeamAdapter';
 import { TeamService } from 'app/services/team.service';
-import { User } from '@core';
+import { User } from 'app/models/user';
 import { UserService } from 'app/services/user.service';
 import { BoardComponent } from '../board/board.component';
 
@@ -69,7 +69,7 @@ export class ProjectDialogComponent {
       description: [this.project?.description,
         [Validators.required],
       ],
-      user: [this.project?.user?.id,
+      user: [this.project?.user?.matricule,
         [Validators.required],
       ]
     });
@@ -91,7 +91,7 @@ export class ProjectDialogComponent {
       return;
     }
     console.log(this.projectForm.value.createdOn);
-    let user = this.listUser.find(u => u.id === this.projectForm.value.user);
+    var user = this.listUser.find(u => u.matricule === this.projectForm.value.user);
     this.projectForm.value.user = user;
     this.projectForm.value.createdOn = "2023-06-16";
     this.projectForm.value.archive = false;

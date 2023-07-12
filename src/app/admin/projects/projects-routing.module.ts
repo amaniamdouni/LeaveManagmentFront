@@ -10,11 +10,11 @@ const routes: Routes = [
     component: AddprojectsComponent,
   },
   {
-    path: "allProjects",
+    path: "teams",
     component: AllprojectsComponent,
   },
   {
-    path: "estimates",
+    path: "employees",
     component: EstimatesComponent,
   },
   {

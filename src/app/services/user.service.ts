@@ -1,6 +1,6 @@
 import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { User } from '@core';
+import { User } from 'app/models/user';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
 
@@ -18,7 +18,7 @@ export class UserService extends UnsubscribeOnDestroyAdapter {
         'Access-Control-Allow-Origin': 'http://localhost:4200'
       })
     };
-    private readonly API_URL = 'http://localhost:9090/user';
+    private readonly API_URL = 'http://localhost:9091/user';
     isTblLoading = true;
     dataChange: BehaviorSubject<User[]> = new BehaviorSubject<User[]>(
       []
