@@ -218,7 +218,7 @@ export class EmployeesComponent
             'center'
           );
       }
-    );
+  }});
 
   }
   private refreshTable() {
