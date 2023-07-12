@@ -4,7 +4,6 @@ import { HttpClient } from '@angular/common/http';
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
-import { Estimates } from './estimates.model';
 import { DataSource } from '@angular/cdk/collections';
 import {
   MatSnackBar,
@@ -18,8 +17,12 @@ import { map } from 'rxjs/operators';
 import { SelectionModel } from '@angular/cdk/collections';
 import { UnsubscribeOnDestroyAdapter } from '@shared';
 import { Direction } from '@angular/cdk/bidi';
+<<<<<<< HEAD
 import { TableExportUtil, TableElement } from '@shared';
 import { formatDate } from '@angular/common';
+=======
+import { User } from 'app/models/user';
+>>>>>>> farah-user-front
 import { UserService } from 'app/services/user.service';
 import { User } from 'app/models/user';
 
@@ -48,7 +51,7 @@ export class EstimatesComponent
   dataSource!: ExampleDataSource;
   selection = new SelectionModel<User>(true, []);
   index?: number;
-  id?: number;
+  matricule?: string;
   estimates?: User;
   searchTerm: string;
 
@@ -93,7 +96,7 @@ export class EstimatesComponent
     });
   }
   test(user : User){
-    console.log(user.id);
+    console.log(user.matricule);
   }
   filterData() {
     if (!this.searchTerm) {
@@ -152,7 +155,7 @@ export class EstimatesComponent
     });
   }
   editCall(row: User) {
-    this.id = row.id;
+    this.matricule = row.matricule;
     let tempDirection: Direction;
     if (localStorage.getItem('isRtl') === 'true') {
       tempDirection = 'rtl';
@@ -170,7 +173,7 @@ export class EstimatesComponent
       if (result === 1) {
         // When using an edit things are little different, firstly we find record inside DataService by id
         const foundIndex = this.exampleDatabase?.dataChange.value.findIndex(
-          (x) => x.id === this.id
+          (x) => x.matricule === this.matricule
         );
         // Then you update that record using data from dialogData (values you enetered)
         if (foundIndex !== undefined) {
@@ -192,7 +195,7 @@ export class EstimatesComponent
   }
   deleteItem(i: number, row: User) {
     this.index = i;
-    this.id = row.id;
+    this.matricule = row.matricule;
     let tempDirection: Direction;
     if (localStorage.getItem('isRtl') === 'true') {
       tempDirection = 'rtl';
@@ -208,7 +211,7 @@ export class EstimatesComponent
     this.subs.sink = dialogRef.afterClosed().subscribe((result) => {
       if (result === 1) {
         const foundIndex = this.exampleDatabase?.dataChange.value.findIndex(
-          (x) => x.id === this.id
+          (x) => x.matricule === this.matricule
         );
         // for delete we use splice in order to remove single object from DataService
         if (foundIndex !== undefined) {
@@ -349,7 +352,7 @@ export class ExampleDataSource extends DataSource<User> {
           .slice()
           .filter((users: User) => {
             const searchStr = (
-              users.id +
+              users.matricule +
               users.firstName +
               users.lastName 
             ).toLowerCase();
@@ -381,8 +384,8 @@ export class ExampleDataSource extends DataSource<User> {
       let propertyA: number | string = '';
       let propertyB: number | string = '';
       switch (this._sort.active) {
-        case 'id':
-          [propertyA, propertyB] = [a.id, b.id];
+        case 'matricule':
+          [propertyA, propertyB] = [a.matricule, b.matricule];
           break;
         case 'firstName':
           [propertyA, propertyB] = [a.firstName, b.firstName];

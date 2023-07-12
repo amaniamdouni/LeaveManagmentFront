@@ -59,7 +59,6 @@ export class FormDialogComponent {
   }
   createContactForm(): UntypedFormGroup {
     return this.fb.group({
-      id: [this.estimates.id],
       firstName: [this.estimates.firstName],
       lastName: [this.estimates.lastName],
       address: [this.estimates.address],
@@ -81,6 +80,6 @@ export class FormDialogComponent {
   }
   public confirmAdd(): void {
     console.log(this.estimatesForm);
-    this.userservice.addEstimates(this.estimatesForm.getRawValue());
+    this.userservice.addUser(this.estimatesForm.getRawValue());
   }
 }

@@ -1,25 +1,15 @@
 import { NgModule } from "@angular/core";
 import { EstimatesComponent } from "./estimates/estimates.component";
-import { ProjectDetailsComponent } from "./project-details/project-details.component";
 import { Routes, RouterModule } from "@angular/router";
-import { AddprojectsComponent } from "./add-project/add-project.component";
-import { AllprojectsComponent } from "./all-projects/all-projects.component";
+import { AllteamsComponent } from "./all-teams/all-teams.component";
 const routes: Routes = [
   {
-    path: "addProject",
-    component: AddprojectsComponent,
-  },
-  {
-    path: "allProjects",
-    component: AllprojectsComponent,
+    path: "allteams",
+    component: AllteamsComponent,
   },
   {
     path: "estimates",
     component: EstimatesComponent,
-  },
-  {
-    path: "projectDetails",
-    component: ProjectDetailsComponent,
   },
 ];
 @NgModule({

@@ -19,11 +19,11 @@ import { MatIconModule } from "@angular/material/icon";
 import { MatSelectModule } from "@angular/material/select";
 import { MatSnackBarModule } from "@angular/material/snack-bar";
 
-import { ProjectDialogComponent } from "./project-dialog.component";
+import { TeamDialogComponent } from "./team-dialog.component";
 
 describe("ProjectDialogComponent", () => {
-  let component: ProjectDialogComponent;
-  let fixture: ComponentFixture<ProjectDialogComponent>;
+  let component: TeamDialogComponent;
+  let fixture: ComponentFixture<TeamDialogComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
@@ -42,7 +42,7 @@ describe("ProjectDialogComponent", () => {
         MatSelectModule,
         MatSnackBarModule,
       ],
-      declarations: [ProjectDialogComponent],
+      declarations: [TeamDialogComponent],
       providers: [
         {
           provide: MatDialogRef,
@@ -58,7 +58,7 @@ describe("ProjectDialogComponent", () => {
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(ProjectDialogComponent);
+    fixture = TestBed.createComponent(TeamDialogComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

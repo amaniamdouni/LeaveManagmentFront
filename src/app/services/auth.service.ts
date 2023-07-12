@@ -2,8 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { BehaviorSubject, Observable, of } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { User } from '../models/user';
-import { environment } from 'environments/environment';
+import { User } from 'app/models/user';
 
 @Injectable({
   providedIn: 'root',
@@ -31,22 +30,23 @@ export class AuthService {
 
   login(matricule: string, password: string) {
     return this.http
-    .post<any>('http://localhost:9090/api/auth/login', {
-      //.post<any>('http://localhost:9090/api/auth/login', {
+
+    //.post<User>(`${environment.apiUrl}/authenticate`, {
+      .post<any>('http://localhost:9091/api/auth/login', {
         matricule,
         password,
-      })
+      },this.httpOptions)
       .pipe(
-        map((user) => {
-          console.log(user)
+        map((data) => {
+          console.log(data.user)
           // store user details and jwt token in local storage to keep user logged in between page refreshes
 
-          localStorage.setItem('currentUser', JSON.stringify(user));
-          this.currentUserSubject.next(user);
-          return user;
+          localStorage.setItem('currentUser', JSON.stringify(data.user));
+          this.currentUserSubject.next(data.user);
+          this.currentUserSubject.value.token = data.accessToken;
+          return data;
         })
-      );
-      
+      ); 
   }
 
   logout() {

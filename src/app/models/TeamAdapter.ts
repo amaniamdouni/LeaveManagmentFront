@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Adapter } from './Adapter';
-import { User } from './user';
+import { User } from 'app/models/user';
 
 export class Team {
   
@@ -8,7 +8,7 @@ export class Team {
     public id: number,
     public nameTeam: string,
     public description?: string,
-    public archive?: Boolean,
+    public archive?: boolean,
     public createdOn?: Date,
     public user?:User,
     public userList?:User[]

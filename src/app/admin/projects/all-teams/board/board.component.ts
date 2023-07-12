@@ -3,9 +3,7 @@ import { CdkDragDrop } from '@angular/cdk/drag-drop';
 
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatDialog } from '@angular/material/dialog';
-import { Project, ProjectStatus } from '../core/project.model';
-import { ProjectService } from '../core/project.service';
-import { ProjectDialogComponent } from '../project-dialog/project-dialog.component';
+import { TeamDialogComponent } from '../team-dialog/team-dialog.component';
 import { Direction } from '@angular/cdk/bidi';
 import { TeamService } from 'app/services/team.service';
 import { Team } from 'app/models/TeamAdapter';
@@ -22,7 +20,6 @@ export class BoardComponent implements OnInit {
   private pollingInterval: any;
 
   constructor(
-    private projectService: ProjectService,
     private teamservice: TeamService,
     private dialog: MatDialog,
     private snackBar: MatSnackBar,
@@ -32,9 +29,9 @@ export class BoardComponent implements OnInit {
   }
 
   async ngOnInit() {
-    this.projectService.getObjects().subscribe((projects: Project[]) => {
+    this.teamservice.getObjects().subscribe((teams: Team[]) => {
       // split project to status categories
-      this.lists = {projects};
+      this.lists = {teams};
     });
       this.refreshTeams();
 
@@ -69,20 +66,19 @@ export class BoardComponent implements OnInit {
   public drop(event: CdkDragDrop<any>): void {
     if (event.previousContainer !== event.container) {
       const project = event.item.data;
-      this.projectService.updateObject(project);
+      this.teamservice.updateObject(project);
     }
   }
 
-  public addProject(name: string, status: any): void {
-    this.projectService.createOject({
+  public addTeam(name: string): void {
+    this.teamservice.createOject({
       name,
-      status: ProjectStatus[status],
     });
   }
   delay(ms: number): Promise<void> {
     return new Promise(resolve => setTimeout(resolve, ms));
   }
-  async removeProject(project: Team) {
+  async removeTeam(project: Team) {
     // show "deleted" info
     // const snack = this.snackBar.open("The Project has been deleted", "Undo");
     const snack = this.snackBar.open(
@@ -99,7 +95,7 @@ export class BoardComponent implements OnInit {
     await this.delay(2000); // Wait for 2 seconds
     this.refreshTeams();
   }
-  public Adduser(project: Team): void {
+  public Adduser(team: Team): void {
     let tempDirection: Direction;
     if (localStorage.getItem('isRtl') === 'true') {
       tempDirection = 'rtl';
@@ -111,22 +107,20 @@ export class BoardComponent implements OnInit {
       height: '80%',
       width: '55%',
       autoFocus: true,
-      data: {
-        project,
-      },
+      data: { team },
       direction: tempDirection,
     });
   }
-  public newProjectDialog(): void {
+  public newTeamDialog(): void {
     this.dialogOpen('Créer une nouvelle équipe', null);
     
   }
 
-  public editProjectDialog(team: Team): void {
+  public editTeamDialog(team: Team): void {
     this.dialogOpen('Modifier Equipe', team);
   }
 
-  private dialogOpen(title: string, project: Team | any): void {
+  private dialogOpen(title: string, team: Team | any): void {
     let tempDirection: Direction;
     if (localStorage.getItem('isRtl') === 'true') {
       tempDirection = 'rtl';
@@ -134,14 +128,11 @@ export class BoardComponent implements OnInit {
       tempDirection = 'ltr';
     }
     // open angular material dialog
-    this.dialog.open(ProjectDialogComponent, {
+    this.dialog.open(TeamDialogComponent, {
       height: '40%',
       width: '55%',
       autoFocus: true,
-      data: {
-        title,
-        project,
-      },
+      data: {title,team,},
       direction: tempDirection,
     });
   }

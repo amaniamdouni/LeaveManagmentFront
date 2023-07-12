@@ -7,16 +7,12 @@ import {
 
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-
-import {
-  Project,
-  ProjectStatus,
-  ProjectPriority,
-  ProjectType,
-} from '../core/project.model';
-import { ProjectService } from '../core/project.service';
 import { Team } from 'app/models/TeamAdapter';
 import { TeamService } from 'app/services/team.service';
+<<<<<<< HEAD:src/app/admin/projects/all-projects/project-dialog/project-dialog.component.ts
+=======
+import { User } from 'app/models/user';
+>>>>>>> farah-user-front:src/app/admin/projects/all-teams/team-dialog/team-dialog.component.ts
 import { UserService } from 'app/services/user.service';
 import { BoardComponent } from '../board/board.component';
 import { User } from 'app/models/user';
@@ -25,51 +21,44 @@ export interface DialogData {
   id: number;
   action: string;
   title: string;
-  project: Team;
+  team: Team;
 }
 
 @Component({
-  selector: 'app-project-dialog',
-  templateUrl: './project-dialog.component.html',
+  selector: 'app-team-dialog',
+  templateUrl: './team-dialog.component.html',
   providers: [BoardComponent],
 })
-export class ProjectDialogComponent {
-  public project: Team;
+export class TeamDialogComponent {
+  public team: Team;
   public dialogTitle: string;
-  public projectForm: UntypedFormGroup;
-  public statusChoices: typeof ProjectStatus;
-  public priorityChoices: typeof ProjectPriority;
-  public projectType: typeof ProjectType;
+  public teamForm: UntypedFormGroup;
   listUser : User[];
   private pollingInterval: any;
 
   constructor(
     private formBuilder: UntypedFormBuilder,
     @Inject(MAT_DIALOG_DATA) public data: DialogData,
-    public dialogRef: MatDialogRef<ProjectDialogComponent>,
-    private snackBar: MatSnackBar,
-    private projectService: ProjectService,    
+    public dialogRef: MatDialogRef<TeamDialogComponent>,
+    private snackBar: MatSnackBar,    
     private teamservice: TeamService,
     private userservice:UserService,
     private compOne: BoardComponent
   ) {
     this.listUser=[];
     this.dialogTitle = data.title;
-    this.project = data.project;
-    this.statusChoices = ProjectStatus;
-    this.priorityChoices = ProjectPriority;
-    this.projectType = ProjectType;
+    this.team = data.team;
     const nonWhiteSpaceRegExp = new RegExp('\\S');
 
-    this.projectForm = this.formBuilder.group({
+    this.teamForm = this.formBuilder.group({
       nameTeam: [
-        this.project?.nameTeam,
+        this.team?.nameTeam,
         [Validators.required, Validators.pattern(nonWhiteSpaceRegExp)],
       ],
-      description: [this.project?.description,
+      description: [this.team?.description,
         [Validators.required],
       ],
-      user: [this.project?.user?.id,
+      user: [this.team?.user?.matricule,
         [Validators.required],
       ]
     });
@@ -87,20 +76,20 @@ export class ProjectDialogComponent {
   }
   async save() {
     console.log('save');
-    if (!this.projectForm.valid) {
+    if (!this.teamForm.valid) {
       return;
     }
-    console.log(this.projectForm.value.createdOn);
-    let user = this.listUser.find(u => u.id === this.projectForm.value.user);
-    this.projectForm.value.user = user;
-    this.projectForm.value.createdOn = "2023-06-16";
-    this.projectForm.value.archive = false;
-    this.projectForm.value.userList = [];
-    if (this.project) {
+    console.log(this.teamForm.value.createdOn);
+    var user = this.listUser.find(u => u.matricule === this.teamForm.value.user);
+    this.teamForm.value.user = user;
+    this.teamForm.value.createdOn = "2023-06-16";
+    this.teamForm.value.archive = false;
+    this.teamForm.value.userList = [];
+    if (this.team) {
       // update project object with form values
-      Object.assign(this.project, this.projectForm.value);
-      console.log(this.project);
-      this.teamservice.updateObject(this.project);
+      Object.assign(this.team, this.teamForm.value);
+      console.log(this.team);
+      this.teamservice.updateObject(this.team);
       this.snackBar.open('Project updated Successfully...!!!', '', {
         duration: 2000,
         verticalPosition: 'bottom',
@@ -110,7 +99,7 @@ export class ProjectDialogComponent {
 
       this.dialogRef.close();
     } else {
-      this.teamservice.createOject(this.projectForm.value);
+      this.teamservice.createOject(this.teamForm.value);
       this.snackBar.open('Project created Successfully...!!!', '', {
         duration: 2000,
         verticalPosition: 'bottom',
