@@ -16,10 +16,12 @@ import { DeleteComponent } from './dialogs/delete/delete.component';
 import { SelectionModel } from '@angular/cdk/collections';
 import { UnsubscribeOnDestroyAdapter } from '@shared';
 import { MyTasksService } from './my-tasks.service';
-import { MyTasks } from './my-tasks.model';
+import { Claim, ClaimPriority } from './my-tasks.model';
 import { Direction } from '@angular/cdk/bidi';
 import { TableExportUtil, TableElement } from '@shared';
 import { formatDate } from '@angular/common';
+import { C } from '@angular/cdk/keycodes';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-my-tasks',
@@ -32,13 +34,8 @@ export class MyTasksComponent
 {
   displayedColumns = [
     'select',
-    'taskNo',
-    'project',
-    'client',
-    'status',
-    'type',
-    'priority',
-    'executor',
+    'claimStatus',
+    'claimPriority',
     'date',
     'details',
     'actions',
@@ -46,28 +43,33 @@ export class MyTasksComponent
 
   exampleDatabase?: MyTasksService | null;
   dataSource!: ExampleDataSource;
-  selection = new SelectionModel<MyTasks>(true, []);
+  dataSourceClaim: any;
+  selection = new SelectionModel<Claim>(true, []);
   index?: number;
   id?: number;
-  myTasks?: MyTasks | null;
+  myTasks?: Claim | null;
   constructor(
     public httpClient: HttpClient,
     public dialog: MatDialog,
-    public myTasksService: MyTasksService,
-    private snackBar: MatSnackBar
+    public claimService: MyTasksService,
+    private snackBar: MatSnackBar,
   ) {
     super();
   }
   @ViewChild(MatPaginator, { static: true }) paginator!: MatPaginator;
   @ViewChild(MatSort, { static: true }) sort!: MatSort;
   @ViewChild('filter', { static: true }) filter!: ElementRef;
+  
+  
   ngOnInit() {
     this.loadData();
+  
   }
   refresh() {
+    
     this.loadData();
   }
-  addNew() {
+ addNew() {
     let tempDirection: Direction;
     if (localStorage.getItem('isRtl') === 'true') {
       tempDirection = 'rtl';
@@ -83,22 +85,17 @@ export class MyTasksComponent
     });
     this.subs.sink = dialogRef.afterClosed().subscribe((result) => {
       if (result === 1) {
-        // After dialog is closed we're doing frontend updates
-        // For add we're just pushing a new row inside DataServicex
-        this.exampleDatabase?.dataChange.value.unshift(
-          this.myTasksService.getDialogData()
-        );
-        this.refreshTable();
-        this.showNotification(
-          'snackbar-success',
-          'Add Record Successfully...!!!',
-          'bottom',
-          'center'
-        );
+        const newClaim: Claim = this.claimService.getDialogData();
+        this.claimService.addClaim(newClaim).subscribe((addedClaim) => {
+          console.log(newClaim.description)
+          this.exampleDatabase?.dataChange.value.unshift(addedClaim);
+        this.loadData();
+        },);
       }
     });
   }
-  editCall(row: MyTasks) {
+  editCall(row: Claim) {
+    console.log(row);
     this.id = row.id;
     let tempDirection: Direction;
     if (localStorage.getItem('isRtl') === 'true') {
@@ -115,28 +112,20 @@ export class MyTasksComponent
     });
     this.subs.sink = dialogRef.afterClosed().subscribe((result) => {
       if (result === 1) {
-        // When using an edit things are little different, firstly we find record inside DataService by id
         const foundIndex = this.exampleDatabase?.dataChange.value.findIndex(
           (x) => x.id === this.id
         );
-        // Then you update that record using data from dialogData (values you enetered)
         if (foundIndex != null && this.exampleDatabase) {
-          this.exampleDatabase.dataChange.value[foundIndex] =
-            this.myTasksService.getDialogData();
-          // And lastly refresh table
-          this.refreshTable();
-          this.showNotification(
-            'black',
-            'Edit Record Successfully...!!!',
-            'bottom',
-            'center'
-          );
-        }
+          const updatedClaim: Claim = this.claimService.getDialogData();
+          console.log('updatedClaim:', updatedClaim);
+          this.claimService.updateMyTasks(updatedClaim).subscribe(() => {
+          this.loadData();
+          });
+        } 
       }
     });
   }
-
-  deleteItem(i: number, row: MyTasks) {
+  deleteItem(i: number, row: Claim) {
     this.index = i;
     this.id = row.id;
     let tempDirection: Direction;
@@ -145,29 +134,20 @@ export class MyTasksComponent
     } else {
       tempDirection = 'ltr';
     }
-
+  
     const dialogRef = this.dialog.open(DeleteComponent, {
       height: '270px',
       width: '300px',
       data: row,
       direction: tempDirection,
     });
+  
     this.subs.sink = dialogRef.afterClosed().subscribe((result) => {
       if (result === 1) {
-        const foundIndex = this.exampleDatabase?.dataChange.value.findIndex(
-          (x) => x.id === this.id
-        );
-        // for delete we use splice in order to remove single object from DataService
-        if (foundIndex !== undefined && this.exampleDatabase !== undefined) {
-          this.exampleDatabase?.dataChange.value.splice(foundIndex, 1);
-          this.refreshTable();
-          this.showNotification(
-            'snackbar-danger',
-            'Delete Record Successfully...!!!',
-            'bottom',
-            'center'
-          );
-        }
+              this.loadData();
+              console.log("Record deleted successfully");
+      } else {
+        console.log("err");
       }
     });
   }
@@ -199,7 +179,7 @@ export class MyTasksComponent
       this.exampleDatabase?.dataChange.value.splice(index, 1);
 
       this.refreshTable();
-      this.selection = new SelectionModel<MyTasks>(true, []);
+      this.selection = new SelectionModel<Claim>(true, []);
     });
     this.showNotification(
       'snackbar-danger',
@@ -208,41 +188,27 @@ export class MyTasksComponent
       'center'
     );
   }
+  // dataSource => dataSourceClaim
   public loadData() {
-    this.exampleDatabase = new MyTasksService(this.httpClient);
-    this.dataSource = new ExampleDataSource(
-      this.exampleDatabase,
-      this.paginator,
-      this.sort
-    );
-    this.subs.sink = fromEvent(this.filter.nativeElement, 'keyup').subscribe(
-      () => {
-        if (!this.dataSource) {
-          return;
-        }
-        this.dataSource.filter = this.filter.nativeElement.value;
-      }
-    );
+    this.claimService.getclaims().subscribe(x => {
+      this.dataSourceClaim = x ;
+      console.log(this.dataSourceClaim);
+    });
   }
   // export table data in excel file
   exportExcel() {
-    // key name with space add in brackets
-    const exportData: Partial<TableElement>[] =
-      this.dataSource.filteredData.map((x) => ({
-        'Task No': x.taskNo,
-        Project: x.project,
-        Client: x.client,
-        Status: x.status,
-        Priority: x.priority,
-        Type: x.type,
-        Executor: x.executor,
-        'Joining Date': formatDate(new Date(x.date), 'yyyy-MM-dd', 'en') || '',
-        Details: x.details,
+    if (this.dataSourceClaim.filteredData) {
+      const exportData: Partial<TableElement>[] = this.dataSourceClaim.filteredData.map((x) => ({
+        Status: x.claimStatus,
+        Priority: x.claimPriority,
+        'Joining Date': x.dateClaim,
+        Details: x.description,
       }));
-
-    TableExportUtil.exportToExcel(exportData, 'excel');
+  
+      TableExportUtil.exportToExcel(exportData, 'excel');
+    }
   }
-
+  
   showNotification(
     colorName: string,
     text: string,
@@ -257,7 +223,7 @@ export class MyTasksComponent
     });
   }
 }
-export class ExampleDataSource extends DataSource<MyTasks> {
+export class ExampleDataSource extends DataSource<Claim> {
   filterChange = new BehaviorSubject('');
   get filter(): string {
     return this.filterChange.value;
@@ -265,8 +231,8 @@ export class ExampleDataSource extends DataSource<MyTasks> {
   set filter(filter: string) {
     this.filterChange.next(filter);
   }
-  filteredData: MyTasks[] = [];
-  renderedData: MyTasks[] = [];
+  filteredData: Claim[] = [];
+  renderedData: Claim[] = [];
   constructor(
     public exampleDatabase: MyTasksService,
     public paginator: MatPaginator,
@@ -277,7 +243,7 @@ export class ExampleDataSource extends DataSource<MyTasks> {
     this.filterChange.subscribe(() => (this.paginator.pageIndex = 0));
   }
   /** Connect function called by the table to retrieve one stream containing the data to render. */
-  connect(): Observable<MyTasks[]> {
+  connect(): Observable<Claim[]> {
     // Listen for any changes in the base data, sorting, filtering, or pagination
     const displayDataChanges = [
       this.exampleDatabase.dataChange,
@@ -285,23 +251,18 @@ export class ExampleDataSource extends DataSource<MyTasks> {
       this.filterChange,
       this.paginator.page,
     ];
-    this.exampleDatabase.getAllMyTaskss();
+    //this.exampleDatabase.getAllClaims();
     return merge(...displayDataChanges).pipe(
       map(() => {
         // Filter data
         this.filteredData = this.exampleDatabase.data
           .slice()
-          .filter((myTasks: MyTasks) => {
+          .filter((myTasks: Claim) => {
             const searchStr = (
-              myTasks.taskNo +
-              myTasks.project +
-              myTasks.client +
-              myTasks.status +
-              myTasks.priority +
-              myTasks.type +
-              myTasks.executor +
-              myTasks.date +
-              myTasks.details
+              myTasks.claimStatus,
+              myTasks.claimPriority,
+              myTasks.dateClaim +
+              myTasks.description
             ).toLowerCase();
             return searchStr.indexOf(this.filter.toLowerCase()) !== -1;
           });
@@ -321,7 +282,7 @@ export class ExampleDataSource extends DataSource<MyTasks> {
     //disconnect
   }
   /** Returns a sorted copy of the database data. */
-  sortData(data: MyTasks[]): MyTasks[] {
+  sortData(data: Claim[]): Claim[] {
     if (!this._sort.active || this._sort.direction === '') {
       return data;
     }
@@ -332,23 +293,11 @@ export class ExampleDataSource extends DataSource<MyTasks> {
         case 'id':
           [propertyA, propertyB] = [a.id, b.id];
           break;
-        case 'taskNo':
-          [propertyA, propertyB] = [a.taskNo, b.taskNo];
-          break;
-        case 'project':
-          [propertyA, propertyB] = [a.project, b.project];
-          break;
-        case 'client':
-          [propertyA, propertyB] = [a.client, b.client];
-          break;
         case 'status':
-          [propertyA, propertyB] = [a.status, b.status];
+          [propertyA, propertyB] = [a.claimStatus, b.claimStatus];
           break;
         case 'priority':
-          [propertyA, propertyB] = [a.priority, b.priority];
-          break;
-        case 'type':
-          [propertyA, propertyB] = [a.type, b.type];
+          [propertyA, propertyB] = [a.claimPriority, b.claimPriority];
           break;
       }
       const valueA = isNaN(+propertyA) ? propertyA : +propertyA;

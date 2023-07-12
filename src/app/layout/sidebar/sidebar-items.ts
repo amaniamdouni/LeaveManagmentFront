@@ -146,6 +146,7 @@ export const ROUTES: RouteInfo[] = [
     role: ['ADMIN', 'EMPLOYEE'],
     submenu: [],
   },
+
   {
     path: '',
     title: 'MENUITEMS.LEAVES.TEXT',

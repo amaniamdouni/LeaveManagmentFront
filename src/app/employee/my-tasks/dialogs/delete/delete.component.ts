@@ -1,12 +1,12 @@
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { Component, Inject } from '@angular/core';
 import { MyTasksService } from '../../my-tasks.service';
+import { ClaimStatus } from '../../my-tasks.model';
 
 export interface DialogData {
   id: number;
-  taskNo: string;
-  status: string;
-  project: string;
+  claimStatus: string;
+  description: string;
 }
 
 @Component({
@@ -24,6 +24,15 @@ export class DeleteComponent {
     this.dialogRef.close();
   }
   confirmDelete(): void {
-    this.myTasksService.deleteMyTasks(this.data.id);
+    const claimStatus = ClaimStatus[this.data.claimStatus];
+    this.myTasksService.deleteMyTasks(this.data.id).subscribe(
+      (res) => {
+        console.log(res);
+      },
+      (err) => {
+        console.log(err);
+      }
+    );
   }
+  
 }
