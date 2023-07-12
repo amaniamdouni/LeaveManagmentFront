@@ -1,10 +1,10 @@
 import { NgModule } from "@angular/core";
 import { EstimatesComponent } from "./estimates/estimates.component";
 import { Routes, RouterModule } from "@angular/router";
-import { AllteamsComponent } from "./all-projects/all-teams.component";
+import { AllteamsComponent } from "./all-teams/all-teams.component";
 const routes: Routes = [
   {
-    path: "allprojects",
+    path: "allteams",
     component: AllteamsComponent,
   },
   {

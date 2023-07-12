@@ -1,7 +1,7 @@
-import { TruncatePipe, PluralPipe } from './all-projects/core/pipes';
-import { TeamDialogComponent } from './all-projects/team-dialog/team-dialog.component';
-import { BoardComponent } from './all-projects/board/board.component';
-import { AllteamsComponent } from './all-projects/all-teams.component';
+import { TruncatePipe, PluralPipe } from './all-teams/core/pipes';
+import { TeamDialogComponent } from './all-teams/team-dialog/team-dialog.component';
+import { BoardComponent } from './all-teams/board/board.component';
+import { AllteamsComponent } from './all-teams/all-teams.component';
 
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
