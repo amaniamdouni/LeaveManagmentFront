@@ -27,7 +27,7 @@ export class UserService extends UnsubscribeOnDestroyAdapter {
     dialogData!: User;
     constructor(private httpClient: HttpClient) {
       super();
-      this.getAllEstimatess();
+      this.getAllusers();
     }
     get data(): User[] {
       return this.dataChange.value;
@@ -36,7 +36,7 @@ export class UserService extends UnsubscribeOnDestroyAdapter {
       return this.dialogData;
     }
     /** CRUD METHODS */
-    getAllEstimatess(): Observable<User[]> {
+    getAllusers(): Observable<User[]> {
       return this.httpClient.get<User[]>(this.API_URL).pipe(
         tap((data: User[]) => {
           this.isTblLoading = false;

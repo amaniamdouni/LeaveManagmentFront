@@ -13,7 +13,7 @@ export const ROUTES: RouteInfo[] = [
     submenu: [],
   },
   {
-    path:'/admin/projects/allteams',
+    path:'/admin/details/allteams',
     title: 'MENUITEMS.TEAM.TEXT',
     iconType: 'feather',
     icon: 'users',
@@ -25,7 +25,7 @@ export const ROUTES: RouteInfo[] = [
     submenu: [],
   },
   {
-    path: '/admin/projects/estimates',
+    path: '/admin/details/allemployees',
     title: 'MENUITEMS.EMPLOYEES.TEXT',
     iconType: 'feather',
     icon: 'users',

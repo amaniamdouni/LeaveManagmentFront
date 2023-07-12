@@ -7,7 +7,7 @@ import { TeamDialogComponent } from '../team-dialog/team-dialog.component';
 import { Direction } from '@angular/cdk/bidi';
 import { TeamService } from 'app/services/team.service';
 import { Team } from 'app/models/TeamAdapter';
-import { EstimatesComponent } from '../../estimates/estimates.component';
+import { EmployeesComponent } from '../../employees/employees.component';
 
 @Component({
   selector: 'app-board',
@@ -103,7 +103,7 @@ export class BoardComponent implements OnInit {
       tempDirection = 'ltr';
     }
     // open angular material dialog
-    this.dialog.open(EstimatesComponent, {
+    this.dialog.open(EmployeesComponent, {
       height: '80%',
       width: '55%',
       autoFocus: true,
