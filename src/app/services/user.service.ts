@@ -1,10 +1,10 @@
 import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { User } from '@core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
 
 import { UnsubscribeOnDestroyAdapter } from '@shared';
+import { User } from 'app/models/user';
 
 @Injectable({
   providedIn: 'root'

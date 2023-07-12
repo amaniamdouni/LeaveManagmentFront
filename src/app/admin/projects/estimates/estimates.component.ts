@@ -20,8 +20,8 @@ import { UnsubscribeOnDestroyAdapter } from '@shared';
 import { Direction } from '@angular/cdk/bidi';
 import { TableExportUtil, TableElement } from '@shared';
 import { formatDate } from '@angular/common';
-import { User } from '@core';
 import { UserService } from 'app/services/user.service';
+import { User } from 'app/models/user';
 
 @Component({
   selector: 'app-estimates',

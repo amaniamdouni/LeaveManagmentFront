@@ -27,6 +27,7 @@ export class TeamAdapter implements Adapter<Team> {
       item.description,
       item.archive,
       item.createdOn ? new Date(item.createdOn) : undefined,
+      item.user ? item.user : new User(item.user),
       item.userList ? item.userList : [],
     );
     return adapted;
