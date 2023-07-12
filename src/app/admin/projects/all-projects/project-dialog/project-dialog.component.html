@@ -29,13 +29,13 @@
             <mat-label>User</mat-label>
             <mat-select formControlName="user" required>
               <ng-container *ngIf="project?.user !== null">
-                <mat-option [value]="project?.user?.id" selected>
+                <mat-option [value]="project?.user?.matricule" selected>
                 {{ project?.user?.firstName +" "+ project?.user?.lastName}}
             </mat-option>
             </ng-container>
             <ng-container *ngIf="listUser !== null">
             <ng-container *ngFor="let user of listUser">
-              <mat-option [value]="user?.id" *ngIf="user?.id !== project?.user?.id">
+              <mat-option [value]="user?.matricule"*ngIf="user?.matricule !== project?.user?.matricule">
                 {{ user?.firstName }} {{ user?.lastName }}
               </mat-option>
             </ng-container>

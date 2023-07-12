@@ -17,9 +17,9 @@ import {
 import { ProjectService } from '../core/project.service';
 import { Team } from 'app/models/TeamAdapter';
 import { TeamService } from 'app/services/team.service';
-import { User } from '@core';
 import { UserService } from 'app/services/user.service';
 import { BoardComponent } from '../board/board.component';
+import { User } from 'app/models/user';
 
 export interface DialogData {
   id: number;
