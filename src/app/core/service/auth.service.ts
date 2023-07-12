@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { BehaviorSubject, Observable, of } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { User } from '../models/user';
@@ -11,6 +11,12 @@ import { environment } from 'environments/environment';
 export class AuthService {
   private currentUserSubject: BehaviorSubject<User>;
   public currentUser: Observable<User>;
+  httpOptions= {
+    headers: new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Access-Control-Allow-Origin': 'http://localhost:4200'
+    })
+  };
 
   constructor(private http: HttpClient) {
     this.currentUserSubject = new BehaviorSubject<User>(
@@ -23,14 +29,16 @@ export class AuthService {
     return this.currentUserSubject.value;
   }
 
-  login(username: string, password: string) {
+  login(matricule: string, password: string) {
     return this.http
-      .post<User>(`${environment.apiUrl}/authenticate`, {
-        username,
+    .post<User>(`${environment.apiUrl}/authenticate`, {
+      //.post<any>('http://localhost:9090/api/auth/login', {
+        matricule,
         password,
       })
       .pipe(
         map((user) => {
+          console.log(user)
           // store user details and jwt token in local storage to keep user logged in between page refreshes
 
           localStorage.setItem('currentUser', JSON.stringify(user));
@@ -38,6 +46,7 @@ export class AuthService {
           return user;
         })
       );
+      
   }
 
   logout() {

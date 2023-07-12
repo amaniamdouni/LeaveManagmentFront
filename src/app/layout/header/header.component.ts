@@ -110,13 +110,13 @@ export class HeaderComponent
   ngOnInit() {
     this.config = this.configService.configData;
     const userRole = this.authService.currentUserValue.role;
-    this.userImg = this.authService.currentUserValue.img;
+    //this.userImg = this.authService.currentUserValue.img;
 
-    if (userRole === 'Admin') {
+    if (userRole === 'ADMIN') {
       this.homePage = 'admin/dashboard/main';
     } else if (userRole === 'Client') {
       this.homePage = 'client/dashboard';
-    } else if (userRole === 'Employee') {
+    } else if (userRole === 'EMPLOYEE') {
       this.homePage = 'employee/dashboard';
     } else {
       this.homePage = 'admin/dashboard/main';
