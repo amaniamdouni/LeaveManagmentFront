@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Adapter } from './Adapter';
-import { User } from '@core';
+import { User } from './user';
 
 export class Team {
   
@@ -27,7 +27,6 @@ export class TeamAdapter implements Adapter<Team> {
       item.description,
       item.archive,
       item.createdOn ? new Date(item.createdOn) : undefined,
-      item.user ? item.user : new User(),
       item.userList ? item.userList : [],
     );
     return adapted;
