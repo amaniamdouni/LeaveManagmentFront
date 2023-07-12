@@ -8,14 +8,14 @@ import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
-import { FormDialogComponent } from './estimates/dialog/form-dialog/form-dialog.component';
-import { DeleteDialogComponent } from './estimates/dialog/delete/delete.component';
+import { FormDialogComponent } from './employees/dialog/form-dialog/form-dialog.component';
+import { DeleteDialogComponent } from './employees/dialog/delete/delete.component';
 
-import { ProjectsRoutingModule } from './projects-routing.module';
+import { DetailsRoutingModule } from './details-routing.module';
 import { ComponentsModule } from '@shared/components/components.module';
-import { EstimatesComponent } from './estimates/estimates.component';
+import { EmployeesComponent } from './employees/employees.component';
 import { SharedModule } from '@shared';
-import { EstimatesService } from './estimates/estimates.service';
+
 
 @NgModule({
   declarations: [
@@ -24,13 +24,13 @@ import { EstimatesService } from './estimates/estimates.service';
     TeamDialogComponent,
     TruncatePipe,
     PluralPipe,
-    EstimatesComponent,
+    EmployeesComponent,
     FormDialogComponent,
     DeleteDialogComponent,
   ],
   imports: [
     CommonModule,
-    ProjectsRoutingModule,
+    DetailsRoutingModule,
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
@@ -39,6 +39,6 @@ import { EstimatesService } from './estimates/estimates.service';
     ComponentsModule,
     SharedModule,
   ],
-  providers: [EstimatesService],
+  providers: [],
 })
-export class ProjectsModule {}
+export class DetailsModule {}

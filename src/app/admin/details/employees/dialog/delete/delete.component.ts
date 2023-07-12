@@ -1,6 +1,6 @@
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { Component, Inject } from '@angular/core';
-import { EstimatesService } from '../../estimates.service';
+import { UserService } from 'app/services/user.service';
 
 export interface DialogData {
   id: number;
@@ -18,12 +18,12 @@ export class DeleteDialogComponent {
   constructor(
     public dialogRef: MatDialogRef<DeleteDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: DialogData,
-    public estimatesService: EstimatesService
+    public userService: UserService
   ) {}
   onNoClick(): void {
     this.dialogRef.close();
   }
   confirmDelete(): void {
-    this.estimatesService.deleteEstimates(this.data.id);
+    this.userService.deleteUser(this.data.id);
   }
 }

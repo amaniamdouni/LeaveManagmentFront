@@ -1,5 +1,4 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { EstimatesService } from './estimates.service';
 import { HttpClient } from '@angular/common/http';
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
@@ -21,11 +20,11 @@ import { UserService } from 'app/services/user.service';
 import { User } from 'app/models/user';
 
 @Component({
-  selector: 'app-estimates',
-  templateUrl: './estimates.component.html',
-  styleUrls: ['./estimates.component.scss'],
+  selector: 'app-employees',
+  templateUrl: './employees.component.html',
+  styleUrls: ['./employees.component.scss'],
 })
-export class EstimatesComponent
+export class EmployeesComponent
   extends UnsubscribeOnDestroyAdapter
   implements OnInit
 {
@@ -54,7 +53,6 @@ export class EstimatesComponent
   constructor(
     public httpClient: HttpClient,
     public dialog: MatDialog,
-    public estimatesService: EstimatesService,
     private snackBar: MatSnackBar,
     private userservice:UserService,
 
@@ -79,7 +77,7 @@ export class EstimatesComponent
     console.log(this.selection);
   }
   refreshTeams() {
-    this.userservice.getAllEstimatess().subscribe({
+    this.userservice.getAllusers().subscribe({
       next: (users: User[]) => {
         this.listUser = users;
       },
@@ -107,7 +105,7 @@ export class EstimatesComponent
       let fullname = user.firstName+" "+user.lastName;
       // Effectuez ici la logique de recherche en fonction des propriétés de l'objet utilisateur
       // Par exemple, vous pouvez rechercher par nom, ID, etc.
-      return user.firstName.toLowerCase().includes(searchTermLowerCase) ||
+      return user.matricule.toLowerCase().includes(searchTermLowerCase) || user.firstName.toLowerCase().includes(searchTermLowerCase) ||
       user.lastName.toLowerCase().includes(searchTermLowerCase);
     });
   
@@ -275,25 +273,6 @@ export class EstimatesComponent
       }
     );
   }
-  // // export table data in excel file
-  // exportExcel() {
-  //   // key name with space add in brackets
-  //   const exportData: Partial<TableElement>[] =
-  //     this.dataSource.filteredData.map((x) => ({
-  //       'Estimate ID': x.eNo,
-  //       'Client Name': x.cName,
-  //       'Estimate Date':
-  //         formatDate(new Date(x.estDate), 'yyyy-MM-dd', 'en') || '',
-  //       'Expired Date':
-  //         formatDate(new Date(x.expDate), 'yyyy-MM-dd', 'en') || '',
-  //       Country: x.country,
-  //       Amount: x.amount,
-  //       Status: x.status,
-  //       Details: x.details,
-  //     }));
-
-  //   TableExportUtil.exportToExcel(exportData, 'excel');
-  // }
 
   showNotification(
     colorName: string,
@@ -338,7 +317,7 @@ export class ExampleDataSource extends DataSource<User> {
       this.filterChange,
       this.paginator.page,
     ];
-    this.exampleDatabase.getAllEstimatess();
+    this.exampleDatabase.getAllusers();
     return merge(...displayDataChanges).pipe(
       map(() => {
         // Filter data

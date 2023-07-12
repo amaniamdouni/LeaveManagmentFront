@@ -1,5 +1,5 @@
 import { NgModule } from "@angular/core";
-import { EstimatesComponent } from "./estimates/estimates.component";
+import { EmployeesComponent } from "./employees/employees.component";
 import { Routes, RouterModule } from "@angular/router";
 import { AllteamsComponent } from "./all-teams/all-teams.component";
 const routes: Routes = [
@@ -8,12 +8,12 @@ const routes: Routes = [
     component: AllteamsComponent,
   },
   {
-    path: "estimates",
-    component: EstimatesComponent,
+    path: "allemployees",
+    component: EmployeesComponent,
   },
 ];
 @NgModule({
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule],
 })
-export class ProjectsRoutingModule {}
+export class DetailsRoutingModule {}

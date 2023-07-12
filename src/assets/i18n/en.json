@@ -24,33 +24,6 @@
                 "EDIT-CLIENT": "Edit Client"
             }
         },
-        "ACCOUNTS": {
-            "TEXT": "Accounts",
-            "LIST": {
-                "ALL-PAYMENTS": "All Payments",
-                "ADD-PAYMENT": "Add Payment",
-                "INVOICE": "Invoice"
-            }
-        },
-        "PAYROLL": {
-            "TEXT": "Payroll",
-            "LIST": {
-                "EMPLOYEE_SALARY": "Employee Salary",
-                "PAYSLIP": "Payslip"
-            }
-        },
-        "LEADERS": {
-            "TEXT": "Leaders"
-        },
-        "JOBS": {
-            "TEXT": "Jobs",
-            "LIST": {
-                "JOBS_LIST": "Jobs List",
-                "RESUMES": "Resumes",
-                "CANDIDATES": "Candidates",
-                "SHORTLIST_CANDIDATES": "Shortlist Candidates"
-            }
-        },
         "REPORTS": {
             "TEXT": "Reports",
             "LIST": {
@@ -92,35 +65,11 @@
                 "SHEET": "Attendance Sheet"
             }
         },
-        "CLIENT": {
-            "TEXT": "Client",
-            "DASHBOARD": "Dashboard",
-            "PROJECTS": {
-                "TEXT": "Projects",
-                "LIST": {
-                    "MY-PROJECTS": "My Projects",
-                    "PROJECT-DETAILS": "Project Details"
-                }
-            },
-            "SUPPORTS": {
-                "TEXT": "Supports",
-                "LIST": {
-                    "TICKETS": "Tickets",
-                    "TICKET-DETAILS": "Ticket Details"
-                }
-            },
-            "BILLING": "Billing",
-            "CHAT": "Chat",
-            "SETTINGS": "Settings"
-        },
         "APPS": {
             "TEXT": "Apps"
         },
         "CALENDAR": {
             "TEXT": "Calendar"
-        },
-        "TASK": {
-            "TEXT": "Task"
         },
         "CONTACTS": {
             "TEXT": "Contacts"

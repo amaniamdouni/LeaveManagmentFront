@@ -1,13 +1,12 @@
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { Component, Inject } from '@angular/core';
-import { EstimatesService } from '../../estimates.service';
 import {
   UntypedFormControl,
   Validators,
   UntypedFormGroup,
   UntypedFormBuilder,
 } from '@angular/forms';
-import { Estimates } from '../../estimates.model';
+
 import { User } from 'app/models/user';
 import { UserService } from 'app/services/user.service';
 
@@ -30,7 +29,6 @@ export class FormDialogComponent {
   constructor(
     public dialogRef: MatDialogRef<FormDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: DialogData,
-    public estimatesService: EstimatesService,
     public userservice : UserService,
     private fb: UntypedFormBuilder
   ) {
