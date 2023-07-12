@@ -11,7 +11,7 @@ import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
 import { FormDialogComponent } from './employees/dialog/form-dialog/form-dialog.component';
 import { DeleteDialogComponent } from './employees/dialog/delete/delete.component';
 
-import { ProjectsRoutingModule } from './projects-routing.module';
+import { DetailsRoutingModule } from './details-routing.module';
 import { ComponentsModule } from '@shared/components/components.module';
 import { EmployeesComponent } from './employees/employees.component';
 import { SharedModule } from '@shared';
@@ -30,7 +30,7 @@ import { SharedModule } from '@shared';
   ],
   imports: [
     CommonModule,
-    ProjectsRoutingModule,
+    DetailsRoutingModule,
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
@@ -41,4 +41,4 @@ import { SharedModule } from '@shared';
   ],
   providers: [],
 })
-export class ProjectsModule {}
+export class DetailsModule {}
