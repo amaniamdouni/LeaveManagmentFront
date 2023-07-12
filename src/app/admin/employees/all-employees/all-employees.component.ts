@@ -21,8 +21,8 @@ import { User } from 'app/models/user';
 
 @Component({
   selector: 'app-employees',
-  templateUrl: './employees.component.html',
-  styleUrls: ['./employees.component.scss'],
+  templateUrl: './all-employees.component.html',
+  styleUrls: ['./all-employees.component.scss'],
 })
 export class EmployeesComponent
   extends UnsubscribeOnDestroyAdapter
@@ -45,7 +45,7 @@ export class EmployeesComponent
   selection = new SelectionModel<User>(true, []);
   index?: number;
   matricule?: string;
-  estimates?: User;
+  user?: User;
   searchTerm: string;
 
   private pollingInterval: any;
@@ -102,7 +102,7 @@ export class EmployeesComponent
     
     // Filtrez la liste en fonction du terme de recherche
     const filteredData = this.listUser.filter((user) => {
-      let fullname = user.firstName+" "+user.lastName;
+      const fullname = user.firstName+" "+user.lastName;
       // Effectuez ici la logique de recherche en fonction des propriétés de l'objet utilisateur
       // Par exemple, vous pouvez rechercher par nom, ID, etc.
       return user.matricule.toLowerCase().includes(searchTermLowerCase) || user.firstName.toLowerCase().includes(searchTermLowerCase) ||
@@ -124,7 +124,7 @@ export class EmployeesComponent
     }
     const dialogRef = this.dialog.open(FormDialogComponent, {
       data: {
-        estimates: this.estimates,
+        user: this.user,
         action: 'add',
       },
       direction: tempDirection,

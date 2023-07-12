@@ -25,7 +25,7 @@ export const ROUTES: RouteInfo[] = [
     submenu: [],
   },
   {
-    path: '/admin/details/allemployees',
+    path: '/admin/employee/allemployees',
     title: 'MENUITEMS.EMPLOYEES.TEXT',
     iconType: 'feather',
     icon: 'users',

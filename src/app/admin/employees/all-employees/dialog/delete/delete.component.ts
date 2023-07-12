@@ -3,10 +3,10 @@ import { Component, Inject } from '@angular/core';
 import { UserService } from 'app/services/user.service';
 
 export interface DialogData {
-  id: number;
-  eNo: string;
-  cName: string;
-  status: string;
+  matricule: string;
+  firstName: string;
+  lastName: string;
+  position: string;
 }
 
 @Component({
@@ -24,6 +24,6 @@ export class DeleteDialogComponent {
     this.dialogRef.close();
   }
   confirmDelete(): void {
-    this.userService.deleteUser(this.data.id);
+    this.userService.deleteUser(this.data.matricule);
   }
 }

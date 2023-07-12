@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { User } from 'app/models/user';
+import { UserService } from 'app/services/user.service';
 import { ChartConfiguration, ChartData, ChartType } from 'chart.js';
 import {
   ApexAxisChartSeries,
@@ -50,7 +52,7 @@ export class MainComponent implements OnInit {
   public smallChart4Options!: Partial<ChartOptions>;
   public performanceRateChartOptions!: Partial<ChartOptions>;
 
-  constructor() {
+  constructor( public userservice : UserService) {
     // constructor code
   }
   ngOnInit() {
