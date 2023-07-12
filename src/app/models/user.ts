@@ -20,8 +20,8 @@ export class User {
         this.lastName = user.lastName || '';
         this.address = user.address || '';
         this.position = user.position || '';
-        this.birthDate = user.birthDate || '';
-        this.startDate = user.startDate || '';
+        this.birthDate = user.birthDate ;
+        this.startDate = user.startDate ;
         this.leaveBalance = user.leaveBalance || 0;
         this.role = user.role || '';
         this.phoneNumber = user.phoneNumber || '';
@@ -34,4 +34,3 @@ export class User {
   }
 
 
-  

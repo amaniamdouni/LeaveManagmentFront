@@ -13,16 +13,15 @@ export class Leave {
     constructor(user: Leave) {
         {
           this.id = user.id || 0;
-          this.startDate = user.startDate || '';
-          this.endDate = user.endDate || '';
+          this.startDate = user.startDate ;
+          this.endDate = user.endDate ;
           this.comment = user.comment || '';
           this.nbr_days = user.nbr_days || 0;
-          this.createdAt = user.createdAt || '';
+          this.createdAt = user.createdAt ;
           this.leaveStatus = user.leaveStatus || '';
-          this.startDate = user.startDate || '';
+          this.startDate = user.startDate ;
           this.leaveType = user.leaveType || '';
           this.user = user.user || new User({} as User);
         }
       }
   }
-  
