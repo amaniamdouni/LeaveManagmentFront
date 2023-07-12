@@ -13,7 +13,7 @@ export const ROUTES: RouteInfo[] = [
     submenu: [],
   },
   {
-    path:'/admin/details/allteams',
+    path:'/admin/teams/allteams',
     title: 'MENUITEMS.TEAM.TEXT',
     iconType: 'feather',
     icon: 'users',

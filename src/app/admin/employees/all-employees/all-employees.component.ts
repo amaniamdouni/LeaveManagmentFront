@@ -77,7 +77,7 @@ export class EmployeesComponent
     console.log(this.selection);
   }
   refreshTeams() {
-    this.userservice.getAllusers().subscribe({
+    this.userservice.getAllUsers().subscribe({
       next: (users: User[]) => {
         this.listUser = users;
       },
@@ -318,7 +318,7 @@ export class ExampleDataSource extends DataSource<User> {
       this.filterChange,
       this.paginator.page,
     ];
-    this.exampleDatabase.getAllusers();
+    this.exampleDatabase.getAllUsers();
     return merge(...displayDataChanges).pipe(
       map(() => {
         // Filter data

@@ -13,6 +13,7 @@ export class User {
     email: string;
     password: string;
     token: string;
+    img: string;
     constructor(user: User) {
       {
         this.matricule = user.matricule || '';
@@ -29,6 +30,7 @@ export class User {
         this.email = user.email || '';
         this.password = user.password || '';
         this.token = user.token || '';
+        this.img = '';
       }
     }
   }
