@@ -31,7 +31,7 @@ export class AuthService {
 
   login(matricule: string, password: string) {
     return this.http
-    .post<User>(`${environment.apiUrl}/authenticate`, {
+    .post<any>('http://localhost:9090/api/auth/login', {
       //.post<any>('http://localhost:9090/api/auth/login', {
         matricule,
         password,

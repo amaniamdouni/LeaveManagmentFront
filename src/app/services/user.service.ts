@@ -18,7 +18,7 @@ export class UserService extends UnsubscribeOnDestroyAdapter {
         'Access-Control-Allow-Origin': 'http://localhost:4200'
       })
     };
-    private readonly API_URL = 'http://localhost:9090/users/';
+    private readonly API_URL = 'http://localhost:9090/user/';
     isTblLoading = true;
     dataChange: BehaviorSubject<User[]> = new BehaviorSubject<User[]>(
       []

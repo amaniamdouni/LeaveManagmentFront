@@ -33,7 +33,7 @@ export class SigninComponent
   ngOnInit() {
     this.authForm = this.formBuilder.group({
       username: ['admin@software.com',Validators.required],
-      password: [ 'admin@123',Validators.required],
+      password: [ 'admin@123!',Validators.required],
     });
   }
   get f() {
@@ -57,15 +57,16 @@ export class SigninComponent
       this.error = 'Username and Password not valid !';
       return;
     } else {
+      console.log(this.authForm);
       this.subs.sink = this.authService
         .login(this.f['username'].value, this.f['password'].value)
         .subscribe(
           (res) => {
             if (res) {
               setTimeout(() => {
-                const role = this.authService.currentUserValue.role;
-                if (role === Role.All || role === Role.Admin) {
-                  this.router.navigate(['/admin/dashboard/main']);
+                const role = 'ADMIN';
+                if ( role === Role.Admin) {
+                  this.router.navigate(['/admin/projects']);
                 } else if (role === Role.Employee) {
                   this.router.navigate(['/employee/dashboard']);
                 } else if (role === Role.Client) {
