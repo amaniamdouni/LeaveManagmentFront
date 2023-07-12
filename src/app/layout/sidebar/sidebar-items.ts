@@ -1,55 +1,16 @@
 import { RouteInfo } from './sidebar.metadata';
 export const ROUTES: RouteInfo[] = [
   {
-    path: '',
-    title: 'MENUITEMS.MAIN.TEXT',
-    iconType: '',
-    icon: '',
-    class: '',
-    groupTitle: true,
-    badge: '',
-    badgeClass: '',
-    role: ['All'],
-    submenu: [],
-  },
-
-  // Admin Modules
-  {
-    path: '',
+    path: '/admin/dashboard/main',
     title: 'MENUITEMS.DASHBOARD.TEXT',
     iconType: 'feather',
     icon: 'monitor',
-    class: 'menu-toggle',
+    class: '',
     groupTitle: false,
     badge: '',
     badgeClass: '',
     role: ['ADMIN'],
-    submenu: [
-      {
-        path: '/admin/dashboard/main',
-        title: 'MENUITEMS.DASHBOARD.LIST.DASHBOARD1',
-        iconType: '',
-        icon: '',
-        class: 'ml-menu',
-        groupTitle: false,
-        badge: '',
-        badgeClass: '',
-        role: [''],
-        submenu: [],
-      },
-      {
-        path: '/admin/dashboard/dashboard2',
-        title: 'MENUITEMS.DASHBOARD.LIST.DASHBOARD2',
-        iconType: '',
-        icon: '',
-        class: 'ml-menu',
-        groupTitle: false,
-        badge: '',
-        badgeClass: '',
-        role: [''],
-        submenu: [],
-      },
-    ],
+    submenu: [],
   },
   {
     path: '',
@@ -468,12 +429,12 @@ export const ROUTES: RouteInfo[] = [
     role: ['ADMIN'],
     submenu: [],
   },
-  {
-    path: '',
-    title: 'MENUITEMS.JOBS.TEXT',
+    {
+    path: '/admin/projects/estimates',
+    title: 'MENUITEMS.EMPLOYEES.TEXT',
     iconType: 'feather',
-    icon: 'award',
-    class: 'menu-toggle',
+    icon: 'user-plus',
+    class: '',
     groupTitle: false,
     badge: '',
     badgeClass: '',
@@ -664,21 +625,6 @@ export const ROUTES: RouteInfo[] = [
     role: ['EMPLOYEE'],
     submenu: [],
   },
-  
-  // Common Modules
-
-  {
-    path: '',
-    title: 'Apps',
-    iconType: '',
-    icon: '',
-    class: '',
-    groupTitle: true,
-    badge: '',
-    badgeClass: '',
-    role: ['Admin', 'Employee'],
-    submenu: [],
-  },
   {
     path: 'calendar',
     title: 'Calendar',
@@ -688,7 +634,7 @@ export const ROUTES: RouteInfo[] = [
     groupTitle: false,
     badge: 'New',
     badgeClass: 'badge bg-blue sidebar-badge float-end',
-    role: ['Admin', 'Employee'],
+    role: ['ADMIN', 'Employee'],
     submenu: [],
   },
   {
@@ -712,7 +658,7 @@ export const ROUTES: RouteInfo[] = [
     groupTitle: false,
     badge: '',
     badgeClass: '',
-    role: ['Admin', 'Employee'],
+    role: ['ADMIN', 'Employee'],
     submenu: [],
   },
   {
