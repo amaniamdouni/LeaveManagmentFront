@@ -7,8 +7,7 @@ import { TeamDialogComponent } from '../team-dialog/team-dialog.component';
 import { Direction } from '@angular/cdk/bidi';
 import { TeamService } from 'app/services/team.service';
 import { Team } from 'app/models/TeamAdapter';
-import { EmployeesComponent } from '../../employees/employees.component';
-
+import { EmployeesComponent } from 'app/admin/employees/all-employees/all-employees.component';
 @Component({
   selector: 'app-board',
   templateUrl: './board.component.html',

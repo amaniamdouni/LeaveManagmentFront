@@ -19,13 +19,6 @@
                 </li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
-                <!-- Full Screen Button -->
-                <li class="fullscreen">
-                    <button mat-button class="nav-notification-icons" (click)="callFullscreen()">
-                        <app-feather-icons [icon]="'maximize'"
-                            [class]="'header-icon'"></app-feather-icons>
-                    </button>
-                </li>
                 <li class="nav-item user_profile">
                     <button mat-button [matMenuTriggerFor]="profilemenu">
                         <div class="chip dropdown-toggle" ngbDropdownToggle
@@ -39,14 +32,6 @@
                         <div class="noti-list">
                             <div class="menu ">
                                 <div class="user_dw_menu">
-                                    <button mat-menu-item>
-                                        <app-feather-icons [icon]="'user'"
-                                            [class]="'user-menu-icons'"></app-feather-icons>Account
-                                    </button>
-                                    <button mat-menu-item>
-                                        <app-feather-icons [icon]="'mail'"
-                                            [class]="'user-menu-icons'"></app-feather-icons>Inbox
-                                    </button>
                                     <button mat-menu-item>
                                         <app-feather-icons [icon]="'settings'"
                                             [class]="'user-menu-icons'"></app-feather-icons>Settings
