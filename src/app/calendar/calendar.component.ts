@@ -10,7 +10,7 @@ import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import listPlugin from '@fullcalendar/list';
-import { Observable, BehaviorSubject } from 'rxjs';
+
 import { MatDialog } from '@angular/material/dialog';
 import {
   UntypedFormBuilder,
@@ -29,9 +29,6 @@ import { INITIAL_EVENTS } from './events-util';
 import { MatCheckboxChange } from '@angular/material/checkbox';
 import { UnsubscribeOnDestroyAdapter } from '../shared/UnsubscribeOnDestroyAdapter';
 import { Direction } from '@angular/cdk/bidi';
-import { TeamService } from 'app/services/team.service';
-import { Team } from 'app/models/TeamAdapter';
-import { Leave } from 'app/models/Leave';
 
 @Component({
   selector: 'app-calendar',
@@ -48,77 +45,44 @@ export class CalendarComponent
   dialogTitle: string;
   filterOptions = 'All';
   calendarData!: Calendar;
-  private pollingInterval: any;
-  public d = new Date();
-  public day = this.d.getDate();
-  public month = this.d.getMonth();
-  public year = this.d.getFullYear();
-  allCalendarData:any;
   filterItems: string[] = [
-    'Team Building',
-    'Conference',
-    'Training Session',
-    'Employee Events',
-    'Product Launches',
+    'work',
+    'personal',
+    'important',
+    'travel',
+    'friends',
   ];
-  leaves : Observable<Leave[]>;
+
   calendarEvents?: EventInput[];
   tempEvents?: EventInput[];
-  CG_payee : EventInput[];
+
   public filters: Array<{ name: string; value: string; checked: boolean }> = [
-    { name: 'Team_Building', value: 'Team Building', checked: true },
-    { name: 'Conference', value: 'Conference', checked: true },
-    { name: 'Training_Session', value: 'Training Session', checked: true },
-    { name: 'Employee_Events', value: 'Employee Events', checked: true },
-    { name: 'Product_Launches', value: 'Product Launches', checked: true },
+    { name: 'work', value: 'Work', checked: true },
+    { name: 'personal', value: 'Personal', checked: true },
+    { name: 'important', value: 'Important', checked: true },
+    { name: 'travel', value: 'Travel', checked: true },
+    { name: 'friends', value: 'Friends', checked: true },
   ];
 
   constructor(
     private fb: UntypedFormBuilder,
     private dialog: MatDialog,
     public calendarService: CalendarService,
-    private snackBar: MatSnackBar,
-    private teamservice:TeamService
+    private snackBar: MatSnackBar
   ) {
     super();
     this.dialogTitle = 'Add New Event';
     const blankObject = {} as Calendar;
     this.calendar = new Calendar(blankObject);
     this.addCusForm = this.createCalendarForm(this.calendar);
-    this.CG_payee = [];
-    this.leaves = new Observable;
-
   }
 
-   ngOnInit() :void{
-
-    console.log("test");
-    console.log(INITIAL_EVENTS);
-    this.refreshTeams();
-
-    this.calendarEvents = this.CG_payee
+  public ngOnInit(): void {
+    this.calendarEvents = INITIAL_EVENTS;
     this.tempEvents = this.calendarEvents;
     this.calendarOptions.initialEvents = this.calendarEvents;
-
-    // recuperer les calendries
-    this.calendarService.getAllCalendars().subscribe((x) => {
-      this.allCalendarData = x;
-      console.log(this.allCalendarData);
-    });
   }
 
-  
-  delay(ms: number): Promise<void> {
-    return new Promise(resolve => setTimeout(resolve, ms));
-  }
-  async refreshTeams() {
-    this.CG_payee = [];
-    this.leaves = await this.teamservice.getAllProjectssByTeam();
-    this.delay(2000);
-    this.leaves = await this.teamservice.getAllProjectssByTeam();
-    console.log(this.leaves);
-
-  }
   calendarOptions: CalendarOptions = {
     plugins: [dayGridPlugin, timeGridPlugin, listPlugin, interactionPlugin],
     headerToolbar: {
@@ -160,20 +124,17 @@ export class CalendarComponent
     this.subs.sink = dialogRef.afterClosed().subscribe((result) => {
       if (result === 'submit') {
         this.calendarData = this.calendarService.getDialogData();
-        console.log(this.calendarData);
+        console.log(this.calendarData.startDate);
         this.calendarEvents = this.calendarEvents?.concat({
           // add new event data. must create new array
           id: this.calendarData.id,
-          title: this.calendarData.eventTitle,
+          title: this.calendarData.title,
           start: this.calendarData.startDate,
           end: this.calendarData.endDate,
-          className: this.getClassNameValue(this.calendarData.eventType),
-          groupId: this.calendarData.eventType,
+          className: this.getClassNameValue(this.calendarData.category),
+          groupId: this.calendarData.category,
           details: this.calendarData.details,
         });
-        console.log(this.calendarEvents)
-        // events = calendarEvent
-        // this.calendarService.add(events);
         this.calendarOptions.events = this.calendarEvents;
         this.addCusForm.reset();
         this.showNotification(
@@ -268,11 +229,11 @@ export class CalendarComponent
     const calendarEvents = this.calendarEvents!.slice();
     const singleEvent = Object.assign({}, calendarEvents[eventIndex]);
     singleEvent.id = calendarData.id;
-    singleEvent.title = calendarData.eventTitle;
+    singleEvent.title = calendarData.title;
     singleEvent.start = calendarData.startDate;
     singleEvent.end = calendarData.endDate;
-    singleEvent.className = this.getClassNameValue(calendarData.eventType);
-    singleEvent.groupId = calendarData.eventType;
+    singleEvent.className = this.getClassNameValue(calendarData.category);
+    singleEvent.groupId = calendarData.category;
     singleEvent['details'] = calendarData.details;
     calendarEvents[eventIndex] = singleEvent;
     this.calendarEvents = calendarEvents; // reassign the array
@@ -289,10 +250,10 @@ export class CalendarComponent
     return this.fb.group({
       id: [calendar.id],
       title: [
-        calendar.eventTitle,
+        calendar.title,
         [Validators.required, Validators.pattern('[a-zA-Z]+([a-zA-Z ]+)*')],
       ],
-      category: [calendar.eventType],
+      category: [calendar.category],
       startDate: [calendar.startDate, [Validators.required]],
       endDate: [calendar.endDate, [Validators.required]],
       details: [
@@ -319,11 +280,11 @@ export class CalendarComponent
   getClassNameValue(category: string) {
     let className;
 
-    if (category === 'Team_Building') className = 'fc-event-danger';
-    else if (category === 'Conference') className = 'fc-event-warning';
-    else if (category === 'Training_Session') className = 'fc-event-primary';
-    else if (category === 'Employee_Events') className = 'fc-event-success';
-    else if (category === 'Product_Launches') className = 'fc-event-info';
+    if (category === 'work') className = 'fc-event-success';
+    else if (category === 'personal') className = 'fc-event-warning';
+    else if (category === 'important') className = 'fc-event-primary';
+    else if (category === 'travel') className = 'fc-event-danger';
+    else if (category === 'friends') className = 'fc-event-info';
 
     return className;
   }

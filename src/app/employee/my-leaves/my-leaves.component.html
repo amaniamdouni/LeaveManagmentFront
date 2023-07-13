@@ -32,23 +32,23 @@
                 </li>
                 <li class="tbl-header-btn">
                   <div class="m-l-10" matTooltip="REFRESH">
-                    <button mat-mini-fab color="primary" (click)="loadData()">
+                    <button mat-mini-fab color="primary" (click)="refresh()">
                       <mat-icon class="col-white">refresh</mat-icon>
                     </button>
                   </div>
                 </li>
                 <li class="tbl-header-btn">
-                  <!-- <div class="m-l-10" [hidden]=!selection.hasValue() matTooltip="DELETE">
+                  <div class="m-l-10" [hidden]=!selection.hasValue() matTooltip="DELETE">
                     <button mat-mini-fab color="warn" (click)="removeSelectedRows()">
                       <mat-icon class="col-white">delete
                       </mat-icon>
                     </button>
-                  </div> -->
+                  </div>
                 </li>
                 <li>
-                  <!-- <div class="export-button m-l-10" matTooltip="XLSX">
+                  <div class="export-button m-l-10" matTooltip="XLSX">
                     <img src="assets/images/icons/xlsx.png" alt="" (click)="exportExcel()" />
-                  </div> -->
+                  </div>
                 </li>
               </ul>
             </div>
@@ -57,7 +57,7 @@
             <div class="responsive_table">
               <table mat-table #table [dataSource]="dataSource" matSort class="mat-cell">
                 <!-- Checkbox Column -->
-                <!-- <ng-container matColumnDef="select">
+                <ng-container matColumnDef="select">
                   <mat-header-cell *matHeaderCellDef [ngClass]="'tbl-col-width-per-6'">
                     <mat-checkbox (change)="$event ? masterToggle() : null"
                       [checked]="selection.hasValue() && isAllSelected()"
@@ -69,73 +69,65 @@
                       [checked]="selection.isSelected(row)" [ngClass]="'tbl-checkbox'">
                     </mat-checkbox>
                   </mat-cell>
-                </ng-container> -->
+                </ng-container>
                 <!-- ID Column -->
                 <ng-container matColumnDef="id">
-                  <mat-header-cell *matHeaderCellDef mat-sort-header>N</mat-header-cell>
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>Id</mat-header-cell>
                   <mat-cell *matCellDef="let row">{{row.id}}</mat-cell>
                 </ng-container>
-                <ng-container matColumnDef="createdAt">
+                <ng-container matColumnDef="applyDate">
                   <mat-header-cell *matHeaderCellDef mat-sort-header>Apply Date</mat-header-cell>
                   <mat-cell *matCellDef="let row" (contextmenu)="onContextMenu($event, row)">
-                    <span class="mobile-label">Apply Date:</span> {{row.createdAt | date: 'MM/dd/yyyy'}}
+                    <span class="mobile-label">Apply Date:</span> {{row.applyDate | date: 'MM/dd/yyyy'}}
                   </mat-cell>
                 </ng-container>
-                <ng-container matColumnDef="startDate">
+                <ng-container matColumnDef="fromDate">
                   <mat-header-cell *matHeaderCellDef mat-sort-header>From Date</mat-header-cell>
                   <mat-cell *matCellDef="let row" (contextmenu)="onContextMenu($event, row)">
-                    <span class="mobile-label">From Date:</span> {{row.startDate | date: 'MM/dd/yyyy'}}
+                    <span class="mobile-label">From Date:</span> {{row.fromDate | date: 'MM/dd/yyyy'}}
                   </mat-cell>
                 </ng-container>
-                <ng-container matColumnDef="endDate">
+                <ng-container matColumnDef="toDate">
                   <mat-header-cell *matHeaderCellDef mat-sort-header>To Date</mat-header-cell>
                   <mat-cell *matCellDef="let row" (contextmenu)="onContextMenu($event, row)">
-                    <span class="mobile-label">To Date:</span>{{row.endDate | date: 'MM/dd/yyyy'}}
+                    <span class="mobile-label">To Date:</span>{{row.toDate | date: 'MM/dd/yyyy'}}
                   </mat-cell>
                 </ng-container>
-                <ng-container matColumnDef="nbr_days">
-                  <mat-header-cell *matHeaderCellDef mat-sort-header>N° Days</mat-header-cell>
+                <ng-container matColumnDef="halfDay">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header>Half Day</mat-header-cell>
                   <mat-cell *matCellDef="let row" (contextmenu)="onContextMenu($event, row)">
-                    <span class="mobile-label">N° Days</span> {{row.nbr_days}}</mat-cell>
+                    <span class="mobile-label">Half Day:</span> {{row.halfDay}}</mat-cell>
                 </ng-container>
-                <ng-container matColumnDef="leaveType">
+                <ng-container matColumnDef="type">
                   <mat-header-cell *matHeaderCellDef mat-sort-header>Type
                   </mat-header-cell>
                   <mat-cell *matCellDef="let row" (contextmenu)="onContextMenu($event, row)">
-                    <span class="mobile-label">Type:</span> {{row.leaveType}}</mat-cell>
+                    <span class="mobile-label">Type:</span> {{row.type}}</mat-cell>
                 </ng-container>
-                <ng-container matColumnDef="leaveStatus">
+                <ng-container matColumnDef="status">
                   <mat-header-cell *matHeaderCellDef mat-sort-header> Status
                   </mat-header-cell>
                   <mat-cell mat-cell *matCellDef="let row">
                     <span class="mobile-label">Status:</span>
-                    <div *ngIf="row.leaveStatus==='APPROVED'">
+                    <div *ngIf="row.status==='Approved'">
                       <span class="badge badge-pill badge-primary col-green">
-                        {{row.leaveStatus}}</span>
+                        {{row.status}}</span>
                     </div>
-                    <div *ngIf="row.leaveStatus==='REFUSED'">
+                    <div *ngIf="row.status==='Rejected'">
                       <span class="badge badge-pill badge-primary col-red">
-                        {{row.leaveStatus}}</span>
+                        {{row.status}}</span>
                     </div>
-                    <div *ngIf="row.leaveStatus==='IN_PROGRESS'">
+                    <div *ngIf="row.status==='Pending'">
                       <span class="badge badge-pill badge-primary col-blue">
-                        {{row.leaveStatus}}</span>
-                    </div>
-                    <div *ngIf="row.leaveStatus==='CANCELLED'">
-                      <span class="badge badge-pill badge-primary col-black">
-                        {{row.leaveStatus}}</span>
-                    </div>
-                    <div *ngIf="row.leaveStatus==='ON_HOLD'">
-                      <span class="badge badge-pill badge-primary col-blue">
-                        {{row.leaveStatus}}</span>
+                        {{row.status}}</span>
                     </div>
                   </mat-cell>
                 </ng-container>
-                <ng-container matColumnDef="comment">
+                <ng-container matColumnDef="reason">
                   <mat-header-cell *matHeaderCellDef mat-sort-header>Reason
                   </mat-header-cell>
                   <mat-cell *matCellDef="let row" (contextmenu)="onContextMenu($event, row)" class="column-nowrap">
-                    <span class="mobile-label">Reason:</span>{{row.comment}}</mat-cell>
+                    <span class="mobile-label">Reason:</span>{{row.reason}}</mat-cell>
                 </ng-container>
 
                 <!-- actions -->
@@ -144,12 +136,12 @@
                   <mat-cell *matCellDef="let row; let i=index;" class="pr-0">
                     <button mat-icon-button color="accent" (click)="$event.stopPropagation()" (click)="editCall(row)"
                       class="tbl-action-btn" matTooltip="Edit">
-                      <app-feather-icons [icon]="'edit2'" [class]="'tbl-fav-edit'">
+                      <app-feather-icons [icon]="'edit'" [class]="'tbl-fav-edit'">
                       </app-feather-icons>
                     </button>
                     <button mat-icon-button color="accent" (click)="$event.stopPropagation()"
                       (click)="deleteItem(i, row)" class="tbl-action-btn" matTooltip="Delete">
-                      <app-feather-icons [icon]="'x'" [class]="'tbl-fav-delete'">
+                      <app-feather-icons [icon]="'trash-2'" [class]="'tbl-fav-delete'">
                       </app-feather-icons>
                     </button>
                   </mat-cell>
@@ -183,7 +175,7 @@
                     <mat-icon>delete</mat-icon>
                     <span>Delete Record</span>
                   </button>
-                  <button mat-menu-item (click)="loadData()">
+                  <button mat-menu-item (click)="refresh()">
                     <mat-icon>refresh</mat-icon>
                     <span>Refresh Record</span>
                   </button>
@@ -213,10 +205,10 @@
               </mat-menu>
               <!-- context menu end -->
               <div *ngIf="!exampleDatabase?.isTblLoading" class="no-results"
-                [style.display]="dataSource.length === 0 ? '' : 'none'">
+                [style.display]="dataSource.renderedData.length === 0 ? '' : 'none'">
                 No results
               </div>
-              <mat-paginator #paginator [length]="dataSource.length" [pageSize]="10"
+              <mat-paginator #paginator [length]="dataSource.filteredData.length" [pageIndex]="0" [pageSize]="10"
                 [pageSizeOptions]="[5, 10, 25, 100]">
               </mat-paginator>
             </div>

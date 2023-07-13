@@ -11,8 +11,7 @@ import {
   OnDestroy,
 } from '@angular/core';
 import { ROUTES } from './sidebar-items';
-import { Role } from 'app/models/role';
-import { AuthService } from 'app/services/auth.service';
+import { AuthService, Role } from '@core';
 import { RouteInfo } from './sidebar.metadata';
 @Component({
   selector: 'app-sidebar',
@@ -70,21 +69,21 @@ export class SidebarComponent implements OnInit, OnDestroy {
     }
   }
   ngOnInit() {
-    if ( this.authService.currentUserValue ) {
-      console.log(this.authService.currentUserValue)
+    if (this.authService.currentUserValue) {
       const userRole = this.authService.currentUserValue.role;
       this.userFullName =
         this.authService.currentUserValue.firstName +
         ' ' +
         this.authService.currentUserValue.lastName;
-        this.authService.currentUserValue.img ='assets/images/pages/1048219.png';
-        this.userImg = this.authService.currentUserValue.img;
+      this.userImg = this.authService.currentUserValue.img;
 
       this.sidebarItems = ROUTES.filter(
         (x) => x.role.indexOf(userRole) !== -1 || x.role.indexOf('All') !== -1
       );
-      if (userRole === Role.Admin || userRole === Role.SuperAdmin ) {
+      if (userRole === Role.Admin) {
         this.userType = Role.Admin;
+      } else if (userRole === Role.Client) {
+        this.userType = Role.Client;
       } else if (userRole === Role.Employee) {
         this.userType = Role.Employee;
       } else {

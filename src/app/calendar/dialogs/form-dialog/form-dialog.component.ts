@@ -14,8 +14,7 @@ export interface DialogData {
   action: string;
   calendar: Calendar;
 }
-// if employe => champs non editable => readOnly
-// boolean ifEmploye 
+
 @Component({
   selector: 'app-form-dialog:not(l)',
   templateUrl: './form-dialog.component.html',
@@ -36,7 +35,7 @@ export class FormDialogComponent {
     // Set the defaults
     this.action = data.action;
     if (this.action === 'edit') {
-      this.dialogTitle = data.calendar.eventTitle;
+      this.dialogTitle = data.calendar.title;
       this.calendar = data.calendar;
       this.showDeleteBtn = true;
     } else {
@@ -62,8 +61,8 @@ export class FormDialogComponent {
   createContactForm(): UntypedFormGroup {
     return this.fb.group({
       id: [this.calendar.id],
-      eventTitle: [this.calendar.eventTitle, [Validators.required]],
-      eventType: [this.calendar.eventType],
+      title: [this.calendar.title, [Validators.required]],
+      category: [this.calendar.category],
       startDate: [this.calendar.startDate, [Validators.required]],
       endDate: [this.calendar.endDate, [Validators.required]],
       details: [this.calendar.details],
@@ -73,23 +72,14 @@ export class FormDialogComponent {
     // emppty stuff
   }
   deleteEvent() {
-    this.calendarService.delete(this.calendarForm.getRawValue());
+    this.calendarService.deleteCalendar(this.calendarForm.getRawValue());
     this.dialogRef.close('delete');
   }
   onNoClick(): void {
     this.dialogRef.close();
   }
   public confirmAdd(): void {
-    let evente=this.calendarForm.getRawValue();
-    this.calendarService.add(evente).subscribe(
-      data=>
-      {console.log("add event");
-        console.log(evente);
-        console.log(this.data);
-      this.calendarService.dialogData=evente;
-      console.log(this.calendarService.dialogData)
-      this.dialogRef.close('submit');
-      }
-      );
+    this.calendarService.addUpdateCalendar(this.calendarForm.getRawValue());
+    this.dialogRef.close('submit');
   }
 }

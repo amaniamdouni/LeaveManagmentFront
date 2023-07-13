@@ -1,6 +1,7 @@
 import { NgModule } from "@angular/core";
 import { Routes, RouterModule } from "@angular/router";
 import { SigninComponent } from "./signin/signin.component";
+import { SignupComponent } from "./signup/signup.component";
 import { ForgotPasswordComponent } from "./forgot-password/forgot-password.component";
 import { LockedComponent } from "./locked/locked.component";
 import { Page404Component } from "./page404/page404.component";
@@ -14,6 +15,10 @@ const routes: Routes = [
   {
     path: "signin",
     component: SigninComponent,
+  },
+  {
+    path: "signup",
+    component: SignupComponent,
   },
   {
     path: "forgot-password",

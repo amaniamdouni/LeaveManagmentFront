@@ -2,12 +2,12 @@
   <div *ngIf="!isDetails" class="contact-form">
     <div class="modalHeader">
       <div class="editRowModal">
-        <!-- <div class="modalHeader clearfix">
+        <div class="modalHeader clearfix">
           <img [src]='leaves.img' alt="avatar">
           <div class="modal-about">
             {{dialogTitle}}
           </div>
-        </div> -->
+        </div>
       </div>
       <button mat-icon-button (click)="dialogRef.close()" class="modal-close-button" aria-label="Close dialog">
         <mat-icon>close</mat-icon>
@@ -18,27 +18,21 @@
         <div class="row">
           <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
             <mat-form-field class="example-full-width mb-3" appearance="outline">
-              <mat-label>Leave Type</mat-label>
-              <!-- <input matInput formControlName="leaveType" required>
-              <i class="material-icons-two-tone color-icon p-3" matSuffix>spoke</i> -->
-              <mat-select formControlName="leaveType" >
-                <mat-option *ngFor="let item of leaveTypeList | keyvalue" value={{item.value}}>
-                  {{item.value}}
-                </mat-option>
-              </mat-select>
-              <mat-error *ngIf="leavesForm.get('leaveType')?.hasError('required') || leavesForm.get('type')?.touched">
-                Please enter a valid type reason
+              <mat-label>Name</mat-label>
+              <input matInput formControlName="name" required>
+              <i class="material-icons-two-tone color-icon p-3" matSuffix>face</i>
+              <mat-error *ngIf="leavesForm.get('name')?.hasError('required')">
+                Name is required
               </mat-error>
             </mat-form-field>
           </div>
-          <div class=" col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
-            <mat-form-field class="example-full-width" appearance="outline">
-              <mat-label>Apply date</mat-label>
-              <input matInput [matDatepicker]="picker1" formControlName="createdAt" required>
-              <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
-              <mat-datepicker #picker1></mat-datepicker>
-              <mat-error *ngIf="leavesForm.get('createdAt')?.hasError('required')">
-                Please select date
+          <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+            <mat-form-field class="example-full-width mb-3" appearance="outline">
+              <mat-label>Leave Type</mat-label>
+              <input matInput formControlName="type" required>
+              <i class="material-icons-two-tone color-icon p-3" matSuffix>spoke</i>
+              <mat-error *ngIf="leavesForm.get('type')?.hasError('required') || leavesForm.get('type')?.touched">
+                Please enter a valid type reason
               </mat-error>
             </mat-form-field>
           </div>
@@ -47,10 +41,10 @@
           <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
             <mat-form-field class="example-full-width mb-3" appearance="outline">
               <mat-label>Leave From</mat-label>
-              <input matInput [matDatepicker]="picker2" formControlName="startDate">
+              <input matInput [matDatepicker]="picker2" formControlName="from">
               <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
               <mat-datepicker #picker2></mat-datepicker>
-              <mat-error *ngIf="leavesForm.get('startDate')?.hasError('required')">
+              <mat-error *ngIf="leavesForm.get('from')?.hasError('required')">
                 Please select date
               </mat-error>
             </mat-form-field>
@@ -59,10 +53,10 @@
           <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
             <mat-form-field class="example-full-width mb-3" appearance="outline">
               <mat-label>Leave To</mat-label>
-              <input matInput [matDatepicker]="picker" formControlName="endDate">
+              <input matInput [matDatepicker]="picker" formControlName="leaveTo">
               <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
               <mat-datepicker #picker></mat-datepicker>
-              <mat-error *ngIf="leavesForm.get('endDate')?.hasError('required')">
+              <mat-error *ngIf="leavesForm.get('leaveTo')?.hasError('required')">
                 Please select date
               </mat-error>
             </mat-form-field>
@@ -72,7 +66,23 @@
           <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
             <mat-form-field class="example-full-width mb-3" appearance="outline">
               <mat-label>No Of Days</mat-label>
-              <input matInput formControlName="nbr_days" required>
+              <input matInput formControlName="noOfDays" required>
+            </mat-form-field>
+          </div>
+          <div class=" col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+            <mat-form-field class="example-full-width " appearance="outline">
+              <mat-label>Status</mat-label>
+              <mat-select formControlName="status" required>
+                <mat-option [value]="'Approved'">
+                  Approved
+                </mat-option>
+                <mat-option [value]="'Rejected'">
+                  Rejected
+                </mat-option>
+              </mat-select>
+              <mat-error *ngIf="leavesForm.get('status')?.hasError('required')">
+                Employee Name is required
+              </mat-error>
             </mat-form-field>
           </div>
         </div>
@@ -80,7 +90,15 @@
           <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
             <mat-form-field class="example-full-width mb-3" appearance="outline">
               <mat-label>Reason</mat-label>
-              <textarea matInput formControlName="comment"></textarea>
+              <textarea matInput formControlName="reason"></textarea>
+            </mat-form-field>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
+            <mat-form-field class="example-full-width mb-3" appearance="outline">
+              <mat-label>Note</mat-label>
+              <textarea matInput formControlName="note"></textarea>
             </mat-form-field>
           </div>
         </div>
@@ -101,12 +119,12 @@
       <div class="editRowModal">
         <div class="modalHeader clearfix">
           <div class="modal-about contact-header">
-            <!-- <div class="contact-details-img">
+            <div class="contact-details-img">
               <img [src]='leaves.img' alt="avatar">
-            </div> -->
+            </div>
             <div class="contact-details-heading">
-              <div class="contact-details-name mb-2">{{leaves.user.firstName}} {{leaves.user.lastName}}</div>
-              <!-- <div class="badge col-green ms-2">Manager</div> -->
+              <div class="contact-details-name mb-2">{{leaves.name}}</div>
+              <div class="badge col-green ms-2">Manager</div>
             </div>
           </div>
         </div>
@@ -117,76 +135,39 @@
     </div>
     <div mat-dialog-content>
       <mat-card-content>
-        <form class="register-form m-4" [formGroup]="leavesForm">
-          <div class="row">
-            <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
-              <mat-form-field class="example-full-width mb-3" appearance="outline">
-                <mat-label>Leave Type</mat-label>
-                <!-- <input matInput formControlName="leaveType" required>
-                <i class="material-icons-two-tone color-icon p-3" matSuffix>spoke</i> -->
-                  <input matInput formControlName="leaveType" required readonly>
-              </mat-form-field>
-            </div>
-            <div class=" col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
-              <mat-form-field class="example-full-width" appearance="outline">
-                <mat-label>Apply date</mat-label>
-                <input readonly matInput [matDatepicker]="picker1" formControlName="createdAt" required>
-                <mat-datepicker-toggle matSuffix></mat-datepicker-toggle>
-                <mat-datepicker #picker1></mat-datepicker>
-              </mat-form-field>
-            </div>
+        <div class="contact-details-field">
+          <i class="material-icons-two-tone color-icon p-3">receipt</i>
+          <div class="contact-detail-info"> {{leaves.type}}
           </div>
-          <div class="row">
-            <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
-              <mat-form-field class="example-full-width mb-3" appearance="outline">
-                <mat-label>Leave From</mat-label>
-                <input matInput readonly [matDatepicker]="picker2" formControlName="startDate">
-                <mat-datepicker-toggle matSuffix></mat-datepicker-toggle>
-                <mat-datepicker #picker2></mat-datepicker>
-              </mat-form-field>
-
-            </div>
-            <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
-              <mat-form-field class="example-full-width mb-3" appearance="outline">
-                <mat-label>Leave To</mat-label>
-                <input matInput readonly [matDatepicker]="picker" formControlName="endDate">
-                <mat-datepicker-toggle matSuffix></mat-datepicker-toggle>
-                <mat-datepicker #picker></mat-datepicker>
-              </mat-form-field>
-            </div>
+        </div>
+        <div class="contact-details-field">
+          <i class="material-icons-two-tone color-icon p-3">today</i>
+          <div class="contact-detail-info"> {{leaves.from | date: 'MMMM d, yyyy'}}
           </div>
-          <div class="row">
-            <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
-              <mat-form-field class="example-full-width mb-3" appearance="outline">
-                <mat-label>No Of Days</mat-label>
-                <input matInput formControlName="nbr_days" required readonly>
-              </mat-form-field>
-            </div>
-            <div class=" col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
-              <mat-form-field class="example-full-width " appearance="outline">
-                <mat-label>Status</mat-label>
-                <input matInput formControlName="leaveStatus" required readonly>
-              </mat-form-field>
-            </div>
+        </div>
+        <div class="contact-details-field">
+          <i class="material-icons-two-tone color-icon p-3">fact_check</i>
+          <div class="contact-detail-info"> {{leaves.leaveTo | date: 'MMMM d, yyyy'}}
           </div>
-          <div class="row">
-            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
-              <mat-form-field class="example-full-width mb-3" appearance="outline">
-                <mat-label>Reason</mat-label>
-                <textarea matInput readonly formControlName="comment"></textarea>
-              </mat-form-field>
-            </div>
+        </div>
+        <div class="contact-details-field">
+          <i class="material-icons-two-tone color-icon p-3">tag</i>
+          <div class="contact-detail-info"> {{leaves.noOfDays}}
           </div>
-        </form>
-        <div class="row">
-          <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
-            <div class="example-button-row" align="end">
-              <button mat-raised-button color="primary" [mat-dialog-close]="1"
-                (click)="leaveApproved()">APPROVE</button>
-                <button mat-raised-button color="basic" [mat-dialog-close]="1" (click)="leaveOnHold()"  tabindex="-1">ON HOLD</button>
-              <button mat-raised-button color="warn" [mat-dialog-close]="1" (click)="leaveRefused()"  tabindex="-1">REFUSE</button>
-
-            </div>
+        </div>
+        <div class="contact-details-field">
+          <i class="material-icons-two-tone color-icon p-3">info</i>
+          <div class="contact-detail-info"> {{leaves.status}}
+          </div>
+        </div>
+        <div class="contact-details-field">
+          <i class="material-icons-two-tone color-icon p-3">description</i>
+          <div class="contact-detail-info"> {{leaves.reason}}
+          </div>
+        </div>
+        <div class="contact-details-field">
+          <i class="material-icons-two-tone color-icon p-3">note</i>
+          <div class="contact-detail-info"> {{leaves.note}}
           </div>
         </div>
       </mat-card-content>

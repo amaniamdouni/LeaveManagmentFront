@@ -1,92 +1,74 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { Leaves } from './models/leaves.model';
+import { MyLeaves } from './my-leaves.model';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { UnsubscribeOnDestroyAdapter } from '@shared';
 @Injectable()
 export class MyLeavesService extends UnsubscribeOnDestroyAdapter {
-  private readonly API_URL = 'http://localhost:8081/leave';
+  private readonly API_URL = 'assets/data/empLeaveReq.json';
   isTblLoading = true;
-  dataChange: BehaviorSubject<Leaves[]> = new BehaviorSubject<Leaves[]>([]);
+  dataChange: BehaviorSubject<MyLeaves[]> = new BehaviorSubject<MyLeaves[]>([]);
   // Temporarily stores data from dialogs
-  dialogData!: Leaves;
+  dialogData!: MyLeaves;
   constructor(private httpClient: HttpClient) {
     super();
   }
-  // get data(): Leaves[] {
-  //   return this.dataChange.value;
-  // }
-   getDialogData() {
-     return this.dialogData;
-   }
+  get data(): MyLeaves[] {
+    return this.dataChange.value;
+  }
+  getDialogData() {
+    return this.dialogData;
+  }
   /** CRUD METHODS */
-  // getAllMyLeaves(): void {
-  //   this.subs.sink = this.httpClient.get<Leaves[]>(this.API_URL).subscribe({
-  //     next: (data) => {
-  //       this.isTblLoading = false;
-  //       this.dataChange.next(data);
-  //     },
-  //     error: (error: HttpErrorResponse) => {
-  //       this.isTblLoading = false;
-  //       console.log(error.name + ' ' + error.message);
-  //     },
-  //   });
-  // }
-  getAllMyLeaves()
-  {
-    return this.httpClient.get<Leaves[]>(this.API_URL);
+  getAllMyLeaves(): void {
+    this.subs.sink = this.httpClient.get<MyLeaves[]>(this.API_URL).subscribe({
+      next: (data) => {
+        this.isTblLoading = false;
+        this.dataChange.next(data);
+      },
+      error: (error: HttpErrorResponse) => {
+        this.isTblLoading = false;
+        console.log(error.name + ' ' + error.message);
+      },
+    });
   }
+  addMyLeaves(myLeaves: MyLeaves): void {
+    this.dialogData = myLeaves;
 
-  updateLeave(leave:Leaves)
-  {
-    return this.httpClient.put<Leaves>(this.API_URL+"/update",leave);
+    // this.httpClient.post(this.API_URL, myLeaves)
+    //   .subscribe({
+    //     next: (data) => {
+    //       this.dialogData = myLeaves;
+    //     },
+    //     error: (error: HttpErrorResponse) => {
+    //        // error code here
+    //     },
+    //   });
   }
+  updateMyLeaves(myLeaves: MyLeaves): void {
+    this.dialogData = myLeaves;
 
-  deleteLeave(id:number)
-  {
-    return this.httpClient.delete(this.API_URL+"/delete/"+id);
+    // this.httpClient.put(this.API_URL + myLeaves.id, myLeaves)
+    //     .subscribe({
+    //       next: (data) => {
+    //         this.dialogData = myLeaves;
+    //       },
+    //       error: (error: HttpErrorResponse) => {
+    //          // error code here
+    //       },
+    //     });
   }
+  deleteMyLeaves(id: number): void {
+    console.log(id);
 
-  addLeave(leave:Leaves) {
-    return this.httpClient.post<Leaves>(this.API_URL+"/add",leave);
+    // this.httpClient.delete(this.API_URL + id)
+    //     .subscribe({
+    //       next: (data) => {
+    //         console.log(id);
+    //       },
+    //       error: (error: HttpErrorResponse) => {
+    //          // error code here
+    //       },
+    //     });
   }
-  // addMyLeaves(Leaves: Leaves): void {
-  //   this.dialogData = Leaves;
-
-  //   // this.httpClient.post(this.API_URL, Leaves)
-  //   //   .subscribe({
-  //   //     next: (data) => {
-  //   //       this.dialogData = Leaves;
-  //   //     },
-  //   //     error: (error: HttpErrorResponse) => {
-  //   //        // error code here
-  //   //     },
-  //   //   });
-  }
-  // updateMyLeaves(Leaves: Leaves): void {
-  //   this.dialogData = Leaves;
-
-  //   // this.httpClient.put(this.API_URL + Leaves.id, Leaves)
-  //   //     .subscribe({
-  //   //       next: (data) => {
-  //   //         this.dialogData = Leaves;
-  //   //       },
-  //   //       error: (error: HttpErrorResponse) => {
-  //   //          // error code here
-  //   //       },
-  //   //     });
-  // }
-  // deleteMyLeaves(id: number): void {
-  //   console.log(id);
-
-  //   // this.httpClient.delete(this.API_URL + id)
-  //   //     .subscribe({
-  //   //       next: (data) => {
-  //   //         console.log(id);
-  //   //       },
-  //   //       error: (error: HttpErrorResponse) => {
-  //   //          // error code here
-  //   //       },
-  //   //     });
-  // }
-
+}

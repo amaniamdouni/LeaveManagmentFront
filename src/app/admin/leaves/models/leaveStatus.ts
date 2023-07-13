@@ -1,7 +1,0 @@
-export enum LeaveStatus {
-  IN_PROGRESS = "IN_PROGRESS",
-  APPROVED = "APPROVED",
-  REFUSED = "REFUSED",
-  CANCELLED = "CANCELLED",
-  ON_HOLD = "ON_HOLD"
-}
