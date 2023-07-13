@@ -79,7 +79,7 @@
                 <ng-container matColumnDef="user">
                   <mat-header-cell *matHeaderCellDef mat-sort-header>Name
                   </mat-header-cell>
-                  <mat-cell *matCellDef="let row"> <span class="mobile-label">Name:</span> {{row.user.firstName}} {{row.user.lastName}}
+                  <mat-cell *matCellDef="let row"> <span class="mobile-label">Name:</span> 
                   </mat-cell>
                 </ng-container>
                 <ng-container matColumnDef="createdAt">
@@ -141,11 +141,23 @@
                     </div>
                   </mat-cell>
                 </ng-container>
-                <ng-container matColumnDef="comment">
-                  <mat-header-cell *matHeaderCellDef mat-sort-header>Reason
+                <ng-container matColumnDef="leavePriority">
+                  <mat-header-cell *matHeaderCellDef mat-sort-header> Leave Priority
                   </mat-header-cell>
-                  <mat-cell *matCellDef="let row" class="column-nowrap"> <span class="truncate-text"> <span
-                        class="mobile-label">Reason:</span>{{row.comment}}</span>
+                  <mat-cell mat-cell *matCellDef="let row">
+                    <span class="mobile-label">Status:</span>
+                    <div *ngIf="row.leavePriority==='HIGH'">
+                      <span class="badge badge-pill badge-primary col-red">
+                        {{row.leavePriority}}</span>
+                    </div>
+                    <div *ngIf="row.leavePriority==='MEDUIM'">
+                      <span class="badge badge-pill badge-primary col-blue">
+                        {{row.leavePriority}}</span>
+                    </div>
+                    <div *ngIf="row.leavePriority==='LOW'">
+                      <span class="badge badge-pill badge-primary col-black">
+                        {{row.leavePriority}}</span>
+                    </div>
                   </mat-cell>
                 </ng-container>
                 <!-- actions -->

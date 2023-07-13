@@ -156,7 +156,7 @@ export const ROUTES: RouteInfo[] = [
     groupTitle: false,
     badge: '',
     badgeClass: '',
-    role: ['Admin'],
+    role: ['ADMIN', 'SUPERADMIN'],
     submenu: [
       {
         path: '/admin/leaves/leave-requests',
@@ -167,7 +167,7 @@ export const ROUTES: RouteInfo[] = [
         groupTitle: false,
         badge: '',
         badgeClass: '',
-        role: ['Admin'],
+        role: ['ADMIN', 'SUPERADMIN'],
         submenu: [],
       },
       {
@@ -179,7 +179,7 @@ export const ROUTES: RouteInfo[] = [
         groupTitle: false,
         badge: '',
         badgeClass: '',
-        role: ['Admin'],
+        role: ['ADMIN', 'SUPERADMIN'],
         submenu: [],
       },
     ],

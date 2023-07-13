@@ -20,7 +20,7 @@ export class UserService extends UnsubscribeOnDestroyAdapter {
       })
     };
 
-    private readonly API_URL = 'http://localhost:9090/user';
+    private readonly API_URL = 'http://localhost:8081/user';
     isTblLoading = true;
     dataChange: BehaviorSubject<User[]> = new BehaviorSubject<User[]>(
       []
@@ -52,7 +52,7 @@ export class UserService extends UnsubscribeOnDestroyAdapter {
         })
       );
     }
-    
+
     getUsers(): Observable<User[]> {
       return this.httpClient.get<User[]>(this.API_URL);
     }
@@ -91,4 +91,3 @@ export class UserService extends UnsubscribeOnDestroyAdapter {
           });
     }
   }
-  

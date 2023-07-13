@@ -23,7 +23,7 @@ export class TeamService extends UnsubscribeOnDestroyAdapter {
   private _projects = new BehaviorSubject<object[]>([]);
   public readonly projects: Observable<object[]> =
     this._projects.asObservable();
-  private readonly API_URL = 'http://localhost:9090/team/';
+  private readonly API_URL = 'http://localhost:8081/team/';
   isTblLoading = true;
   dataChange: BehaviorSubject<Leave[]> = new BehaviorSubject<Leave[]>(
     []
@@ -59,7 +59,7 @@ export class TeamService extends UnsubscribeOnDestroyAdapter {
       })
     );
   }
-  
+
   public getObjects(): Observable<Team[]> {
     this.getAllProjectss();
     console.log(this.projects);
@@ -74,9 +74,9 @@ export class TeamService extends UnsubscribeOnDestroyAdapter {
             // convert objects to Project instances
             (item: any) => this.adapter.adapt(item)
           )
-          
+
       )
-      
+
     );
   }
 
@@ -106,10 +106,10 @@ export class TeamService extends UnsubscribeOnDestroyAdapter {
           error: (error: HttpErrorResponse) => {
              // error code here
           },
-        }); 
+        });
   }
 
-  public updateObject(project: Team): void {  
+  public updateObject(project: Team): void {
     this.httpClient.put(this.API_URL, project,this.httpOptions)
         .subscribe({
           next: (data) => {
@@ -118,9 +118,9 @@ export class TeamService extends UnsubscribeOnDestroyAdapter {
           error: (error: HttpErrorResponse) => {
              // error code here
           },
-        });  
+        });
   }
-  
+
 
   async deleteObject(project: Team)  {
     console.log(this.API_URL + project.id,this.httpOptions);

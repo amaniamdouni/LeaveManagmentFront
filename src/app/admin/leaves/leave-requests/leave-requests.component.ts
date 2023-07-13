@@ -41,7 +41,7 @@ export class LeaveRequestsComponent
     'nbr_days',
     'leaveType',
     'leaveStatus',
-    'comment',
+    'leavePriority',
     'actions'
 
   ];

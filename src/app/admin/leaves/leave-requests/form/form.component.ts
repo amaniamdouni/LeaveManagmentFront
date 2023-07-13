@@ -12,6 +12,7 @@ import { formatDate } from '@angular/common';
 import { LeaveStatus } from '../../models/leaveStatus';
 import { LeaveType } from '../../models/leaveType';
 import { User } from '../../models/user.model';
+import { AuthService } from 'app/services/auth.service';
 
 export interface DialogData {
   id: number;
@@ -32,13 +33,18 @@ export class FormComponent {
   leaves: Leaves;
   leaveStatutList = LeaveStatus;
   leaveTypeList = LeaveType;
+ matricule =
+        this.authService.currentUserValue.matricule ;
   constructor(
     public dialogRef: MatDialogRef<FormComponent>,
     @Inject(MAT_DIALOG_DATA) public data: DialogData,
     public leavesService: LeavesService,
-    private fb: UntypedFormBuilder
+    private fb: UntypedFormBuilder,
+    private authService: AuthService,
   ) {
     // Set the defaults
+
+        console.log(this.matricule);
     this.action = data.action;
     console.log(data);
     if (this.action === 'edit') {
@@ -92,7 +98,7 @@ export class FormComponent {
   public confirmAdd(): void {
     if (this.action === 'edit') {
       console.log(this.leavesForm.value);
-      this.leavesForm.value.user = new User(1,"test","test");
+      //this.leavesForm.value.user = new User(1,"test","test");
       this.leavesService.updateLeave(this.leavesForm.value).subscribe((result) => {
         console.log(result);
       },
@@ -100,8 +106,9 @@ export class FormComponent {
         console.log(err);
       });
     } else {
-      this.leavesForm.value.user = new User(1,"test","test");
-      this.leavesService.addLeave(this.leavesForm.value).subscribe((result) => {
+     // this.leavesForm.value.user = new User(1,"test","test");
+     console.log(this.leavesForm.value);
+      this.leavesService.addLeave(this.leavesForm.value,this.matricule).subscribe((result) => {
         console.log(result);
       },
       (err) => {

@@ -2,6 +2,7 @@ import { formatDate } from '@angular/common';
 import { LeaveStatus } from './leaveStatus';
 import { LeaveType } from './leaveType';
 import { User } from './user.model';
+import { leavePriority } from './leavePriority.model';
 export class Leaves {
   id: number;
   //halfDay: string;
@@ -14,6 +15,7 @@ export class Leaves {
   leaveType: LeaveType;
   archived: boolean;
   user: User;
+  leavePriority: leavePriority
 
   constructor(myLeaves: Leaves) {
     {
@@ -27,6 +29,7 @@ export class Leaves {
       this.leaveStatus = myLeaves.leaveStatus;
       this.leaveType = myLeaves.leaveType;
       this.user = myLeaves.user
+      this.leavePriority = myLeaves.leavePriority
     }
   }
 }

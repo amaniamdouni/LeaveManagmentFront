@@ -32,7 +32,7 @@ export class AuthService {
     return this.http
 
     //.post<User>(`${environment.apiUrl}/authenticate`, {
-      .post<any>('http://localhost:9090/api/auth/login', {
+      .post<any>('http://localhost:8081/api/auth/login', {
         matricule,
         password,
       },this.httpOptions)
@@ -44,7 +44,7 @@ export class AuthService {
           this.currentUserSubject.value.token = data.accessToken;
           return data;
         })
-      ); 
+      );
   }
 
   logout() {
