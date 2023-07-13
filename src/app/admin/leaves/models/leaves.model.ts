@@ -15,7 +15,8 @@ export class Leaves {
   leaveType: LeaveType;
   archived: boolean;
   user: User;
-  leavePriority: leavePriority
+  leavePriority: leavePriority;
+  teamAvailability: boolean;
 
   constructor(myLeaves: Leaves) {
     {
@@ -28,8 +29,9 @@ export class Leaves {
       this.archived = myLeaves.archived;
       this.leaveStatus = myLeaves.leaveStatus;
       this.leaveType = myLeaves.leaveType;
-      this.user = myLeaves.user
-      this.leavePriority = myLeaves.leavePriority
+      this.user = myLeaves.user;
+      this.leavePriority = myLeaves.leavePriority;
+      this.teamAvailability = myLeaves.teamAvailability;
     }
   }
 }

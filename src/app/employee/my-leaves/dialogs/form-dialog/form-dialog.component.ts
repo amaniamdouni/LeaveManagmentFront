@@ -10,6 +10,7 @@ import { Leaves } from '../../models/leaves.model';
 import { MyLeavesService } from '../../my-leaves.service';
 import { LeaveStatus } from '../../models/leaveStatus';
 import { LeaveType } from '../../models/leaveType';
+import { AuthService } from 'app/services/auth.service';
 
 export interface DialogData {
   id: number;
@@ -29,11 +30,14 @@ export class FormDialogComponent {
   myLeaves: Leaves;
   leaveStatutList = LeaveStatus;
   leaveTypeList = LeaveType;
+  matricule =
+  this.authService.currentUserValue.matricule ;
   constructor(
     public dialogRef: MatDialogRef<FormDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: DialogData,
     public myLeavesService: MyLeavesService,
-    private fb: UntypedFormBuilder
+    private fb: UntypedFormBuilder,
+    private authService: AuthService,
   ) {
     // Set the defaults
     this.action = data.action;
@@ -88,7 +92,7 @@ export class FormDialogComponent {
         console.log(err);
       });
     } else {
-      this.myLeavesService.addLeave(this.myLeavesForm.value).subscribe((result) => {
+      this.myLeavesService.addLeave(this.myLeavesForm.value,this.matricule).subscribe((result) => {
         console.log(result);
       },
       (err) => {

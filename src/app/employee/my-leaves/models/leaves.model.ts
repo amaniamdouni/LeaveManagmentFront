@@ -13,6 +13,7 @@ export class Leaves {
   leaveType: LeaveType;
   archived: boolean;
   user: string;
+  teamAvailability : boolean;
 
   constructor(myLeaves: Leaves) {
     {
@@ -26,6 +27,7 @@ export class Leaves {
       this.leaveStatus = myLeaves.leaveStatus;
       this.leaveType = myLeaves.leaveType;
       this.user = myLeaves.user
+      this.teamAvailability = myLeaves.teamAvailability;
     }
   }
 }

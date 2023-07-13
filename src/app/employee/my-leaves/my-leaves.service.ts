@@ -1,11 +1,17 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { Leaves } from './models/leaves.model';
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { UnsubscribeOnDestroyAdapter } from '@shared';
 @Injectable()
 export class MyLeavesService extends UnsubscribeOnDestroyAdapter {
   private readonly API_URL = 'http://localhost:8081/leave';
+  httpOptions= {
+    headers: new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Access-Control-Allow-Origin': 'http://localhost:4200'
+    })
+  };
   isTblLoading = true;
   dataChange: BehaviorSubject<Leaves[]> = new BehaviorSubject<Leaves[]>([]);
   // Temporarily stores data from dialogs
@@ -47,8 +53,9 @@ export class MyLeavesService extends UnsubscribeOnDestroyAdapter {
     return this.httpClient.delete(this.API_URL+"/delete/"+id);
   }
 
-  addLeave(leave:Leaves) {
-    return this.httpClient.post<Leaves>(this.API_URL+"/add",leave);
+  addLeave(leave:Leaves,matricule:string) {
+
+    return this.httpClient.post<Leaves>(this.API_URL+"/add/"+matricule,leave,this.httpOptions);
   }
   // addMyLeaves(Leaves: Leaves): void {
   //   this.dialogData = Leaves;

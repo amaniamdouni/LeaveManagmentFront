@@ -35,6 +35,7 @@ export class FormComponent {
   leaveTypeList = LeaveType;
  matricule =
         this.authService.currentUserValue.matricule ;
+        teamAvailability: boolean;
   constructor(
     public dialogRef: MatDialogRef<FormComponent>,
     @Inject(MAT_DIALOG_DATA) public data: DialogData,
@@ -55,8 +56,9 @@ export class FormComponent {
     } else if (this.action === 'details') {
       this.leaves = data.leaves;
       console.log(this.leaves);
+      this.teamAvailability = data.leaves.teamAvailability;
       this.isDetails = true;
-      this.leavesForm = this.createContactForm();
+      this.leavesForm = this.createContactFormRH();
     } else {
       this.isDetails = false;
       console.log(this.isDetails);
@@ -86,7 +88,20 @@ export class FormComponent {
       endDate: [this.leaves.endDate, [Validators.required]],
       leaveType: [this.leaves.leaveType, [Validators.required]],
       leaveStatus: [this.leaves.leaveStatus],
+      comment: [this.leaves.comment, [Validators.required]]
+    });
+  }
+  createContactFormRH(): UntypedFormGroup {
+    return this.fb.group({
+      id: [this.leaves.id],
+      nbr_days: [this.leaves.nbr_days, [Validators.required]],
+      createdAt: [this.leaves.createdAt, [Validators.required]],
+      startDate: [this.leaves.startDate, [Validators.required]],
+      endDate: [this.leaves.endDate, [Validators.required]],
+      leaveType: [this.leaves.leaveType, [Validators.required]],
+      leaveStatus: [this.leaves.leaveStatus],
       comment: [this.leaves.comment, [Validators.required]],
+      teamAvailability: [this.leaves.teamAvailability]
     });
   }
   submit() {
