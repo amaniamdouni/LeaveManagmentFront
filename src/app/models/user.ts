@@ -16,6 +16,7 @@ export class User {
     password: string;
     token: string;
     teamUser : Team;
+    img: string;
     constructor(user: User) {
       {
         this.matricule = user.matricule || '';
@@ -33,6 +34,7 @@ export class User {
         this.password = user.password || '';
         this.token = user.token || '';
         this.teamUser = user.teamUser || null;
+        this.img = '';
       }
     }
   }

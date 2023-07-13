@@ -69,9 +69,9 @@ export class EmployeesComponent
   ngOnInit() {
     this.loadData();
   }
-  async refreshUsers() {
-    this.delay(2000);
-    this.userservice.getAllusers().subscribe({
+
+  refreshUsers() {
+    this.userservice.getAllUsers().subscribe({
       next: (users: User[]) => {
         this.listUser = users;
       },
@@ -319,7 +319,7 @@ export class ExampleDataSource extends DataSource<User> {
       this.filterChange,
       this.paginator.page,
     ];
-    this.exampleDatabase.getAllusers();
+    this.exampleDatabase.getAllUsers();
     return merge(...displayDataChanges).pipe(
       map(() => {
         // Filter data

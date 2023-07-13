@@ -34,7 +34,7 @@ export class HeaderComponent
   isOpenSidebar?: boolean;
   docElement: HTMLElement | undefined;
   isFullScreen = false;
-  fullname = '';
+  fullname? : string;
 
   constructor(
     @Inject(DOCUMENT) private document: Document,
@@ -51,8 +51,10 @@ export class HeaderComponent
   ngOnInit() {
     this.config = this.configService.configData;
     const userRole = this.authService.currentUserValue.role;
-    const fullname = this.authService.currentUserValue.firstName +' ' +this.authService.currentUserValue.lastName;
-    //this.userImg = this.authService.currentUserValue.img;
+    const fullname = this.authService.currentUserValue.firstName + ' ' + this.authService.currentUserValue.lastName;
+    this.authService.currentUserValue.img ='assets/images/pages/1048219.png';
+    this.userImg = this.authService.currentUserValue.img;
+
 
     if (userRole === 'ADMIN') {
       this.homePage = 'admin/dashboard/main';

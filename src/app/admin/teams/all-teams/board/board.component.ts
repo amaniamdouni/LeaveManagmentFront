@@ -53,7 +53,7 @@ export class BoardComponent implements OnInit {
   // }
   async refreshUsers() {
     this.delay(2000);
-    this.userservice.getAllusers().subscribe({
+    this.userservice.getAllUsers().subscribe({
       next: (users: User[]) => {
         this.listUser = users;
       },

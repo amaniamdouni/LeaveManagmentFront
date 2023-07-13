@@ -34,7 +34,6 @@ export class UserService extends UnsubscribeOnDestroyAdapter {
 
     constructor(private httpClient: HttpClient,private authService: AuthService) {
       super();
-      this.getAllusers();
       this.currentUser = this.authService.currentUserValue;
       this.auth_token = '';
       let auth_token = this.currentUser.token;
@@ -44,6 +43,7 @@ export class UserService extends UnsubscribeOnDestroyAdapter {
         'Authorization': `Bearer ${auth_token}`
       });
       // th
+      this.getAllUsers();
     }
     get data(): User[] {
       return this.dataChange.value;
@@ -52,9 +52,9 @@ export class UserService extends UnsubscribeOnDestroyAdapter {
       return this.dialogData;
     }
     /** CRUD METHODS */
-    getAllusers(): Observable<User[]> {
-      let requestOptions = { headers: this.headers };
-      return this.httpClient.get<User[]>(this.API_URL,requestOptions).pipe(
+
+    getAllUsers(): Observable<User[]> {
+      return this.httpClient.get<User[]>(this.API_URL).pipe(
         tap((data: User[]) => {
           this.isTblLoading = false;
           this.dataChange.next(data);

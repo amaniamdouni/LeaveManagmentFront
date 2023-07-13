@@ -80,6 +80,7 @@ export class TeamDialogComponent {
       return;
     }
     var user = this.listUser.find(u => u.matricule === this.teamForm.value.user);
+
     this.teamForm.value.user = user;
     this.teamForm.value.createdOn = new Date();
     this.teamForm.value.archive = false;
@@ -111,7 +112,7 @@ export class TeamDialogComponent {
     await this.delay(2000); // Wait for 2 seconds
 
     await this.compOne.ngOnInit().then(() => console.log('Finished'))
-    .catch(() => console.error('Failed!'));;
+    .catch(() => console.error('Failed!'));
     
   }
   onNoClick(): void {

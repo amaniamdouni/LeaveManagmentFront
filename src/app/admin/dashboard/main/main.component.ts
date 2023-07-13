@@ -51,9 +51,10 @@ export class MainComponent implements OnInit {
   public smallChart3Options!: Partial<ChartOptions>;
   public smallChart4Options!: Partial<ChartOptions>;
   public performanceRateChartOptions!: Partial<ChartOptions>;
+  public nbrUsers: number;
 
   constructor( public userservice : UserService) {
-    // constructor code
+    this.nbrUsers = 0;
   }
   ngOnInit() {
     this.smallChart1();
@@ -64,6 +65,10 @@ export class MainComponent implements OnInit {
     this.chart2();
     this.chart4();
     this.projectChart();
+    this.userservice.getAllUsers().subscribe((users: User[]) => {
+        this.nbrUsers = users.length;
+      }
+    );
   }
 
   // Doughnut chart start
