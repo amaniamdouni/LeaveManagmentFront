@@ -36,6 +36,31 @@ export const ROUTES: RouteInfo[] = [
     role:  ['ADMIN', 'SUPERADMIN'],
     submenu: [],
   },
+   {
+    path: '',
+    title: 'MENUITEMS.REPORTS.TEXT',
+    iconType: 'feather',
+    icon: 'file-text',
+    class: 'menu-toggle',
+    groupTitle: false,
+    badge: '',
+    badgeClass: '',
+    role: ['ADMIN'],
+    submenu: [
+      {
+        path: '/admin/reports/leave-report',
+        title: 'All Claims',
+        iconType: '',
+        icon: '',
+        class: 'ml-menu',
+        groupTitle: false,
+        badge: '',
+        badgeClass: '',
+        role: [''],
+        submenu: [],
+      },
+    ],
+  },
 
   // Employee Modules
   {

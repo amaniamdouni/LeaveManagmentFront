@@ -22,7 +22,12 @@ const routes: Routes = [
     path: 'leaves',
     loadChildren: () =>
       import('./leaves/leaves.module').then((m) => m.LeavesModule),
-  }
+  },
+  {
+    path: 'reports',
+    loadChildren: () =>
+      import('./reports/reports.module').then((m) => m.ReportsModule),
+  },
 ];
 
 

@@ -34,7 +34,11 @@ const routes: Routes = [
         path: 'calendar',
         loadChildren: () =>
           import('./calendar/calendar.module').then((m) => m.CalendarsModule),
-      }
+      },
+      {
+        path: 'ui',
+        loadChildren: () => import('./ui/ui.module').then((m) => m.UiModule),
+      },
     ],
   },
   {

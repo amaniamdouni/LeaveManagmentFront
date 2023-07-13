@@ -22,6 +22,7 @@ import { TableExportUtil, TableElement } from '@shared';
 import { formatDate } from '@angular/common';
 import { C } from '@angular/cdk/keycodes';
 import { Router } from '@angular/router';
+import { id } from '@swimlane/ngx-charts';
 
 @Component({
   selector: 'app-my-tasks',
@@ -69,40 +70,37 @@ export class MyTasksComponent
     
     this.loadData();
   }
- addNew() {
-    let tempDirection: Direction;
-    if (localStorage.getItem('isRtl') === 'true') {
-      tempDirection = 'rtl';
-    } else {
-      tempDirection = 'ltr';
-    }
-    const dialogRef = this.dialog.open(FormDialogComponent, {
-      data: {
-        myTasks: this.myTasks,
-        action: 'add',
-      },
-      direction: tempDirection,
-    });
-    this.subs.sink = dialogRef.afterClosed().subscribe((result) => {
-      if (result === 1) {
-        const newClaim: Claim = this.claimService.getDialogData();
-        this.claimService.addClaim(newClaim).subscribe((addedClaim) => {
-          console.log(newClaim.description)
-          this.exampleDatabase?.dataChange.value.unshift(addedClaim);
-        this.loadData();
-        },);
-      }
-    });
+  
+addNew() {
+  let tempDirection: Direction;
+  if (localStorage.getItem('isRtl') === 'true') {
+    tempDirection = 'rtl';
+  } else {
+    tempDirection = 'ltr';
   }
+  const dialogRef = this.dialog.open(FormDialogComponent, {
+    data: {
+      myTasks: this.myTasks,
+      action: 'add',
+    },
+    direction: tempDirection,
+  });
+  this.subs.sink = dialogRef.afterClosed().subscribe((result) => {
+    if (result === 1) {
+      const newClaim: Claim = this.claimService.getDialogData();
+      this.claimService.addClaim(newClaim).subscribe((addedClaim) => {
+        console.log(newClaim.description);
+        this.exampleDatabase?.dataChange.value.unshift(addedClaim);
+      });
+      // Déplacez l'appel à this.loadData() à l'intérieur de la souscription à this.claimService.addClaim()
+      this.loadData();
+    }
+  });
+}
+  
   editCall(row: Claim) {
     console.log(row);
-    this.id = row.id;
-    let tempDirection: Direction;
-    if (localStorage.getItem('isRtl') === 'true') {
-      tempDirection = 'rtl';
-    } else {
-      tempDirection = 'ltr';
-    }
+    const tempDirection = localStorage.getItem('isRtl') === 'true' ? 'rtl' : 'ltr';
     const dialogRef = this.dialog.open(FormDialogComponent, {
       data: {
         myTasks: row,
@@ -111,20 +109,21 @@ export class MyTasksComponent
       direction: tempDirection,
     });
     this.subs.sink = dialogRef.afterClosed().subscribe((result) => {
-      if (result === 1) {
+      if (result) {
         const foundIndex = this.exampleDatabase?.dataChange.value.findIndex(
-          (x) => x.id === this.id
+          (x) => x.id === row.id
         );
         if (foundIndex != null && this.exampleDatabase) {
           const updatedClaim: Claim = this.claimService.getDialogData();
           console.log('updatedClaim:', updatedClaim);
-          this.claimService.updateMyTasks(updatedClaim).subscribe(() => {
-          this.loadData();
+          this.claimService.updateClaim(row.id, updatedClaim).subscribe(() => {
+            this.loadData();
           });
-        } 
+        }
       }
     });
   }
+  
   deleteItem(i: number, row: Claim) {
     this.index = i;
     this.id = row.id;

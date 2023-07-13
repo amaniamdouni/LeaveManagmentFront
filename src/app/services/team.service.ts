@@ -5,8 +5,6 @@ import { catchError, map, tap } from 'rxjs/operators';
 import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { UnsubscribeOnDestroyAdapter } from '@shared';
 import { Team, TeamAdapter } from 'app/models/TeamAdapter';
-import { DatePipe } from '@angular/common';
-import { Archive } from 'angular-feather/icons';
 import { Leave } from 'app/models/Leave';
 @Injectable({
   providedIn: 'root'
