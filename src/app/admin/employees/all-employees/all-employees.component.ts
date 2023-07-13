@@ -70,7 +70,8 @@ export class EmployeesComponent
     this.loadData();
   }
 
-  refreshUsers() {
+  async refreshUsers() {
+    this.delay(2000);
     this.userservice.getAllUsers().subscribe({
       next: (users: User[]) => {
         this.listUser = users;
@@ -308,7 +309,7 @@ export class ExampleDataSource extends DataSource<User> {
   ) {
     super();
     // Reset to the first page when the user changes the filter.
-    //this.filterChange.subscribe(() => (this.paginator.pageIndex = 0));
+    this.filterChange.subscribe(() => (this.paginator.pageIndex = 0));
   }
   /** Connect function called by the table to retrieve one stream containing the data to render. */
   connect(): Observable<User[]> {
@@ -341,6 +342,7 @@ export class ExampleDataSource extends DataSource<User> {
           startIndex,
           this.paginator.pageSize
         );
+        console.log(this.renderedData)
         return this.renderedData;
       })
     );
@@ -359,7 +361,7 @@ export class ExampleDataSource extends DataSource<User> {
       let propertyA: number | string = '';
       let propertyB: number | string = '';
       switch (this._sort.active) {
-        case 'matricule':
+        case 'id':
           [propertyA, propertyB] = [a.matricule, b.matricule];
           break;
         case 'firstName':

@@ -48,10 +48,10 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2" >
-                    <mat-form-field class="example-full-width mb-3" appearance="outline" >
+                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                    <mat-form-field class="example-full-width mb-3" appearance="outline">
                         <mat-label>Date de naissance</mat-label>
-                        <input matInput [matDatepicker]="picker" formControlName="createdOn" [disabled]="teamForm.get('createdOn')?.disabled ?? true" required >
+                        <input matInput [matDatepicker]="picker" formControlName="createdOn" [disabled]="teamForm.get('createdOn')?.disabled ?? true" required>
                         <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
                         <mat-datepicker #picker></mat-datepicker>
                         <mat-error *ngIf="teamForm.get('createdOn')?.hasError('required')">

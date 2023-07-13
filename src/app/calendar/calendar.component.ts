@@ -105,9 +105,9 @@ export class CalendarComponent
   }
   async refreshTeams() {
     this.CG_payee = [];
-    this.leaves = await this.teamservice.getAllProjectssByTeam();
+    this.leaves = await this.teamservice.getAllLeavesByTeam();
     this.delay(2000);
-    this.leaves = await this.teamservice.getAllProjectssByTeam();
+    this.leaves = await this.teamservice.getAllLeavesByTeam();
     console.log(this.leaves);
     
   }

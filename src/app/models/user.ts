@@ -15,8 +15,13 @@ export class User {
     email: string;
     password: string;
     token: string;
+<<<<<<< HEAD
     teamUser : Team;
     img: string;
+=======
+    img: string;
+    teamUser : Team;
+>>>>>>> farah-user-front
     constructor(user: User) {
       {
         this.matricule = user.matricule || '';
@@ -33,8 +38,13 @@ export class User {
         this.email = user.email || '';
         this.password = user.password || '';
         this.token = user.token || '';
+<<<<<<< HEAD
         this.teamUser = user.teamUser || null;
         this.img = '';
+=======
+        this.img = '';
+        this.teamUser = user.teamUser || null;
+>>>>>>> farah-user-front
       }
     }
   }

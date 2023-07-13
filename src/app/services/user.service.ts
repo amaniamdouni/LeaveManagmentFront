@@ -36,7 +36,7 @@ export class UserService extends UnsubscribeOnDestroyAdapter {
       super();
       this.currentUser = this.authService.currentUserValue;
       this.auth_token = '';
-      let auth_token = this.currentUser.token;
+      const auth_token = this.currentUser.token;
       this.headers = new HttpHeaders({
         'Content-Type': 'application/json',
         'Access-Control-Allow-Origin': 'http://localhost:4200',
@@ -73,7 +73,7 @@ export class UserService extends UnsubscribeOnDestroyAdapter {
 
     }
     addUser(user: User): void {
-      let requestOptions = { headers: this.headers };
+      const requestOptions = { headers: this.headers };
       this.dialogData = user;
       console.log(user);
       this.httpClient.post(this.API_URL, user,requestOptions)

@@ -5,8 +5,6 @@ import { catchError, map, tap } from 'rxjs/operators';
 import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { UnsubscribeOnDestroyAdapter } from '@shared';
 import { Team, TeamAdapter } from 'app/models/TeamAdapter';
-import { DatePipe } from '@angular/common';
-import { Archive } from 'angular-feather/icons';
 import { Leave } from 'app/models/Leave';
 import { User } from 'app/models/user';
 import { AuthService } from './auth.service';
@@ -23,9 +21,9 @@ export class TeamService extends UnsubscribeOnDestroyAdapter {
   };
   private trash: Set<number> = new Set([]); // trashed projects' id; set is better for unique ids
   // private _projects: BehaviorSubject<object[]> = new BehaviorSubject([]);
-  private _projects = new BehaviorSubject<object[]>([]);
-  public readonly projects: Observable<object[]> =
-    this._projects.asObservable();
+  private _teams = new BehaviorSubject<object[]>([]);
+  public readonly teams: Observable<object[]> =
+    this._teams.asObservable();
   private readonly API_URL = 'http://localhost:9090/team/';
   isTblLoading = true;
   currentUser: User;
@@ -54,14 +52,14 @@ export class TeamService extends UnsubscribeOnDestroyAdapter {
     console.log(requestOptions);
     this.subs.sink = this.httpClient.get<Team[]>(this.API_URL,requestOptions).subscribe({
       next: (data) => {
-        this._projects.next(data);
+        this._teams.next(data);
       },
       error: (error: HttpErrorResponse) => {
         console.log(error.name + ' ' + error.message);
       },
     });
   }
-  async getAllProjectssByTeam() {
+  async getAllLeavesByTeam() {
     return this.httpClient.get<Leave[]>(this.API_URL+"retrieveLeavesByTeam/3").pipe(
       tap((data: Leave[]) => {
         this.isTblLoading = false;
@@ -78,8 +76,8 @@ export class TeamService extends UnsubscribeOnDestroyAdapter {
   
   public getObjects(): Observable<Team[]> {
     this.getAllTeams();
-    console.log(this.projects);
-    return this.projects.pipe(
+    console.log(this.teams);
+    return this.teams.pipe(
       map((data: any[]) =>
         data
           .filter(
@@ -97,7 +95,7 @@ export class TeamService extends UnsubscribeOnDestroyAdapter {
   }
 
   public getObjectById(id: number): Observable<Team> {
-    return this.projects.pipe(
+    return this.teams.pipe(
       map(
         (data: any) =>
           data
@@ -113,11 +111,11 @@ export class TeamService extends UnsubscribeOnDestroyAdapter {
     );
   }
 
-  public createOject(project: any): void {
-    this.httpClient.put(this.API_URL, project,this.httpOptions)
+  public createOject(team: any): void {
+    this.httpClient.put(this.API_URL, team,this.httpOptions)
         .subscribe({
           next: (data) => {
-            this.dialogData = project;
+            this.dialogData = team;
           },
           error: (error: HttpErrorResponse) => {
              // error code here
@@ -125,11 +123,11 @@ export class TeamService extends UnsubscribeOnDestroyAdapter {
         }); 
   }
 
-  public updateObject(project: Team): void {  
-    this.httpClient.put(this.API_URL, project,this.httpOptions)
+  public updateObject(team: Team): void {  
+    this.httpClient.put(this.API_URL, team,this.httpOptions)
         .subscribe({
           next: (data) => {
-            this.dialogData = project;
+            this.dialogData = team;
           },
           error: (error: HttpErrorResponse) => {
              // error code here
@@ -138,12 +136,12 @@ export class TeamService extends UnsubscribeOnDestroyAdapter {
   }
   
 
-  async deleteObject(project: Team)  {
-    console.log(this.API_URL + project.id,this.httpOptions);
-    this.httpClient.delete(this.API_URL + project.id)
+  async deleteObject(team: Team)  {
+    console.log(this.API_URL + team.id,this.httpOptions);
+    this.httpClient.delete(this.API_URL + team.id)
         .subscribe({
           next: (data) => {
-            console.log(project.id);
+            console.log(team.id);
           },
           error: (error: HttpErrorResponse) => {
              // error code here
@@ -151,15 +149,15 @@ export class TeamService extends UnsubscribeOnDestroyAdapter {
         });
   }
 
-  public detachObject(project: Team): void {
+  public detachObject(team: Team): void {
     // add project id to trash
-    this.trash.add(project.id);
+    this.trash.add(team.id);
     // force emit change for projects observers
-    return this._projects.next(this._projects.getValue());
+    return this._teams.next(this._teams.getValue());
   }
 
-  public attachObject(project: Team): void {
+  public attachObject(team: Team): void {
     // remove project id from trash
-    this.trash.delete(project.id);
+    this.trash.delete(team.id);
   }
 }

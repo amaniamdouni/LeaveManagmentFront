@@ -21,11 +21,11 @@ export interface DialogData {
 }
 
 @Component({
-  selector: 'app-team-dialog',
-  templateUrl: './team-dialog.component.html',
-  providers: [BoardComponent],
+  selector: 'app-user-dialog',
+  templateUrl: './user-dialog.component.html',
+  providers: [],
 })
-export class TeamDialogComponent {
+export class UserDialogComponent {
   public team: Team;
   public dialogTitle: string;
   public teamForm: UntypedFormGroup;
@@ -35,11 +35,11 @@ export class TeamDialogComponent {
   constructor(
     private formBuilder: UntypedFormBuilder,
     @Inject(MAT_DIALOG_DATA) public data: DialogData,
-    public dialogRef: MatDialogRef<TeamDialogComponent>,
+    public dialogRef: MatDialogRef<UserDialogComponent>,
     private snackBar: MatSnackBar,    
     private teamservice: TeamService,
     private userservice:UserService,
-    private compOne: BoardComponent
+    //private compOne: BoardComponent
   ) {
     this.listUser=[];
     this.dialogTitle = data.title;
@@ -47,18 +47,10 @@ export class TeamDialogComponent {
     const nonWhiteSpaceRegExp = new RegExp('\\S');
 
     this.teamForm = this.formBuilder.group({
-      nameTeam: [
-        this.team?.nameTeam,
-        [Validators.required, Validators.pattern(nonWhiteSpaceRegExp)],
-      ],
-      description: [this.team?.description,
-        [Validators.required],
-      ],
       user: [this.team?.user?.matricule,
         [Validators.required],
       ],
-      createdOn: [{ value: new Date(), disabled: true }] // Set the createdOn field to disabled
-
+    
     });
     
     this.pollingInterval = setInterval(() => {
@@ -80,8 +72,6 @@ export class TeamDialogComponent {
     }
     const user = this.listUser.find(u => u.matricule === this.teamForm.value.user);
     this.teamForm.value.user = user;
-    this.teamForm.value.createdOn = new Date();
-    this.teamForm.value.archive = false;
     this.teamForm.value.userList = [];
     if (this.team) {
       // update project object with form values
@@ -109,8 +99,8 @@ export class TeamDialogComponent {
     }
     await this.delay(2000); // Wait for 2 seconds
 
-    await this.compOne.ngOnInit().then(() => console.log('Finished'))
-    .catch(() => console.error('Failed!'));
+    //await this.compOne.ngOnInit().then(() => console.log('Finished'))
+    //.catch(() => console.error('Failed!'));
     
   }
   onNoClick(): void {

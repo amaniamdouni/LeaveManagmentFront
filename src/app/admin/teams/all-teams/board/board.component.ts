@@ -10,6 +10,7 @@ import { Team } from 'app/models/TeamAdapter';
 import { EmployeesComponent } from 'app/admin/employees/all-employees/all-employees.component';
 import { User } from 'app/models/user';
 import { UserService } from 'app/services/user.service';
+import { UserDialogComponent } from '../user-dialog/user-dialog.component';
 @Component({
   selector: 'app-board',
   templateUrl: './board.component.html',
@@ -74,8 +75,8 @@ export class BoardComponent implements OnInit {
   };
   public drop(event: CdkDragDrop<any>): void {
     if (event.previousContainer !== event.container) {
-      const project = event.item.data;
-      this.teamservice.updateObject(project);
+      const team = event.item.data;
+      this.teamservice.updateObject(team);
     }
   }
 
@@ -87,11 +88,11 @@ export class BoardComponent implements OnInit {
   delay(ms: number): Promise<void> {
     return new Promise(resolve => setTimeout(resolve, ms));
   }
-  async removeTeam(project: Team) {
+  async removeTeam(team: Team) {
     // show "deleted" info
     // const snack = this.snackBar.open("The Project has been deleted", "Undo");
     const snack = this.snackBar.open(
-      'Project deleted Successfully...!!!',
+      'Team deleted Successfully...!!!',
       'Undo',
       {
         duration: 4000,
@@ -100,7 +101,7 @@ export class BoardComponent implements OnInit {
         panelClass: 'snackbar-danger',
       }
     );
-    await this.teamservice.deleteObject(project);
+    await this.teamservice.deleteObject(team);
     await this.delay(2000); // Wait for 2 seconds
     this.refreshTeams();
   }
@@ -111,12 +112,13 @@ export class BoardComponent implements OnInit {
     } else {
       tempDirection = 'ltr';
     }
-    // open angular material dialog
-    this.dialog.open(EmployeesComponent, {
-      height: '80%',
-      width: '55%',
+    const titre = 'Affecter User to team';
+  // open angular material dialog
+    this.dialog.open(UserDialogComponent, {
+      height: '40%',
+      width: '40%',
       autoFocus: true,
-      data: { team },
+      data: {titre,team},
       direction: tempDirection,
     });
   }
@@ -138,8 +140,8 @@ export class BoardComponent implements OnInit {
     }
     // open angular material dialog
     this.dialog.open(TeamDialogComponent, {
-      height: '40%',
-      width: '55%',
+      height: '70%',
+      width: '50%',
       autoFocus: true,
       data: {title,team,},
       direction: tempDirection,

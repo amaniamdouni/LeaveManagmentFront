@@ -11,6 +11,8 @@ import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
 import { TeamsRoutingModule } from './teams-routing.module';
 import { ComponentsModule } from '@shared/components/components.module';
 import { SharedModule } from '@shared';
+import { UserDialogComponent } from './all-teams/user-dialog/user-dialog.component';
+
 
 
 @NgModule({
@@ -18,6 +20,7 @@ import { SharedModule } from '@shared';
     AllteamsComponent,
     BoardComponent,
     TeamDialogComponent,
+    UserDialogComponent,
     TruncatePipe,
     PluralPipe,
   ],
