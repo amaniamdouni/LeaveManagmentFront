@@ -8,6 +8,8 @@ import { Team, TeamAdapter } from 'app/models/TeamAdapter';
 import { DatePipe } from '@angular/common';
 import { Archive } from 'angular-feather/icons';
 import { Leave } from 'app/models/Leave';
+import { User } from 'app/models/user';
+import { AuthService } from './auth.service';
 @Injectable({
   providedIn: 'root'
 })
@@ -16,6 +18,7 @@ export class TeamService extends UnsubscribeOnDestroyAdapter {
     headers: new HttpHeaders({
       'Content-Type': 'application/json',
       'Access-Control-Allow-Origin': 'http://localhost:4200'
+      
     })
   };
   private trash: Set<number> = new Set([]); // trashed projects' id; set is better for unique ids
@@ -25,20 +28,33 @@ export class TeamService extends UnsubscribeOnDestroyAdapter {
     this._projects.asObservable();
   private readonly API_URL = 'http://localhost:9090/team/';
   isTblLoading = true;
+  currentUser: User;
+  auth_token : string;
+  headers : HttpHeaders;
   dataChange: BehaviorSubject<Leave[]> = new BehaviorSubject<Leave[]>(
     []
   );
   dialogData!: Team;
-  constructor(private adapter: TeamAdapter, private httpClient: HttpClient) {
+  constructor(private adapter: TeamAdapter, private httpClient: HttpClient,private authService: AuthService) {
     super();
+    this.currentUser = this.authService.currentUserValue;
+    this.auth_token = '';
+    let auth_token = this.currentUser.token;
+    this.headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Access-Control-Allow-Origin': 'http://localhost:4200',
+      'Authorization': `Bearer ${auth_token}`
+    });
     // this._projects.next(PROJECTS); // mock up backend with fake data (not Project objects yet!)
   }
 
   /** CRUD METHODS */
-  async getAllProjectss() {
-    this.subs.sink = this.httpClient.get<Team[]>(this.API_URL).subscribe({
+  async getAllTeams() {
+    let requestOptions = { headers: this.headers };
+    console.log(requestOptions);
+    this.subs.sink = this.httpClient.get<Team[]>(this.API_URL,requestOptions).subscribe({
       next: (data) => {
-        this._projects.next(data); // mock up backend with fake data (not Project objects yet!)
+        this._projects.next(data);
       },
       error: (error: HttpErrorResponse) => {
         console.log(error.name + ' ' + error.message);
@@ -61,7 +77,7 @@ export class TeamService extends UnsubscribeOnDestroyAdapter {
   }
   
   public getObjects(): Observable<Team[]> {
-    this.getAllProjectss();
+    this.getAllTeams();
     console.log(this.projects);
     return this.projects.pipe(
       map((data: any[]) =>

@@ -41,7 +41,7 @@ export class AuthService {
           console.log(data.user)
           // store user details and jwt token in local storage to keep user logged in between page refreshes
 
-          localStorage.setItem('currentUser', JSON.stringify(data.user));
+          localStorage.setItem('currentUser', JSON.stringify(data));
           this.currentUserSubject.next(data.user);
           this.currentUserSubject.value.token = data.accessToken;
           return data;

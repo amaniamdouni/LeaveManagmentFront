@@ -105,27 +105,30 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
                     <mat-form-field class="example-full-width" appearance="outline">
-                        <mat-label>Password</mat-label>
-                        <input matInput formControlName="password" required>
-                        <mat-icon class="material-icons-two-tone color-icon p-3" matSuffix>lock_outline</mat-icon>
-                        <mat-error *ngIf="userForm.get('password')?.hasError('required')">
-                            Password is required
-                        </mat-error>
+                      <mat-label>Role</mat-label>
+                      <mat-select formControlName="role">
+                        <mat-option *ngFor="let role of roles" [value]="role">{{ role }}</mat-option>
+                      </mat-select>
                     </mat-form-field>
-                </div>
-                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
-                    <mat-form-field class="example-full-width" appearance="outline">
-                        <mat-label>Confirm Password</mat-label>
-                        <input matInput formControlName="password" required>
-                        <mat-icon class="material-icons-two-tone color-icon p-3" matSuffix>lock_outline</mat-icon>
-                        <mat-error *ngIf="userForm.get('password')?.hasError('required')">
-                            Confirm Password is required
-                        </mat-error>
-                    </mat-form-field>
-                </div>
+                  </div>
             </div>
+            <div class="row" *ngIf="dialogTitle !== 'Edit User'">
+                <mat-form-field appearance="outline">
+                  <mat-label>Password</mat-label>
+                  <input matInput formControlName="password" type="password" required>
+                  <mat-icon matSuffix>lock_outline</mat-icon>
+                  <mat-error *ngIf="userForm.get('password')?.hasError('required')">Password is required</mat-error>
+                </mat-form-field>
+                                
+                <mat-form-field appearance="outline">
+                  <mat-label>Confirm Password</mat-label>
+                  <input matInput formControlName="confirmPassword" type="password" required>
+                  <mat-icon matSuffix>lock_outline</mat-icon>
+                  <mat-error *ngIf="userForm.hasError('passwordsNotMatch')">Passwords do not match</mat-error>
+                </mat-form-field>
+              </div>
             <div class="row">
                 <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 mb-2">
                     <mat-form-field class="example-full-width mb-3" appearance="outline">

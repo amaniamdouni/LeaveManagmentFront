@@ -3,6 +3,5 @@ export enum Role {
   Admin = "ADMIN",
   SuperAdmin = "SUPERADMIN",
   Employee = "EMPLOYEE",
-  Client = "Client",
 }
 

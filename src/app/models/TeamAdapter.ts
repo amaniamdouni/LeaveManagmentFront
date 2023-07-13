@@ -11,7 +11,6 @@ export class Team {
     public archive?: boolean,
     public createdOn?: Date,
     public user?:User,
-    public userList?:User[]
   ) {}
 
 }
@@ -28,7 +27,6 @@ export class TeamAdapter implements Adapter<Team> {
       item.archive,
       item.createdOn ? new Date(item.createdOn) : undefined,
       item.user ? item.user : new User(item.user),
-      item.userList ? item.userList : [],
     );
     return adapted;
   }

@@ -56,8 +56,11 @@ export class TeamDialogComponent {
       ],
       user: [this.team?.user?.matricule,
         [Validators.required],
-      ]
+      ],
+      createdOn: [{ value: new Date(), disabled: true }] // Set the createdOn field to disabled
+
     });
+    
     this.pollingInterval = setInterval(() => {
       this.refreshUser();
     }, 1000);
@@ -65,6 +68,7 @@ export class TeamDialogComponent {
   refreshUser() {
     this.userservice.getUsers().subscribe((res: User[]) => {
       this.listUser = res;
+      console.log(res);
     });
   }
   delay(ms: number): Promise<void> {
@@ -75,10 +79,9 @@ export class TeamDialogComponent {
     if (!this.teamForm.valid) {
       return;
     }
-    console.log(this.teamForm.value.createdOn);
     var user = this.listUser.find(u => u.matricule === this.teamForm.value.user);
     this.teamForm.value.user = user;
-    this.teamForm.value.createdOn = "2023-06-16";
+    this.teamForm.value.createdOn = new Date();
     this.teamForm.value.archive = false;
     this.teamForm.value.userList = [];
     if (this.team) {

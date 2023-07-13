@@ -1,6 +1,7 @@
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { Component, Inject } from '@angular/core';
+import { Component, Inject, ViewChild } from '@angular/core';
 import { UserService } from 'app/services/user.service';
+import { EmployeesComponent } from '../../all-employees.component';
 
 export interface DialogData {
   matricule: string;
@@ -18,8 +19,9 @@ export class DeleteDialogComponent {
   constructor(
     public dialogRef: MatDialogRef<DeleteDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: DialogData,
-    public userService: UserService
-  ) {}
+    public userService: UserService,
+  ) {
+  }
   onNoClick(): void {
     this.dialogRef.close();
   }
