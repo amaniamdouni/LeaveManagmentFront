@@ -19,11 +19,11 @@ import { MatIconModule } from "@angular/material/icon";
 import { MatSelectModule } from "@angular/material/select";
 import { MatSnackBarModule } from "@angular/material/snack-bar";
 
-import { TeamDialogComponent } from "./team-dialog.component";
+import { UserDialogComponent } from "./user-dialog.component";
 
-describe("TeamDialogComponent", () => {
-  let component: TeamDialogComponent;
-  let fixture: ComponentFixture<TeamDialogComponent>;
+describe("UserDialogComponent", () => {
+  let component: UserDialogComponent;
+  let fixture: ComponentFixture<UserDialogComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
@@ -42,7 +42,7 @@ describe("TeamDialogComponent", () => {
         MatSelectModule,
         MatSnackBarModule,
       ],
-      declarations: [TeamDialogComponent],
+      declarations: [UserDialogComponent],
       providers: [
         {
           provide: MatDialogRef,
@@ -58,7 +58,7 @@ describe("TeamDialogComponent", () => {
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(TeamDialogComponent);
+    fixture = TestBed.createComponent(UserDialogComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
@@ -91,7 +91,7 @@ describe("TeamDialogComponent", () => {
     expect(component.save).not.toHaveBeenCalled();
   });
 
-  it("should add new project when name is filled", () => {
+  it("should add new user when name is filled", () => {
     // given
     spyOn(component, "save");
     const button: DebugElement = fixture.debugElement.query(

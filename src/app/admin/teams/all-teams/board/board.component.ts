@@ -10,6 +10,7 @@ import { Team } from 'app/models/TeamAdapter';
 import { EmployeesComponent } from 'app/admin/employees/all-employees/all-employees.component';
 import { User } from 'app/models/user';
 import { UserService } from 'app/services/user.service';
+import { UserDialogComponent } from '../user-dialog/user-dialog.component';
 @Component({
   selector: 'app-board',
   templateUrl: './board.component.html',
@@ -107,12 +108,13 @@ export class BoardComponent implements OnInit {
     } else {
       tempDirection = 'ltr';
     }
-    // open angular material dialog
-    this.dialog.open(EmployeesComponent, {
-      height: '80%',
-      width: '55%',
+    const titre = 'Affecter User to team';
+  // open angular material dialog
+    this.dialog.open(UserDialogComponent, {
+      height: '40%',
+      width: '40%',
       autoFocus: true,
-      data: { team },
+      data: {titre,team},
       direction: tempDirection,
     });
   }
