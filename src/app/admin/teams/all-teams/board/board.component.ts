@@ -29,7 +29,7 @@ export class BoardComponent implements OnInit {
     this.lists = {};
     this.listsTeam = {};
     this.listUser=[];
-    this.refreshUsers();
+
   }
 
   async ngOnInit() {
@@ -37,7 +37,11 @@ export class BoardComponent implements OnInit {
       // split project to status categories
       this.lists = {teams};
     });
+    
       this.refreshTeams();
+      await this.delay(2000);
+      await this.refreshUsers();
+      console.log(this.listUser);
 
     // this.pollingInterval = setInterval(() => {
     //   this.refreshTeams();

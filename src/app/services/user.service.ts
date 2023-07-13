@@ -53,7 +53,8 @@ export class UserService extends UnsubscribeOnDestroyAdapter {
     }
     /** CRUD METHODS */
     getAllusers(): Observable<User[]> {
-      return this.httpClient.get<User[]>(this.API_URL).pipe(
+      let requestOptions = { headers: this.headers };
+      return this.httpClient.get<User[]>(this.API_URL,requestOptions).pipe(
         tap((data: User[]) => {
           this.isTblLoading = false;
           this.dataChange.next(data);
