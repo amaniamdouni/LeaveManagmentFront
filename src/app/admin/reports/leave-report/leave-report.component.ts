@@ -8,8 +8,8 @@ import { BehaviorSubject, fromEvent, merge, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { UnsubscribeOnDestroyAdapter } from '@shared';
 import { AllClaims } from './leave-report.model';
-import { DialogformComponent } from 'app/ui/modal/dialogform/dialogform.component';
 import { MatDialog } from '@angular/material/dialog';
+import { DialogformComponent } from 'app/ui/modal/dialogform/dialogform.component';
 
 @Component({
   selector: 'app-leave-report',

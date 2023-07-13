@@ -39,9 +39,8 @@ export class MyTasksService extends UnsubscribeOnDestroyAdapter {
     this.dialogData = claim;
     return  this.httpClient.post<Claim>(this.API_URL+"/addClaim",claim);
   }
-  updateMyTasks(claim: Claim): Observable<Claim> {
-    this.dialogData = claim;
-    return  this.httpClient.put<Claim>(this.API_URL+"/updateClaim/",claim);
+  updateClaim(id: number, claim: Claim): Observable<Claim> {
+    return this.httpClient.put<Claim>(`${this.API_URL}/updateClaim/${id}`, claim);
   }
   deleteMyTasks(id: number) {
     return this.httpClient.delete<Claim>(this.API_URL + "/deleteClaim/"+ id);

@@ -81,32 +81,14 @@
                         <mat-cell *matCellDef="let row"> <span class="truncate-text"><span
                               class="mobile-label">Description :</span>{{row.description}}</span>
                         </mat-cell>
-                     
-                          
-                      </ng-container>
-                      <div class="row">
-                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                          <div class="card">
-                            <div class="header">
-                              <h2>Dialog With Form</h2>
-                            </div>
-                            <div class="body">
-                              <div>
-                                <h6>Dialog with Form Example</h6>
-                                <br>
-                                <button mat-raised-button color="primary" (click)="openDialog()">Click Here</button>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                   <!--   </ng-container>
+                        <!--Actions-->
+                    </ng-container>
                       <ng-container matColumnDef="actions">
                         <mat-header-cell class="pr-0" *matHeaderCellDef>Actions</mat-header-cell>
                         <mat-cell *matCellDef="let row; let i=index;" class="pr-0">
-                          <button mat-chip-option name="LU" (click)="$event.stopPropagation()"
+                          <button mat-chip-option  (click)="$event.stopPropagation()"
                           (click)="openDialog()"
-                            class="tbl-action-btn" matTooltip="Edit">
+                            class="tbl-action-btn" matTooltip="Checked">
                             <app-feather-icons [icon]="'folder_open'" [class]="'tbl-fav-edit'">
                             </app-feather-icons>
                           </button>
@@ -116,8 +98,8 @@
                         </mat-header-cell>
                         <mat-cell *matCellDef="let row"> <span class="mobile-label" >Total Claims:</span>{{row.total}}
                         </mat-cell>
-                      </ng-container> -->
-
+                      </ng-container> 
+                      </ng-container>
                       <mat-header-row *matHeaderRowDef="displayedColumns">
                       </mat-header-row>
                       <mat-row *matRowDef="let row; columns: displayedColumns;" [style.cursor]="'pointer'" matRipple>
