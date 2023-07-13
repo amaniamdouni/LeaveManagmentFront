@@ -16,8 +16,9 @@ import { map } from 'rxjs/operators';
 import { SelectionModel } from '@angular/cdk/collections';
 import { UnsubscribeOnDestroyAdapter } from '@shared';
 import { Direction } from '@angular/cdk/bidi';
-import { User } from 'app/models/user';
 import { UserService } from 'app/services/user.service';
+import { User } from 'app/models/user';
+import { AuthService } from 'app/services/auth.service';
 
 @Component({
   selector: 'app-employees',
@@ -47,7 +48,6 @@ export class EmployeesComponent
   matricule?: string;
   user?: User;
   searchTerm: string;
-
   private pollingInterval: any;
 
   constructor(
@@ -55,28 +55,22 @@ export class EmployeesComponent
     public dialog: MatDialog,
     private snackBar: MatSnackBar,
     private userservice:UserService,
-
+    private authservice : AuthService
   ) {
     super();
     this.listUser=[];
     this.searchTerm = "";
 
-    this.pollingInterval = setInterval(() => {
-      if (!this.searchTerm) {
-      this.refreshTeams();
-      }else{
-        this.filterData();
-      }
-    }, 5000);
+    this.refreshUsers();
     }
   @ViewChild(MatPaginator, { static: true }) paginator!: MatPaginator;
   @ViewChild(MatSort, { static: true }) sort!: MatSort;
   @ViewChild('filter', { static: true }) filter!: ElementRef;
   ngOnInit() {
     this.loadData();
-    console.log(this.selection);
   }
-  refreshTeams() {
+  async refreshUsers() {
+    this.delay(2000);
     this.userservice.getAllUsers().subscribe({
       next: (users: User[]) => {
         this.listUser = users;
@@ -86,6 +80,9 @@ export class EmployeesComponent
         console.error('Error occurred while fetching users:', error);
       }
     });
+  }
+  async delay(ms: number): Promise<void> {
+    return new Promise(resolve => setTimeout(resolve, ms));
   }
   test(user : User){
     console.log(user.matricule);
@@ -111,9 +108,6 @@ export class EmployeesComponent
   
     // Mettez à jour la source de données avec les éléments filtrés
     this.listUser= filteredData;
-  }
-  refresh() {
-    this.loadData();
   }
   addNew() {
     let tempDirection: Direction;
@@ -146,8 +140,9 @@ export class EmployeesComponent
       }
     });
   }
-  editCall(row: User) {
+  async editCall(row: User) {
     this.matricule = row.matricule;
+    console.log(row);
     let tempDirection: Direction;
     if (localStorage.getItem('isRtl') === 'true') {
       tempDirection = 'rtl';
@@ -156,8 +151,9 @@ export class EmployeesComponent
     }
     const dialogRef = this.dialog.open(FormDialogComponent, {
       data: {
-        estimates: row,
+        matricule:row.matricule,
         action: 'edit',
+        user: row,
       },
       direction: tempDirection,
     });
@@ -174,6 +170,7 @@ export class EmployeesComponent
               this.userservice.getDialogData();
           }
           // And lastly refresh table
+          this.delay(2000);
           this.refreshTable();
           this.showNotification(
             'black',
@@ -184,8 +181,10 @@ export class EmployeesComponent
         }
       }
     });
+    await this.delay(2000);
+    await this.refreshUsers();
   }
-  deleteItem(i: number, row: User) {
+  async deleteItem(i: number, row: User) {
     this.index = i;
     this.matricule = row.matricule;
     let tempDirection: Direction;
@@ -210,6 +209,7 @@ export class EmployeesComponent
           if (this.exampleDatabase) {
             this.exampleDatabase.dataChange.value.splice(foundIndex, 1);
           }
+          this.delay(2000);
           this.refreshTable();
           this.showNotification(
             'snackbar-danger',
@@ -220,6 +220,8 @@ export class EmployeesComponent
         }
       }
     });
+    await this.delay(2000);
+    await this.refreshUsers();
   }
   private refreshTable() {
     this.paginator._changePageSize(this.paginator.pageSize);
@@ -258,7 +260,7 @@ export class EmployeesComponent
     );
   }
   public loadData() {
-    this.exampleDatabase = new UserService(this.httpClient);
+    this.exampleDatabase = new UserService(this.httpClient,this.authservice);
     this.dataSource = new ExampleDataSource(
       this.exampleDatabase,
       this.paginator,
@@ -306,7 +308,7 @@ export class ExampleDataSource extends DataSource<User> {
   ) {
     super();
     // Reset to the first page when the user changes the filter.
-    //this.filterChange.subscribe(() => (this.paginator.pageIndex = 0));
+    this.filterChange.subscribe(() => (this.paginator.pageIndex = 0));
   }
   /** Connect function called by the table to retrieve one stream containing the data to render. */
   connect(): Observable<User[]> {
@@ -339,6 +341,7 @@ export class ExampleDataSource extends DataSource<User> {
           startIndex,
           this.paginator.pageSize
         );
+        console.log(this.renderedData)
         return this.renderedData;
       })
     );
@@ -357,7 +360,7 @@ export class ExampleDataSource extends DataSource<User> {
       let propertyA: number | string = '';
       let propertyB: number | string = '';
       switch (this._sort.active) {
-        case 'matricule':
+        case 'id':
           [propertyA, propertyB] = [a.matricule, b.matricule];
           break;
         case 'firstName':

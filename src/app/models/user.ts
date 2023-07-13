@@ -1,3 +1,5 @@
+import { Team } from "./TeamAdapter";
+
 export class User {
     matricule: string;
     firstName: string;
@@ -14,6 +16,7 @@ export class User {
     password: string;
     token: string;
     img: string;
+    teamUser : Team;
     constructor(user: User) {
       {
         this.matricule = user.matricule || '';
@@ -31,6 +34,7 @@ export class User {
         this.password = user.password || '';
         this.token = user.token || '';
         this.img = '';
+        this.teamUser = user.teamUser || null;
       }
     }
   }

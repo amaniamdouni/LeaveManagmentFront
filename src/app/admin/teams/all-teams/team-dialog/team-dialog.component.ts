@@ -9,9 +9,9 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Team } from 'app/models/TeamAdapter';
 import { TeamService } from 'app/services/team.service';
-import { User } from 'app/models/user';
 import { UserService } from 'app/services/user.service';
 import { BoardComponent } from '../board/board.component';
+import { User } from 'app/models/user';
 
 export interface DialogData {
   id: number;
@@ -56,8 +56,11 @@ export class TeamDialogComponent {
       ],
       user: [this.team?.user?.matricule,
         [Validators.required],
-      ]
+      ],
+      createdOn: [{ value: new Date(), disabled: true }] // Set the createdOn field to disabled
+
     });
+    
     this.pollingInterval = setInterval(() => {
       this.refreshUser();
     }, 1000);
@@ -65,20 +68,19 @@ export class TeamDialogComponent {
   refreshUser() {
     this.userservice.getUsers().subscribe((res: User[]) => {
       this.listUser = res;
+      console.log(res);
     });
   }
   delay(ms: number): Promise<void> {
     return new Promise(resolve => setTimeout(resolve, ms));
   }
   async save() {
-    console.log('save');
     if (!this.teamForm.valid) {
       return;
     }
-    console.log(this.teamForm.value.createdOn);
     const user = this.listUser.find(u => u.matricule === this.teamForm.value.user);
     this.teamForm.value.user = user;
-    this.teamForm.value.createdOn = "2023-06-16";
+    this.teamForm.value.createdOn = new Date();
     this.teamForm.value.archive = false;
     this.teamForm.value.userList = [];
     if (this.team) {
@@ -86,7 +88,7 @@ export class TeamDialogComponent {
       Object.assign(this.team, this.teamForm.value);
       console.log(this.team);
       this.teamservice.updateObject(this.team);
-      this.snackBar.open('Project updated Successfully...!!!', '', {
+      this.snackBar.open('Team updated Successfully...!!!', '', {
         duration: 2000,
         verticalPosition: 'bottom',
         horizontalPosition: 'center',
@@ -96,7 +98,7 @@ export class TeamDialogComponent {
       this.dialogRef.close();
     } else {
       this.teamservice.createOject(this.teamForm.value);
-      this.snackBar.open('Project created Successfully...!!!', '', {
+      this.snackBar.open('Team created Successfully...!!!', '', {
         duration: 2000,
         verticalPosition: 'bottom',
         horizontalPosition: 'center',

@@ -8,6 +8,8 @@ import { Direction } from '@angular/cdk/bidi';
 import { TeamService } from 'app/services/team.service';
 import { Team } from 'app/models/TeamAdapter';
 import { EmployeesComponent } from 'app/admin/employees/all-employees/all-employees.component';
+import { User } from 'app/models/user';
+import { UserService } from 'app/services/user.service';
 @Component({
   selector: 'app-board',
   templateUrl: './board.component.html',
@@ -15,16 +17,19 @@ import { EmployeesComponent } from 'app/admin/employees/all-employees/all-employ
 })
 export class BoardComponent implements OnInit {
   public lists: object;
-  public listsTeam: object;
-  private pollingInterval: any;
+  listUser : User[];
 
+  public listsTeam: object;
   constructor(
     private teamservice: TeamService,
     private dialog: MatDialog,
     private snackBar: MatSnackBar,
+    private userservice : UserService
   ) {
     this.lists = {};
     this.listsTeam = {};
+    this.listUser=[];
+    this.refreshUsers();
   }
 
   async ngOnInit() {
@@ -38,34 +43,35 @@ export class BoardComponent implements OnInit {
     //   this.refreshTeams();
     // }, 5000);
   }
-  getUsersLength(team: Team): number {
-    return team.userList?.length??0;
+
+  // getUsersLength(team: Team): number {
+  //   return team.userList?.length??0;
+  // }
+  async refreshUsers() {
+    this.delay(2000);
+    this.userservice.getAllUsers().subscribe({
+      next: (users: User[]) => {
+        this.listUser = users;
+      },
+      error: (error: any) => {
+        // Handle the error here
+        console.error('Error occurred while fetching users:', error);
+      }
+    });
   }
   async refreshTeams() {
     this.teamservice.getObjects().subscribe((teams: Team[]) => {
       // split project to status categories
       this.listsTeam = {teams};
     });
-    console.log(this.listsTeam)
-    console.log("teset");
-    console.log(this.listsTeam)
   }
-  // async refreshTeams() {
-  //   try {
-  //     const teams: Team[] = await this.teamservice.getObjects().toPromise();
-  //     // split project to status categories
-  //     this.listsTeam = { teams };
-  //   } catch (error) {
-  //     // Handle error
-  //   }
-  // }
   unsorted = (): number => {
     return 0;
   };
   public drop(event: CdkDragDrop<any>): void {
     if (event.previousContainer !== event.container) {
-      const project = event.item.data;
-      this.teamservice.updateObject(project);
+      const team = event.item.data;
+      this.teamservice.updateObject(team);
     }
   }
 
@@ -77,11 +83,11 @@ export class BoardComponent implements OnInit {
   delay(ms: number): Promise<void> {
     return new Promise(resolve => setTimeout(resolve, ms));
   }
-  async removeTeam(project: Team) {
+  async removeTeam(team: Team) {
     // show "deleted" info
     // const snack = this.snackBar.open("The Project has been deleted", "Undo");
     const snack = this.snackBar.open(
-      'Project deleted Successfully...!!!',
+      'Team deleted Successfully...!!!',
       'Undo',
       {
         duration: 4000,
@@ -90,7 +96,7 @@ export class BoardComponent implements OnInit {
         panelClass: 'snackbar-danger',
       }
     );
-    await this.teamservice.deleteObject(project);
+    await this.teamservice.deleteObject(team);
     await this.delay(2000); // Wait for 2 seconds
     this.refreshTeams();
   }
@@ -128,8 +134,8 @@ export class BoardComponent implements OnInit {
     }
     // open angular material dialog
     this.dialog.open(TeamDialogComponent, {
-      height: '40%',
-      width: '55%',
+      height: '70%',
+      width: '50%',
       autoFocus: true,
       data: {title,team,},
       direction: tempDirection,

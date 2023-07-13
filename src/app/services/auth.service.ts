@@ -29,16 +29,15 @@ export class AuthService {
   }
 
   login(matricule: string, password: string) {
-    return this.http
-    //.post<User>(`${environment.apiUrl}/authenticate`, {
-      .post<any>('http://localhost:9091/api/auth/login', {
+    return this.http.post<any>('http://localhost:9090/api/auth/login', {
         matricule,
         password,
       },this.httpOptions)
       .pipe(
         map((data) => {
+          console.log(data.user)
           // store user details and jwt token in local storage to keep user logged in between page refreshes
-          localStorage.setItem('currentUser', JSON.stringify(data.user));
+          localStorage.setItem('currentUser', JSON.stringify(data));
           this.currentUserSubject.next(data.user);
           this.currentUserSubject.value.token = data.accessToken;
           return data;
@@ -47,7 +46,6 @@ export class AuthService {
   }
 
   logout() {
-    // remove user from local storage to log user out
     localStorage.removeItem('currentUser');
     this.currentUserSubject.next(this.currentUserValue);
     return of({ success: false });

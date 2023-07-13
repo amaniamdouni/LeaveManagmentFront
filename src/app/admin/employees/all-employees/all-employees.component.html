@@ -31,7 +31,7 @@
                                 </li>
                                 <li class="tbl-header-btn">
                                     <div class="m-l-10" matTooltip="REFRESH">
-                                        <button mat-mini-fab color="primary" (click)="refresh()">
+                                        <button mat-mini-fab color="primary" (click)="refreshUsers()">
                       <mat-icon class="col-white">refresh</mat-icon>
                     </button>
                                     </div>
@@ -141,12 +141,11 @@
                                 <mat-row *matRowDef="let row; columns: displayedColumns;" (click)="editCall(row)" [style.cursor]="'pointer'" matRipple>
                                 </mat-row>
                             </table>
-                            <!-- Loading spinner -->
-                            <div *ngIf="exampleDatabase?.isTblLoading" class="tbl-spinner">
+                            <div *ngIf="listUser.length === 0" class="tbl-spinner">
                                 <mat-progress-spinner color="primary" [diameter]="40" mode="indeterminate">
                                 </mat-progress-spinner>
                             </div>
-                            <div *ngIf="!exampleDatabase?.isTblLoading" class="no-results" [style.display]="dataSource.renderedData.length === 0 ? '' : 'none'">
+                            <div *ngIf="listUser.length === 0" class="no-results" [style.display]="dataSource.renderedData.length === 0 ? '' : 'none'">
                                 No results
                             </div>
                             <mat-paginator #paginator [length]="dataSource.filteredData.length" [pageIndex]="0" [pageSize]="10" [pageSizeOptions]="[5, 10, 25, 100]">
