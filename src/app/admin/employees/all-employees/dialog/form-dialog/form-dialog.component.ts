@@ -66,7 +66,16 @@ export class FormDialogComponent {
       leaveBalance: [this.user.leaveBalance],
       phoneNumber: [this.user.phoneNumber],
       phoneSecondary: [this.user.phoneSecondary],
-      password: [this.user.password],
+      password: [
+        this.user.password,
+        [
+          Validators.minLength(12),
+          Validators.pattern(".*[A-Z].*"),
+          Validators.pattern(".*[a-z].*"),
+          Validators.pattern(".*\\d.*"),
+          Validators.pattern(".*[\\W_].*")
+        ]
+      ],
       confirmPassword: [''],
       role: [this.user.role] // Add role field to form group
     }, { validator: this.passwordMatchValidator });
@@ -74,9 +83,17 @@ export class FormDialogComponent {
   passwordMatchValidator(formGroup: FormGroup) {
       if (formGroup.controls['matricule'].value !== '') {
       return null;
-      }
+    }
     const password = formGroup.controls['password'].value;
-    const confirmPassword = formGroup.controls['confirmPassword'].value;
+    const confirmPassword = formGroup.controls[ 'confirmPassword' ].value;
+     if (password.length >= 12 &&
+      password.matches(".*[A-Z].*") &&
+      password.matches(".*[a-z].*") &&
+      password.matches(".*\\d.*") &&
+      password.matches(".*[\\W_].*")) {
+    return password === confirmPassword ? null : { passwordsNotMatch: true };
+  }
+    
     return password === confirmPassword ? null : { passwordsNotMatch: true };
   }
   submit() {
