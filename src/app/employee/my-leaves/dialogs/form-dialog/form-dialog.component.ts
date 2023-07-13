@@ -6,13 +6,15 @@ import {
   UntypedFormGroup,
   UntypedFormBuilder,
 } from '@angular/forms';
-import { MyLeaves } from '../../my-leaves.model';
+import { Leaves } from '../../models/leaves.model';
 import { MyLeavesService } from '../../my-leaves.service';
+import { LeaveStatus } from '../../models/leaveStatus';
+import { LeaveType } from '../../models/leaveType';
 
 export interface DialogData {
   id: number;
   action: string;
-  myLeaves: MyLeaves;
+  Leaves: Leaves;
 }
 
 @Component({
@@ -24,7 +26,9 @@ export class FormDialogComponent {
   action: string;
   dialogTitle: string;
   myLeavesForm: UntypedFormGroup;
-  myLeaves: MyLeaves;
+  myLeaves: Leaves;
+  leaveStatutList = LeaveStatus;
+  leaveTypeList = LeaveType;
   constructor(
     public dialogRef: MatDialogRef<FormDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: DialogData,
@@ -35,11 +39,13 @@ export class FormDialogComponent {
     this.action = data.action;
     if (this.action === 'edit') {
       this.dialogTitle = 'Edit Leave Request';
-      this.myLeaves = data.myLeaves;
+      this.myLeaves = data.Leaves;
+      console.log(data);
+
     } else {
       this.dialogTitle = 'New Leave Request';
-      const blankObject = {} as MyLeaves;
-      this.myLeaves = new MyLeaves(blankObject);
+      const blankObject = {} as Leaves;
+      this.myLeaves = new Leaves(blankObject);
     }
     this.myLeavesForm = this.createContactForm();
   }
@@ -57,13 +63,13 @@ export class FormDialogComponent {
   createContactForm(): UntypedFormGroup {
     return this.fb.group({
       id: [this.myLeaves.id],
-      halfDay: [this.myLeaves.halfDay, [Validators.required]],
-      applyDate: [this.myLeaves.applyDate, [Validators.required]],
-      fromDate: [this.myLeaves.fromDate, [Validators.required]],
-      toDate: [this.myLeaves.toDate, [Validators.required]],
-      type: [this.myLeaves.type, [Validators.required]],
-      status: [this.myLeaves.status, [Validators.required]],
-      reason: [this.myLeaves.reason, [Validators.required]],
+      nbr_days: [this.myLeaves.nbr_days, [Validators.required]],
+      createdAt: [this.myLeaves.createdAt, [Validators.required]],
+      startDate: [this.myLeaves.startDate, [Validators.required]],
+      endDate: [this.myLeaves.endDate, [Validators.required]],
+      leaveType: [this.myLeaves.leaveType, [Validators.required]],
+      leaveStatus: [this.myLeaves.leaveStatus],
+      comment: [this.myLeaves.comment, [Validators.required]],
     });
   }
   submit() {
@@ -73,6 +79,21 @@ export class FormDialogComponent {
     this.dialogRef.close();
   }
   public confirmAdd(): void {
-    this.myLeavesService.addMyLeaves(this.myLeavesForm.getRawValue());
+    if (this.action === 'edit') {
+      console.log(this.myLeavesForm.value);
+      this.myLeavesService.updateLeave(this.myLeavesForm.value).subscribe((result) => {
+        console.log(result);
+      },
+      (err) => {
+        console.log(err);
+      });
+    } else {
+      this.myLeavesService.addLeave(this.myLeavesForm.value).subscribe((result) => {
+        console.log(result);
+      },
+      (err) => {
+        console.log(err);
+      });
+    }
   }
 }

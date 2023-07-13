@@ -24,6 +24,11 @@ export class DeleteComponent {
     this.dialogRef.close();
   }
   confirmDelete(): void {
-    this.leavesService.deleteLeaves(this.data.id);
+    this.leavesService.deleteLeave(this.data.id).subscribe((res) => {
+      console.log(res);
+    },
+     (err) => {
+      console.log(err);
+    });
   }
 }

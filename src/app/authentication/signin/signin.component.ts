@@ -1,12 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
-import {
-  UntypedFormBuilder,
-  UntypedFormGroup,
-  Validators,
-} from '@angular/forms';
-import { Role, AuthService } from '@core';
+import { Router } from '@angular/router';
+import {UntypedFormBuilder,UntypedFormGroup,Validators,} from '@angular/forms';
+import { Role } from 'app/models/role';
+import { AuthService } from 'app/services/auth.service';
 import { UnsubscribeOnDestroyAdapter } from '@shared';
+
 @Component({
   selector: 'app-signin',
   templateUrl: './signin.component.html',
@@ -23,7 +21,6 @@ export class SigninComponent
   hide = true;
   constructor(
     private formBuilder: UntypedFormBuilder,
-    private route: ActivatedRoute,
     private router: Router,
     private authService: AuthService
   ) {
@@ -32,20 +29,12 @@ export class SigninComponent
 
   ngOnInit() {
     this.authForm = this.formBuilder.group({
-      username: ['admin@software.com', Validators.required],
-      password: ['admin@123', Validators.required],
+      username: [null,Validators.required],
+      password: [null,Validators.required],
     });
   }
   get f() {
     return this.authForm.controls;
-  }
-  adminSet() {
-    this.authForm.get('username')?.setValue('admin@software.com');
-    this.authForm.get('password')?.setValue('admin@123');
-  }
-  employeeSet() {
-    this.authForm.get('username')?.setValue('employee@software.com');
-    this.authForm.get('password')?.setValue('employee@123');
   }
   onSubmit() {
     this.submitted = true;
@@ -62,10 +51,12 @@ export class SigninComponent
             if (res) {
               setTimeout(() => {
                 const role = this.authService.currentUserValue.role;
-                if (role === Role.All || role === Role.Admin) {
-                  this.router.navigate(['/admin/dashboard/main']);
-                } else if (role === Role.Employee) {
-                  this.router.navigate(['/employee/dashboard']);
+                console.log(this.authService.currentUserValue.role)
+                console.log(role === Role.Admin)
+                if ( role === Role.Admin  || role === Role.SuperAdmin) {
+                  this.router.navigate(['/admin/dashboard/main' ]);
+                } else if ( role === Role.Employee ) {
+                  this.router.navigate( [ '/employee/dashboard' ] );
                 } else {
                   this.router.navigate(['/authentication/signin']);
                 }

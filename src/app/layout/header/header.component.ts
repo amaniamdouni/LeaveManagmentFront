@@ -9,15 +9,10 @@ import {
 import { Router } from '@angular/router';
 import { ConfigService } from '@config';
 import { UnsubscribeOnDestroyAdapter } from '@shared';
-import { LanguageService, InConfiguration, AuthService } from '@core';
+import { InConfiguration} from '@core';
+import { LanguageService} from 'app/services/language.service';
+import { AuthService } from 'app/services/auth.service';
 
-interface Notifications {
-  message: string;
-  time: string;
-  icon: string;
-  color: string;
-  status: string;
-}
 
 @Component({
   selector: 'app-header',
@@ -39,6 +34,7 @@ export class HeaderComponent
   isOpenSidebar?: boolean;
   docElement: HTMLElement | undefined;
   isFullScreen = false;
+  fullname? : string;
 
   constructor(
     @Inject(DOCUMENT) private document: Document,
@@ -51,86 +47,23 @@ export class HeaderComponent
   ) {
     super();
   }
-  listLang = [
-    { text: 'English', flag: 'assets/images/flags/us.jpg', lang: 'en' },
-    { text: 'Spanish', flag: 'assets/images/flags/spain.jpg', lang: 'es' },
-    { text: 'German', flag: 'assets/images/flags/germany.jpg', lang: 'de' },
-  ];
-  notifications: Notifications[] = [
-    {
-      message: 'Please check your mail',
-      time: '14 mins ago',
-      icon: 'mail',
-      color: 'nfc-green',
-      status: 'msg-unread',
-    },
-    {
-      message: 'New Employee Added..',
-      time: '22 mins ago',
-      icon: 'person_add',
-      color: 'nfc-blue',
-      status: 'msg-read',
-    },
-    {
-      message: 'Your leave is approved!! ',
-      time: '3 hours ago',
-      icon: 'event_available',
-      color: 'nfc-orange',
-      status: 'msg-read',
-    },
-    {
-      message: 'Lets break for lunch...',
-      time: '5 hours ago',
-      icon: 'lunch_dining',
-      color: 'nfc-blue',
-      status: 'msg-read',
-    },
-    {
-      message: 'Employee report generated',
-      time: '14 mins ago',
-      icon: 'description',
-      color: 'nfc-green',
-      status: 'msg-read',
-    },
-    {
-      message: 'Please check your mail',
-      time: '22 mins ago',
-      icon: 'mail',
-      color: 'nfc-red',
-      status: 'msg-read',
-    },
-    {
-      message: 'Salary credited...',
-      time: '3 hours ago',
-      icon: 'paid',
-      color: 'nfc-purple',
-      status: 'msg-read',
-    },
-  ];
+ 
   ngOnInit() {
     this.config = this.configService.configData;
     const userRole = this.authService.currentUserValue.role;
+    const fullname = this.authService.currentUserValue.firstName + ' ' + this.authService.currentUserValue.lastName;
+    this.authService.currentUserValue.img ='assets/images/pages/1048219.png';
     this.userImg = this.authService.currentUserValue.img;
 
-    if (userRole === 'Admin') {
+
+    if (userRole === 'ADMIN') {
       this.homePage = 'admin/dashboard/main';
     } else if (userRole === 'Client') {
       this.homePage = 'client/dashboard';
-    } else if (userRole === 'Employee') {
+    } else if (userRole === 'EMPLOYEE') {
       this.homePage = 'employee/dashboard';
     } else {
       this.homePage = 'admin/dashboard/main';
-    }
-
-    this.langStoreValue = localStorage.getItem('lang') as string;
-    const val = this.listLang.filter((x) => x.lang === this.langStoreValue);
-    this.countryName = val.map((element) => element.text);
-    if (val.length === 0) {
-      if (this.flagvalue === undefined) {
-        this.defaultFlag = 'assets/images/flags/us.jpg';
-      }
-    } else {
-      this.flagvalue = val.map((element) => element.flag);
     }
   }
 
