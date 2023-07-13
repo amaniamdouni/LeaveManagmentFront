@@ -28,6 +28,7 @@ import { DeleteComponent as myTaskDeleteComponent } from './my-tasks/dialogs/del
 import { ComponentsModule } from '../shared/components/components.module';
 import { SharedModule } from '@shared';
 import { ChatComponent } from './chat/chat.component';
+import { EmployeesModule } from 'app/admin/employees/employees.module';
 
 @NgModule({
   declarations: [
@@ -46,6 +47,7 @@ import { ChatComponent } from './chat/chat.component';
     myTaskDeleteComponent,
     ChatComponent,
   ],
+  exports: [MyTasksComponent],
   imports: [
     CommonModule,
     EmployeeRoutingModule,

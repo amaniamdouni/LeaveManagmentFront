@@ -11,7 +11,6 @@ import { EmployeeProfileComponent } from './employee-profile/employee-profile.co
 import { EmployeesService } from './allEmployees/employees.service';
 import { ComponentsModule } from '@shared/components/components.module';
 import { SharedModule } from '@shared';
-
 @NgModule({
   declarations: [
     AllemployeesComponent,

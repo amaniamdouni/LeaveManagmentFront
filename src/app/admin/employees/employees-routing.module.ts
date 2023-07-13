@@ -5,6 +5,7 @@ import { Page404Component } from "../../authentication/page404/page404.component
 import { AllemployeesComponent } from "./allEmployees/allemployees.component";
 import { EditEmployeeComponent } from "./edit-employee/edit-employee.component";
 import { EmployeeProfileComponent } from "./employee-profile/employee-profile.component";
+import { LeaveRequestsComponent } from "../leaves/leave-requests/leave-requests.component";
 const routes: Routes = [
   {
     path: "allEmployees",
