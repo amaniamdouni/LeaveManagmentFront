@@ -7,7 +7,9 @@ import { DataSource } from '@angular/cdk/collections';
 import { BehaviorSubject, fromEvent, merge, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { UnsubscribeOnDestroyAdapter } from '@shared';
-import { LeaveReport } from './leave-report.model';
+import { AllClaims } from './leave-report.model';
+import { MatDialog } from '@angular/material/dialog';
+import { DialogformComponent } from 'app/ui/modal/dialogform/dialogform.component';
 
 @Component({
   selector: 'app-leave-report',
@@ -20,22 +22,19 @@ export class LeaveReportComponent
 {
   filterToggle = false;
   displayedColumns = [
-    'img',
-    'name',
+    'claimStatus',
+    'claimPriority',
     'date',
-    'department',
-    'type',
-    'noOfDays',
-    'remaining',
-    'total',
-    'totalTaken',
-    'carryOver',
+    'details',
+    'actions',
   ];
 
   exampleDatabase?: LeaveReportService;
   dataSource!: ExampleDataSource;
+  dataSourceClaim: any;
   id?: number;
-  leaves?: LeaveReport;
+  leaves?: AllClaims;
+  private dialogModel: MatDialog;
   constructor(
     public httpClient: HttpClient,
     public leavesService: LeaveReportService
@@ -48,28 +47,23 @@ export class LeaveReportComponent
   ngOnInit() {
     this.loadData();
   }
-  toggleStar(row: LeaveReport) {
+  public loadData() {
+    this.leavesService.getAllLeavess().subscribe(x => {
+      this.dataSourceClaim = x ;
+      console.log(this.dataSourceClaim);
+    });
+  }
+  toggleStar(row: AllClaims) {
     console.log(row);
   }
-
-  public loadData() {
-    this.exampleDatabase = new LeaveReportService(this.httpClient);
-    this.dataSource = new ExampleDataSource(
-      this.exampleDatabase,
-      this.paginator,
-      this.sort
-    );
-    this.subs.sink = fromEvent(this.filter.nativeElement, 'keyup').subscribe(
-      () => {
-        if (!this.dataSource) {
-          return;
-        }
-        this.dataSource.filter = this.filter.nativeElement.value;
-      }
-    );
+  openDialog(): void {
+    this.dialogModel.open(DialogformComponent, {
+      width: '640px',
+      disableClose: true,
+    });
   }
-}
-export class ExampleDataSource extends DataSource<LeaveReport> {
+  }
+export class ExampleDataSource extends DataSource<AllClaims> {
   filterChange = new BehaviorSubject('');
   get filter(): string {
     return this.filterChange.value;
@@ -77,8 +71,8 @@ export class ExampleDataSource extends DataSource<LeaveReport> {
   set filter(filter: string) {
     this.filterChange.next(filter);
   }
-  filteredData: LeaveReport[] = [];
-  renderedData: LeaveReport[] = [];
+  filteredData: AllClaims[] = [];
+  renderedData: AllClaims[] = [];
   constructor(
     public exampleDatabase: LeaveReportService,
     public paginator: MatPaginator,
@@ -89,7 +83,7 @@ export class ExampleDataSource extends DataSource<LeaveReport> {
     this.filterChange.subscribe(() => (this.paginator.pageIndex = 0));
   }
   /** Connect function called by the table to retrieve one stream containing the data to render. */
-  connect(): Observable<LeaveReport[]> {
+  connect(): Observable<AllClaims[]> {
     // Listen for any changes in the base data, sorting, filtering, or pagination
     const displayDataChanges = [
       this.exampleDatabase.dataChange,
@@ -97,14 +91,19 @@ export class ExampleDataSource extends DataSource<LeaveReport> {
       this.filterChange,
       this.paginator.page,
     ];
-    this.exampleDatabase.getAllLeavess();
+    //this.exampleDatabase.getAllClaims();
     return merge(...displayDataChanges).pipe(
       map(() => {
         // Filter data
         this.filteredData = this.exampleDatabase.data
           .slice()
-          .filter((leaves: LeaveReport) => {
-            const searchStr = leaves.name.toLowerCase();
+          .filter((myTasks: AllClaims) => {
+            const searchStr = (
+              myTasks.claimStatus,
+              myTasks.claimPriority,
+              myTasks.dateClaim +
+              myTasks.description
+            ).toLowerCase();
             return searchStr.indexOf(this.filter.toLowerCase()) !== -1;
           });
         // Sort filtered data
@@ -123,7 +122,7 @@ export class ExampleDataSource extends DataSource<LeaveReport> {
     // disconnect
   }
   /** Returns a sorted copy of the database data. */
-  sortData(data: LeaveReport[]): LeaveReport[] {
+  sortData(data: AllClaims[]): AllClaims[] {
     if (!this._sort.active || this._sort.direction === '') {
       return data;
     }
@@ -134,17 +133,11 @@ export class ExampleDataSource extends DataSource<LeaveReport> {
         case 'id':
           [propertyA, propertyB] = [a.id, b.id];
           break;
-        case 'name':
-          [propertyA, propertyB] = [a.name, b.name];
+        case 'status':
+          [propertyA, propertyB] = [a.claimStatus, b.claimStatus];
           break;
-        case 'type':
-          [propertyA, propertyB] = [a.type, b.type];
-          break;
-        case 'noOfDays':
-          [propertyA, propertyB] = [a.noOfDays, b.noOfDays];
-          break;
-        case 'remaining':
-          [propertyA, propertyB] = [a.remaining, b.remaining];
+        case 'priority':
+          [propertyA, propertyB] = [a.claimPriority, b.claimPriority];
           break;
       }
       const valueA = isNaN(+propertyA) ? propertyA : +propertyA;

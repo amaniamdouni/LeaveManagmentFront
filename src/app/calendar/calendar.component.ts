@@ -10,7 +10,7 @@ import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import listPlugin from '@fullcalendar/list';
-
+import { Observable, BehaviorSubject } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
 import {
   UntypedFormBuilder,
@@ -29,6 +29,9 @@ import { INITIAL_EVENTS } from './events-util';
 import { MatCheckboxChange } from '@angular/material/checkbox';
 import { UnsubscribeOnDestroyAdapter } from '../shared/UnsubscribeOnDestroyAdapter';
 import { Direction } from '@angular/cdk/bidi';
+import { TeamService } from 'app/services/team.service';
+import { Team } from 'app/models/TeamAdapter';
+import { Leave } from 'app/models/Leave';
 
 @Component({
   selector: 'app-calendar',
@@ -45,6 +48,11 @@ export class CalendarComponent
   dialogTitle: string;
   filterOptions = 'All';
   calendarData!: Calendar;
+  private pollingInterval: any;
+  public d = new Date();
+  public day = this.d.getDate();
+  public month = this.d.getMonth();
+  public year = this.d.getFullYear();
   allCalendarData:any;
   filterItems: string[] = [
     'Team Building',
@@ -53,10 +61,10 @@ export class CalendarComponent
     'Employee Events',
     'Product Launches',
   ];
-
+  leaves : Observable<Leave[]>;
   calendarEvents?: EventInput[];
   tempEvents?: EventInput[];
-
+  CG_payee : EventInput[];
   public filters: Array<{ name: string; value: string; checked: boolean }> = [
     { name: 'Team_Building', value: 'Team Building', checked: true },
     { name: 'Conference', value: 'Conference', checked: true },
@@ -69,19 +77,29 @@ export class CalendarComponent
     private fb: UntypedFormBuilder,
     private dialog: MatDialog,
     public calendarService: CalendarService,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private teamservice:TeamService
   ) {
     super();
     this.dialogTitle = 'Add New Event';
     const blankObject = {} as Calendar;
     this.calendar = new Calendar(blankObject);
     this.addCusForm = this.createCalendarForm(this.calendar);
+    this.CG_payee = [];
+    this.leaves = new Observable;
+
   }
 
-  public ngOnInit(): void {
-    this.calendarEvents = INITIAL_EVENTS;
+   ngOnInit() :void{
+
+    console.log("test");
+    console.log(INITIAL_EVENTS);
+    this.refreshTeams();
+
+    this.calendarEvents = this.CG_payee
     this.tempEvents = this.calendarEvents;
     this.calendarOptions.initialEvents = this.calendarEvents;
+
     // recuperer les calendries
     this.calendarService.getAllCalendars().subscribe((x) => {
       this.allCalendarData = x;
@@ -89,6 +107,18 @@ export class CalendarComponent
     });
   }
 
+  
+  delay(ms: number): Promise<void> {
+    return new Promise(resolve => setTimeout(resolve, ms));
+  }
+  async refreshTeams() {
+    this.CG_payee = [];
+    this.leaves = await this.teamservice.getAllProjectssByTeam();
+    this.delay(2000);
+    this.leaves = await this.teamservice.getAllProjectssByTeam();
+    console.log(this.leaves);
+
+  }
   calendarOptions: CalendarOptions = {
     plugins: [dayGridPlugin, timeGridPlugin, listPlugin, interactionPlugin],
     headerToolbar: {
@@ -112,7 +142,7 @@ export class CalendarComponent
     this.addNewEvent();
   }
 
-  addNewEvent() {  
+  addNewEvent() {
     let tempDirection: Direction;
     if (localStorage.getItem('isRtl') === 'true') {
       tempDirection = 'rtl';
@@ -289,7 +319,7 @@ export class CalendarComponent
   getClassNameValue(category: string) {
     let className;
 
-    if (category === 'Team_Building') className = 'fc-event-danger'; 
+    if (category === 'Team_Building') className = 'fc-event-danger';
     else if (category === 'Conference') className = 'fc-event-warning';
     else if (category === 'Training_Session') className = 'fc-event-primary';
     else if (category === 'Employee_Events') className = 'fc-event-success';

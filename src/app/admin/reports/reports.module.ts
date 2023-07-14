@@ -11,6 +11,7 @@ import { LeaveReportService } from './leave-report/leave-report.service';
 import { ExpenseReportComponent } from './expense/expense-report.component';
 import { ExpenseReportService } from './expense/expense-report.service';
 
+
 @NgModule({
   declarations: [LeaveReportComponent, ExpenseReportComponent],
   imports: [
@@ -22,6 +23,7 @@ import { ExpenseReportService } from './expense/expense-report.service';
     CKEditorModule,
     ComponentsModule,
     SharedModule,
+  
   ],
   providers: [LeaveReportService, ExpenseReportService],
 })

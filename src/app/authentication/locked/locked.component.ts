@@ -5,7 +5,8 @@ import {
   UntypedFormGroup,
   Validators,
 } from '@angular/forms';
-import { Role, AuthService } from '@core';
+import { Role} from 'app/models/role';
+import { AuthService } from 'app/services/auth.service';
 @Component({
   selector: 'app-locked',
   templateUrl: './locked.component.html',
@@ -26,7 +27,7 @@ export class LockedComponent implements OnInit {
     this.authForm = this.formBuilder.group({
       password: ['', Validators.required],
     });
-    this.userImg = this.authService.currentUserValue.img;
+    //this.userImg = this.authService.currentUserValue.img;
     this.userFullName =
       this.authService.currentUserValue.firstName +
       ' ' +
@@ -42,12 +43,10 @@ export class LockedComponent implements OnInit {
       return;
     } else {
       const role = this.authService.currentUserValue.role;
-      if (role === Role.All || role === Role.Admin) {
+      if (role === Role.All || role === Role.Admin.toUpperCase() || role === Role.SuperAdmin.toUpperCase()) {
         this.router.navigate(['/admin/dashboard/main']);
-      } else if (role === Role.Employee) {
+      } else if (role === Role.Employee.toUpperCase()) {
         this.router.navigate(['/employee/dashboard']);
-      } else if (role === Role.Client) {
-        this.router.navigate(['/client/dashboard']);
       } else {
         this.router.navigate(['/authentication/signin']);
       }

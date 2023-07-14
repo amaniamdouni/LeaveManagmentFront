@@ -12,8 +12,8 @@ export class Calendar {
       this.id = calendar.id;
       this.eventTitle = calendar.eventTitle || '';
       this.eventType = calendar.eventType || '';
-      this.startDate = calendar.startDate || formatDate(new Date(), 'yyyy-MM-dd', 'en');
-      this.endDate = calendar.endDate || formatDate(new Date(), 'yyyy-MM-dd', 'en');
+     // this.startDate = calendar.startDate || formatDate(new Date(), 'yyyy-MM-dd', 'en');
+     // this.endDate = calendar.endDate || formatDate(new Date(), 'yyyy-MM-dd', 'en');
       this.details = calendar.details || '';
     }
   }
