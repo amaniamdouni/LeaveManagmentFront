@@ -52,7 +52,7 @@ export class SigninComponent
               setTimeout(() => {
                 const role = this.authService.currentUserValue.role;
                 console.log(this.authService.currentUserValue.role)
-                console.log(role === Role.Admin)
+                console.log(role === Role.SuperAdmin)
                 if ( role === Role.Admin  || role === Role.SuperAdmin) {
                   this.router.navigate(['/admin/dashboard/main' ]);
                 } else if ( role === Role.Employee ) {
