@@ -89,6 +89,10 @@
                                     <mat-header-cell *matHeaderCellDef mat-sort-header>Email</mat-header-cell>
                                     <mat-cell *matCellDef="let row"> <span class="mobile-label">Email</span>{{row.email}}</mat-cell>
                                 </ng-container>
+                                <ng-container matColumnDef="position">
+                                    <mat-header-cell *matHeaderCellDef mat-sort-header>Position</mat-header-cell>
+                                    <mat-cell *matCellDef="let row"> <span class="mobile-label">Position</span>{{row.position}}</mat-cell>
+                                </ng-container>
                                 <ng-container matColumnDef="amount">
                                     <mat-header-cell *matHeaderCellDef mat-sort-header>Adresse</mat-header-cell>
                                     <mat-cell *matCellDef="let row"><span class="mobile-label">Adresse</span> {{row.address}}</mat-cell>

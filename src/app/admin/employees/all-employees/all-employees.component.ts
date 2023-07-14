@@ -38,7 +38,8 @@ export class EmployeesComponent
     'country',
     'amount',
     'details',
-    'actions',
+    'position',
+    'actions'
   ];
   listUser : User[];
   exampleDatabase?: UserService;
@@ -195,8 +196,8 @@ export class EmployeesComponent
       tempDirection = 'ltr';
     }
     const dialogRef = this.dialog.open(DeleteDialogComponent, {
-      height: '250px',
-      width: '300px',
+      height: '300px',
+      width: '600px',
       data: row,
       direction: tempDirection,
     });
