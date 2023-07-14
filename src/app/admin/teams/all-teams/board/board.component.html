@@ -65,9 +65,9 @@
                 <div class="col-5 pro-left mb-2">Bug:</div>
                 <div class="col-7 pro-left mb-2">{{ project.bugs }}</div> -->
                                 <div class="col-5 pro-left mb-2">Membres:</div>
-                                <div class="col-7 pro-left" *ngIf="team?.userList != null">
+                                <div class="col-7 pro-left" *ngIf="team != null">
                                     <ul class="list-unstyled order-list" *ngFor="let us of listUser">
-                                        <li class="avatar avatar-sm" *ngIf="us.teamUser.id === team.id"><img src="assets/images/user/user{{us.teamUser.id}}.jpg" alt="user" class="rounded-circle"> {{us.firstName}} {{us.lastName}} </li>
+                                        <li class="avatar avatar-sm" *ngIf="us?.teamUser?.id === team?.id"><img src="assets/images/pages/1048219.png" alt="user" class="rounded-circle"> {{us.firstName}} {{us.lastName}} </li>
                                     </ul>
                                 </div>
 
@@ -92,7 +92,7 @@
             <span>Delete Team</span>
           </button>
                     <button mat-menu-item (click)="Adduser(team)">
-            <mat-icon>delete</mat-icon>
+            <mat-icon>add</mat-icon>
             <span>Add Users</span>
           </button>
                 </mat-menu>

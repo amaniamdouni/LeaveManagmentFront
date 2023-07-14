@@ -37,12 +37,8 @@ export class AuthService {
         map((data) => {
           console.log(data.user)
           // store user details and jwt token in local storage to keep user logged in between page refreshes
-<<<<<<< HEAD
 
           localStorage.setItem('currentUser', JSON.stringify(data.user));
-=======
-          localStorage.setItem('currentUser', JSON.stringify(data));
->>>>>>> farah-user-front
           this.currentUserSubject.next(data.user);
           this.currentUserSubject.value.token = data.accessToken;
           return data;

@@ -45,7 +45,7 @@ export class UserDialogComponent {
     this.dialogTitle = data.title;
     this.team = data.team;
     const nonWhiteSpaceRegExp = new RegExp('\\S');
-
+    console.log(this.team);
     this.teamForm = this.formBuilder.group({
       user: [this.team?.user?.matricule,
         [Validators.required],
@@ -74,21 +74,8 @@ export class UserDialogComponent {
     this.teamForm.value.user = user;
     this.teamForm.value.userList = [];
     if (this.team) {
-      // update project object with form values
-      Object.assign(this.team, this.teamForm.value);
-      console.log(this.team);
-      this.teamservice.updateObject(this.team);
-      this.snackBar.open('Team updated Successfully...!!!', '', {
-        duration: 2000,
-        verticalPosition: 'bottom',
-        horizontalPosition: 'center',
-        panelClass: 'black',
-      });
-
-      this.dialogRef.close();
-    } else {
-      this.teamservice.createOject(this.teamForm.value);
-      this.snackBar.open('Team created Successfully...!!!', '', {
+      this.teamservice.affectUserToTeam(this.team,user?.matricule||'');
+      this.snackBar.open('User affected Successfully...!!!', '', {
         duration: 2000,
         verticalPosition: 'bottom',
         horizontalPosition: 'center',
@@ -97,10 +84,7 @@ export class UserDialogComponent {
 
       this.dialogRef.close();
     }
-    await this.delay(2000); // Wait for 2 seconds
-
-    //await this.compOne.ngOnInit().then(() => console.log('Finished'))
-    //.catch(() => console.error('Failed!'));
+    await this.delay(2000);
     
   }
   onNoClick(): void {

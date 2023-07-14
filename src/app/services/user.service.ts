@@ -75,7 +75,6 @@ export class UserService extends UnsubscribeOnDestroyAdapter {
     addUser(user: User): void {
       const requestOptions = { headers: this.headers };
       this.dialogData = user;
-      console.log(user);
       this.httpClient.post(this.API_URL, user,requestOptions)
       .subscribe({
         next: (data) => {

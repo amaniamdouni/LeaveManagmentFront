@@ -148,7 +148,19 @@ export class TeamService extends UnsubscribeOnDestroyAdapter {
           },
         });
   }
+  affectUserToTeam(team:Team,matricule:string){
+    let requestOptions = { headers: this.headers };
+    this.httpClient.put(this.API_URL+matricule+"/"+team.id,requestOptions)
+    .subscribe({
+      next: (data) => {
+          console.log(data);
 
+            },
+      error: (error: HttpErrorResponse) => {
+         // error code here
+      },
+    }); 
+  }
   public detachObject(team: Team): void {
     // add project id to trash
     this.trash.add(team.id);
