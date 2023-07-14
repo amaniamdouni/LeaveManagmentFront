@@ -58,11 +58,11 @@ export class CalendarComponent
   tempEvents?: EventInput[];
 
   public filters: Array<{ name: string; value: string; checked: boolean }> = [
-    { name: 'Team Building', value: 'Team Building', checked: true },
+    { name: 'Team_Building', value: 'Team Building', checked: true },
     { name: 'Conference', value: 'Conference', checked: true },
-    { name: 'Training Session', value: 'Training Session', checked: true },
-    { name: 'Employee Events', value: 'Employee Events', checked: true },
-    { name: 'Product Launches', value: 'Product Launches', checked: true },
+    { name: 'Training_Session', value: 'Training Session', checked: true },
+    { name: 'Employee_Events', value: 'Employee Events', checked: true },
+    { name: 'Product_Launches', value: 'Product Launches', checked: true },
   ];
 
   constructor(
