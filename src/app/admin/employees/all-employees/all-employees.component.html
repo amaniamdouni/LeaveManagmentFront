@@ -42,6 +42,7 @@
                       <mat-icon class="col-white">delete
                       </mat-icon>
                     </button>
+                    
                                     </div>
                                 </li>
                             </ul>
@@ -138,6 +139,10 @@
                       <app-feather-icons [icon]="'trash-2'" [class]="'tbl-fav-delete'">
                       </app-feather-icons>
                     </button>
+                    <button mat-icon-button color="accent" (click)="$event.stopPropagation()" (click)="desaffectUserToTeam(i, row)" class="tbl-action-btn" matTooltip="Delete" disabled="{{row.teamUser == null}}">
+                        <app-feather-icons  [class]="'fas fa-user-minus'">
+                        </app-feather-icons>
+                      </button>
                                     </mat-cell>
                                 </ng-container>
                                 <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>

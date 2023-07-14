@@ -102,11 +102,16 @@ export class FormDialogComponent {
   onNoClick(): void {
     this.dialogRef.close();
   }
-  public confirmAdd(): void {
+  async confirmAdd() {
     if (this.userForm.getRawValue().matricule === '') {
       this.userservice.addUser(this.userForm.getRawValue());
     }else{
       this.userservice.updateUser(this.userForm.getRawValue());
     }
+    await this.delay(2000);
+
+  }
+  async delay(ms: number): Promise<void> {
+    return new Promise(resolve => setTimeout(resolve, ms));
   }
 }

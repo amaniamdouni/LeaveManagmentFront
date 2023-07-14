@@ -19,6 +19,7 @@ import { Direction } from '@angular/cdk/bidi';
 import { UserService } from 'app/services/user.service';
 import { User } from 'app/models/user';
 import { AuthService } from 'app/services/auth.service';
+import { TeamService } from 'app/services/team.service';
 
 @Component({
   selector: 'app-employees',
@@ -56,23 +57,36 @@ export class EmployeesComponent
     public dialog: MatDialog,
     private snackBar: MatSnackBar,
     private userservice:UserService,
-    private authservice : AuthService
+    private authservice : AuthService,
+    private teamservice: TeamService,
+
   ) {
     super();
     this.listUser=[];
     this.searchTerm = "";
 
-    this.refreshUsers();
+    this.refreshUserss();
     }
   @ViewChild(MatPaginator, { static: true }) paginator!: MatPaginator;
   @ViewChild(MatSort, { static: true }) sort!: MatSort;
   @ViewChild('filter', { static: true }) filter!: ElementRef;
-  ngOnInit() {
+  async ngOnInit() {
     this.loadData();
   }
-
+  async refreshUserss() {
+    await this.delay(1000);
+    this.userservice.getAllUsers().subscribe({
+      next: (users: User[]) => {
+        this.listUser = users;
+      },
+      error: (error: any) => {
+        // Handle the error here
+        console.error('Error occurred while fetching users:', error);
+      }
+    });
+  }
   async refreshUsers() {
-    this.delay(2000);
+    await this.delay(2000);
     this.userservice.getAllUsers().subscribe({
       next: (users: User[]) => {
         this.listUser = users;
@@ -111,7 +125,7 @@ export class EmployeesComponent
     // Mettez à jour la source de données avec les éléments filtrés
     this.listUser= filteredData;
   }
-  addNew() {
+  async addNew() {
     let tempDirection: Direction;
     if (localStorage.getItem('isRtl') === 'true') {
       tempDirection = 'rtl';
@@ -132,6 +146,7 @@ export class EmployeesComponent
         this.exampleDatabase?.dataChange.value.unshift(
           this.userservice.getDialogData()
         );
+        this.delay(8000);
         this.refreshTable();
         this.showNotification(
           'snackbar-success',
@@ -141,6 +156,10 @@ export class EmployeesComponent
         );
       }
     });
+    await this.delay(8000);
+    await this.refreshUsers();
+    await this.delay(8000);
+    await this.refreshUsers();
   }
   async editCall(row: User) {
     this.matricule = row.matricule;
@@ -183,7 +202,7 @@ export class EmployeesComponent
         }
       }
     });
-    await this.delay(2000);
+    await this.delay(4000);
     await this.refreshUsers();
   }
   async deleteItem(i: number, row: User) {
@@ -211,7 +230,7 @@ export class EmployeesComponent
           if (this.exampleDatabase) {
             this.exampleDatabase.dataChange.value.splice(foundIndex, 1);
           }
-          this.delay(2000);
+          this.delay(1000);
           this.refreshTable();
           this.showNotification(
             'snackbar-danger',
@@ -222,7 +241,7 @@ export class EmployeesComponent
         }
       }
     });
-    await this.delay(2000);
+    await this.delay(3000);
     await this.refreshUsers();
   }
   private refreshTable() {
@@ -260,6 +279,19 @@ export class EmployeesComponent
       'bottom',
       'center'
     );
+  }
+  desaffectUserToTeam(i: number, row: User){
+    console.log(row);
+    if (row) {
+      this.teamservice.desaffectUserFromTeam(row?.teamUser,row.matricule);
+      this.snackBar.open('User desaffected Successfully...!!!', '', {
+        duration: 2000,
+        verticalPosition: 'bottom',
+        horizontalPosition: 'center',
+        panelClass: 'black',
+      });
+
+    }
   }
   public loadData() {
     this.exampleDatabase = new UserService(this.httpClient,this.authservice);

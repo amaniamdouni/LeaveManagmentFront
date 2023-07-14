@@ -161,6 +161,20 @@ export class TeamService extends UnsubscribeOnDestroyAdapter {
       },
     }); 
   }
+  desaffectUserFromTeam(team:Team,matricule:string){
+    let requestOptions = { headers: this.headers };
+    console.log(this.API_URL+"desaffectUserToTeam/"+matricule+"/"+team.id);
+    this.httpClient.put(this.API_URL+"desaffectUserToTeam/"+matricule+"/"+team.id,requestOptions)
+    .subscribe({
+      next: (data) => {
+          console.log(data);
+
+            },
+      error: (error: HttpErrorResponse) => {
+         // error code here
+      },
+    }); 
+  }
   public detachObject(team: Team): void {
     // add project id to trash
     this.trash.add(team.id);
