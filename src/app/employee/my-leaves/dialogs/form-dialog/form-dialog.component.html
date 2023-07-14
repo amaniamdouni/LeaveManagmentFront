@@ -17,9 +17,9 @@
         <div class=" col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
           <mat-form-field class="example-full-width" appearance="outline">
             <mat-label>Apply date</mat-label>
-            <input matInput [matDatepicker]="picker1" formControlName="createdAt" required>
-            <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
-            <mat-datepicker #picker1></mat-datepicker>
+            <input matInput readonly [matDatepicker]="picker1" formControlName="createdAt" required>
+            <mat-datepicker-toggle matSuffix></mat-datepicker-toggle>
+                <mat-datepicker #picker1></mat-datepicker>
             <mat-error *ngIf="myLeavesForm.get('createdAt')?.hasError('required')">
               Please select date
             </mat-error>
@@ -49,15 +49,7 @@
             </mat-error>
           </mat-form-field>
         </div>
-        <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 mb-2">
-          <mat-form-field class="example-full-width mb-3" appearance="outline">
-            <mat-label>N° Days</mat-label>
-            <input matInput number formControlName="nbr_days" required>
-            <mat-error *ngIf="myLeavesForm.get('nbr_days')?.hasError('required')">
-              N° Days required
-            </mat-error>
-          </mat-form-field>
-        </div>
+        
       </div>
 
       <div class="row">

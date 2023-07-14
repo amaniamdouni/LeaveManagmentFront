@@ -3,6 +3,7 @@ import { BehaviorSubject } from 'rxjs';
 import { Leaves } from './models/leaves.model';
 import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { UnsubscribeOnDestroyAdapter } from '@shared';
+import { AuthService } from 'app/services/auth.service';
 @Injectable()
 export class MyLeavesService extends UnsubscribeOnDestroyAdapter {
   private readonly API_URL = 'http://localhost:8081/leave';
@@ -16,8 +17,9 @@ export class MyLeavesService extends UnsubscribeOnDestroyAdapter {
   dataChange: BehaviorSubject<Leaves[]> = new BehaviorSubject<Leaves[]>([]);
   // Temporarily stores data from dialogs
   dialogData!: Leaves;
-  constructor(private httpClient: HttpClient) {
+  constructor(private httpClient: HttpClient,private authService: AuthService,) {
     super();
+
   }
   // get data(): Leaves[] {
   //   return this.dataChange.value;
@@ -40,12 +42,14 @@ export class MyLeavesService extends UnsubscribeOnDestroyAdapter {
   // }
   getAllMyLeaves()
   {
-    return this.httpClient.get<Leaves[]>(this.API_URL);
+    const matricule =
+  this.authService.currentUserValue.matricule ;
+    return this.httpClient.get<Leaves[]>(this.API_URL+"/me/"+matricule);
   }
 
-  updateLeave(leave:Leaves)
+  updateLeave(leave:Leaves,matricule:string)
   {
-    return this.httpClient.put<Leaves>(this.API_URL+"/update",leave);
+    return this.httpClient.put<Leaves>(this.API_URL+"/update/"+matricule,leave);
   }
 
   deleteLeave(id:number)

@@ -205,8 +205,10 @@ export class MyLeavesComponent
   //  }
 
   public loadData() {
+    console.log()
     this.myLeavesService.getAllMyLeaves().subscribe((leaves) => {
       this.dataSource = leaves;
+      console.log(leaves);
     });
   }
 

@@ -1,5 +1,5 @@
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { Component, Inject } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import {
   UntypedFormControl,
   Validators,
@@ -50,6 +50,7 @@ export class FormDialogComponent {
       this.dialogTitle = 'New Leave Request';
       const blankObject = {} as Leaves;
       this.myLeaves = new Leaves(blankObject);
+      this.myLeaves.createdAt = new Date();
     }
     this.myLeavesForm = this.createContactForm();
   }
@@ -85,7 +86,7 @@ export class FormDialogComponent {
   public confirmAdd(): void {
     if (this.action === 'edit') {
       console.log(this.myLeavesForm.value);
-      this.myLeavesService.updateLeave(this.myLeavesForm.value).subscribe((result) => {
+      this.myLeavesService.updateLeave(this.myLeavesForm.value,this.matricule).subscribe((result) => {
         console.log(result);
       },
       (err) => {

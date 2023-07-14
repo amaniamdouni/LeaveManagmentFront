@@ -58,6 +58,7 @@ export class FormComponent {
       console.log(this.leaves);
       this.teamAvailability = data.leaves.teamAvailability;
       this.isDetails = true;
+      this.leaves.nbr_days = this.calculDate(this.leaves.startDate, this.leaves.endDate)
       this.leavesForm = this.createContactFormRH();
     } else {
       this.isDetails = false;
@@ -65,6 +66,7 @@ export class FormComponent {
       this.dialogTitle = 'New Leaves';
       const blankObject = {} as Leaves;
       this.leaves = new Leaves(blankObject);
+      this.leaves.createdAt = new Date();
       this.leavesForm = this.createContactForm();
     }
   }
@@ -160,5 +162,10 @@ export class FormComponent {
     (err) => {
       console.log(err);
     });
+  }
+  calculDate(startDate, endDate) {
+  const diffTime = Math.abs(endDate - startDate);
+  const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+  return diffDays;
   }
 }
